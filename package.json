@@ -16,17 +16,25 @@
     "react": "^0.14.6",
     "react-dom": "^0.14.6",
     "react-router": "^1.0.3",
+    "redux": "^3.7.2",
+    "redux-form": "^7.3.0",
     "webpack-dev-server": "^1.14.1"
   },
   "devDependencies": {
+    "axios": "^0.18.0",
     "clean-webpack-plugin": "^0.1.19",
     "copy-webpack-plugin": "^4.5.1",
+    "eslint": "^4.19.1",
+    "eslint-plugin-react": "^7.7.0",
     "html-webpack-plugin": "^3.0.6",
+    "react-redux": "^5.0.7",
+    "redux-promise": "^0.5.3",
+    "redux-thunk": "^2.2.0",
     "webpack": "^1.15.0",
     "webpack-cli": "^2.0.12"
   },
   "scripts": {
-    "dev": "webpack-dev-server --content-base src --inline --hot", 
+    "dev": "webpack-dev-server --content-base src --inline --hot --watch",
     "start": "webpack-dev-server --content-base src --inline --hot --mode development",
     "build": "webpack --mode production"
   },
