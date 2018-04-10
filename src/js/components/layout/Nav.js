@@ -9,7 +9,7 @@ export default class Nav extends React.Component {
     };
   }
 
-  toggleCollapse() {
+  toggleCollapse= () => {
     const collapsed = !this.state.collapsed;
     this.setState({ collapsed });
   }

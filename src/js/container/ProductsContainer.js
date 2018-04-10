@@ -6,6 +6,10 @@ Not every component will be connected, or subscribed, to the store.
 import { connect } from 'react-redux';
 import { fetchProducts, fetchProductsSuccess, fetchProductsFailure } from '../actions/Products';
 import { fetchCategories, fetchCategoriesSuccess, fetchCategoriesFailure } from '../actions/Categories';
+
+import { deleteProduct, deleteProductSuccess, deleteProductFailure } from '../actions/ProductDelete';
+
+
 import Products from '../components/Products';
 
 /*
@@ -86,6 +90,18 @@ const mapDispatchToProps = (dispatch) => {
           !response.error ? dispatch(fetchCategoriesSuccess(data)) : dispatch(fetchCategoriesFailure(data));
         } else {
           !response.error ? dispatch(fetchCategoriesSuccess(response.payload.data)) : dispatch(fetchCategoriesFailure(response.payload.data));
+
+        }
+      });
+    },
+    deleteProduct: (event) => {
+      dispatch(deleteProduct(event)).then((response) => {
+        //clean the payload  fetching
+        if ("records" in response.payload.data) {
+          let data = response.payload.data.records;
+          !response.error ? dispatch(deleteProductSuccess(data)) : dispatch(deleteProductFailure(data));
+        } else {
+          !response.error ? dispatch(deleteProductSuccess(response.payload.data)) : dispatch(deleteProductFailure(response.payload.data));
 
         }
       });

@@ -1,8 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Router, Route, IndexRoute, hashHistory } from "react-router";
+import 'bootstrap/dist/css/bootstrap.css';
+import 'font-awesome/css/font-awesome.css';
 
-import "jquery";
+/* import "jquery"; */
 
 import "../css/app.css";
 import "bootstrap/dist/css/bootstrap.css";
