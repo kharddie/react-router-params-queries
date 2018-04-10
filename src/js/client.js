@@ -2,9 +2,13 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Router, Route, IndexRoute, hashHistory } from "react-router";
 
-//import "../css/app.css";
+import "jquery";
+
+import "../css/app.css";
 import "bootstrap/dist/css/bootstrap.css";
 import 'bootstrap/dist/js/bootstrap.js';
+
+
 
 console.log("The current working directory is " + process.cwd());
 

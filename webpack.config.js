@@ -3,6 +3,7 @@ console.log("This is the Webpack 4 'mode':" + process.env.NODE_ENV);
 const webpack = require('webpack');
 const path = require('path');
 const CleanWebpackPlugin = require("clean-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 
 const PATHS = {
   app: path.join(__dirname, "src"),
@@ -39,12 +40,13 @@ module.exports = {
         }
       },
 
-      
+  
 
       {
 
         test: /\.css$/,
-        use: ["style-loader", "css-loader"],  //******* use[] instead of loaders[]
+        use: [MiniCssExtractPlugin.loader,"css-loader"],  //******* use[] instead of loaders[]
+        
 
       },
 
@@ -67,6 +69,13 @@ module.exports = {
          $: "jquery",
          jQuery: "jquery"
      }),
+     new MiniCssExtractPlugin({
+      // Options similar to the same options in webpackOptions.output
+      // both options are optional
+      filename: "[name].css",
+      chunkFilename: "[id].css"
+    })
+     
   ],
 };
 
