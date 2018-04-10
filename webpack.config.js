@@ -28,7 +28,7 @@ module.exports = {
   },
 
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.jsx?$/,
         exclude: /(node_modules|bower_components)/,
@@ -37,7 +37,23 @@ module.exports = {
           presets: ['react', 'es2015', 'stage-0'],
           plugins: ['react-html-attrs', 'transform-class-properties', 'transform-decorators-legacy'],
         }
-      }
+      },
+
+      
+
+      {
+
+        test: /\.css$/,
+        use: ["style-loader", "css-loader"],  //******* use[] instead of loaders[]
+
+      },
+
+
+  
+      {
+        test: /\.(png|jpg|svg)$/,
+        loader: "url-loader",
+      },
     ]
   },
 
@@ -47,7 +63,10 @@ module.exports = {
       inject: 'body',
     }),
     new CleanWebpackPlugin(PATHS.build),
-
+      new webpack.ProvidePlugin({
+         $: "jquery",
+         jQuery: "jquery"
+     }),
   ],
 };
 

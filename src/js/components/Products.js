@@ -1,30 +1,45 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 
-class Products extends Component {
+class Products extends React.Component {
   componentWillMount() {
     this.props.fetchProducts();
+    this.props.fetchCategories();
   }
 
-
-  renderPosts(products) {
-    if ("records" in products) {
-      products = products.records;
-      return products.map((product) => {
+  renderProducts(data) {
+    if (data.length > 0) {
+      return data.map(function (data, key) {
         return (
-          <span>{product.category_name} ({product.category_id}) {product.description + product.price + product.description}</span>
+          <span>
+          <span key={key}> {data.prodCategoryId} ({data.prodName}) {data.prodDescription} {data.prodprice}
+          </span><br/>
+          </span>
         );
-      });
+      })
     }
+  }
+
+  renderPosts(data) {
+    return data.map( (data) => {
+      return (
+        <div>
+          <span> <strong>{data.catName} ({data.catId}) {data.catDescription}</strong></span><br/>
+          <span>
+            {this.renderProducts(data.products)}
+          </span>
+        </div>
+      );
+    })
+
 
   }
 
   render() {
-    const { products, loading, error } = this.props.productList;
 
+    const { data, loading, error } = this.props.categoriesProductsData;
 
-
-    if (loading) {
+    if (error) {
       return <div className="container"><h1>Products</h1><h3>Loading...</h3></div>
     } else if (error) {
       return <div className="alert alert-danger">Error: {error.message}</div>
@@ -34,7 +49,7 @@ class Products extends Component {
       <div className="container">
         <h1>Posts</h1>
         <ul className="list-group">
-          {this.renderPosts(products)}
+          {this.renderPosts(data)}
         </ul>
       </div>
     );

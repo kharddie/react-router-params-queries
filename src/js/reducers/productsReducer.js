@@ -1,6 +1,14 @@
 import { FETCH_PRODUCTS, FETCH_PRODUCTS_SUCCESS, FETCH_PRODUCTS_FAILURE, RESET_PRODUCTS } from '../actions/Products';
 
 
+
+/* 
+reducer that will be able to handle receiving action creator.
+Reducers return application state
+application state should be treated as immutables
+Reducer should return a brand-new object, with copies of any objects it 
+needs from the previous state, and never alter the previous state
+New state becomes available to any component subscribed to the store*/
 const INITIAL_STATE = {
     productList: { products: [], error: null, loading: false }
 };

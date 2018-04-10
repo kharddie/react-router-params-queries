@@ -1,6 +1,7 @@
 import React from "react";
 import Article from "../components/Article";
-import ProductsContainer from "../container/ProductsContainer"
+import ProductsContainer from "../container/ProductsContainer";
+import CategoriesContainer from "../container/CategoriesContainer";
 
 export default class Featured extends React.Component {
   render() {
@@ -9,6 +10,7 @@ export default class Featured extends React.Component {
         <div class="row">
           <div class="col-lg-12">
             <div class="well text-center">
+        
               <ProductsContainer/>
             </div>
           </div>
