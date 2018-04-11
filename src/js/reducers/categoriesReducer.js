@@ -2,7 +2,7 @@ import { FETCH_CATEGORIES, FETCH_CATEGORIES_SUCCESS, FETCH_CATEGORIES_FAILURE, R
 
 
 const INITIAL_STATE = {
-    categoriesList: { categories: [], error: null, loading: true }
+    categoriesList: { categories: [], error: null, loading: false }
 };
 
 export default function (state = INITIAL_STATE, action) {

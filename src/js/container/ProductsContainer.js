@@ -19,52 +19,47 @@ available to the component as props.
 http://www.thegreatcodeadventure.com/react-redux-tutorial-part-iv-the-index-feature/
 */
 const mapStateToProps = (state) => {
-  let categoriesProductsHolder ={
-    data: [],
-    loading: loading,
-    error:error
-  };
-  let categoriesProducts = [];
-  let products = [];
+
   let error = null;
   let loading = false;
 
-  if (state.posts.productList.products.length > 0 && state.categories.categoriesList.categories.length > 0) {
-    loading = state.categories.categoriesList.loading;
-    error = state.categories.categoriesList.error;
-    state.categories.categoriesList.categories.map(function (data, index) {
-    
-      state.posts.productList.products.map(function (data2, index2) {
-        if (data2.category_id == data.id) {
-          products.push({
-            prodId: data2.id,
-            prodCategoryId: data2.category_id,
-            prodName: data2.name,
-            prodprice: data2.price,
-            prodDescription: data2.description,
-          });
-        }
-      })
-      categoriesProducts.push({
-        catId: data.id,
-        catName: data.name,
-        catDescription: data.description,
-        products: products
-      })
-      products = [];
-    })
-    categoriesProductsHolder = {
-      data: categoriesProducts,
-      loading: loading,
-      error:error
-    };
-    categoriesProducts = [];
-    categoriesProductsHolder;
+  //set loading and error
+  if (state.categories.categoriesList.error || state.posts.productList.error || state.productDelete.deleteProduct.error) {
+    error = true;
   }
 
+  if (state.categories.categoriesList.loading === true || state.posts.productList.loading === true || state.productDelete.deleteProduct.loading === true) {
+    loading = true;
+  }
+
+  //categories
+  let categoriesDetails = {
+    data: state.categories.categoriesList.categories,
+    loading: state.categories.categoriesList.loading,
+    error: state.categories.categoriesList.error
+  };
+//products
+  let productsDetails = {
+    data: state.posts.productList.products,
+    loading: state.posts.productList.loading,
+    error: state.posts.productList.error
+  };
+//product delete
+  let productDelete = {
+    data: state.productDelete.deleteProduct.deleteProduct,
+    loading: state.productDelete.deleteProduct.loading,
+    error: state.productDelete.deleteProduct.error
+  };
+
+  let dataToProps = {
+    categoriesDetails: categoriesDetails,
+    productsDetails: productsDetails,
+    productDelete: productDelete,
+    errorLoading: { error:error, loading:loading}
+  }
 
   return {
-    categoriesProductsData: categoriesProductsHolder,
+    dataToProps: dataToProps
   };
 }
 
@@ -74,20 +69,20 @@ const mapDispatchToProps = (dispatch) => {
     fetchProducts: () => {
       dispatch(fetchProducts()).then((response) => {
         //clean the payload  fetching
-          !response.error ? dispatch(fetchProductsSuccess(response.payload.data.data)) : dispatch(fetchCategoriesFailure(response.payload.data.data));
+        !response.error ? dispatch(fetchProductsSuccess(response.payload.data.data)) : dispatch(fetchCategoriesFailure(response.payload.data.data));
       });
     },
     fetchCategories: () => {
       dispatch(fetchCategories()).then((response) => {
         //clean the payload  fetching
-          !response.error ? dispatch(fetchCategoriesSuccess(response.payload.data.data)) : dispatch(fetchCategoriesFailure(response.payload.data));
+        !response.error ? dispatch(fetchCategoriesSuccess(response.payload.data.data)) : dispatch(fetchCategoriesFailure(response.payload.data));
 
       });
     },
     deleteProduct: (event) => {
       dispatch(deleteProduct(event)).then((response) => {
         //clean the payload  fetching
-        !response.error ? dispatch(deleteProductSuccess(response.payload.data)) :  dispatch(deleteProductFailure(response.payload.data));
+        !response.error ? dispatch(deleteProductSuccess(response.payload.data)) : dispatch(deleteProductFailure(response.payload.data));
       });
     }
   }

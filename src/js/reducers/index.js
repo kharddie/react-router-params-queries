@@ -7,8 +7,10 @@ import { reducer as formReducer } from 'redux-form';
 const rootReducer = combineReducers({
   posts: ProductsReducer, //<-- Posts
   categories: CategoriesReducer,
-  productDeleteReducer:ProductsDeleteReducer,
+  productDelete:ProductsDeleteReducer,
   form: formReducer, // <-- redux-form
 });
 
 export default rootReducer;
+
+

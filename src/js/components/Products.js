@@ -32,11 +32,11 @@ class Products extends React.Component {
     //this.setState({numOfClicks: this.state.numOfClicks + 1});
   }
 
-  handleClick = () =>{
-   // console.log('From handleClick()', this);
-    this.setState({numOfClicks: this.state.numOfClicks + 1});
+  handleClick = () => {
+    // console.log('From handleClick()', this);
+    this.setState({ numOfClicks: this.state.numOfClicks + 1 });
   }
-  
+
   renderProducts = (data) => {
     if (data.length > 0) {
       return data.map((data, key) => {
@@ -46,7 +46,7 @@ class Products extends React.Component {
             <span key={key}> {data.prodCategoryId} ({data.prodName}) {data.prodDescription} {data.prodprice}
             </span>
             <i class="fas fa-arrow-alt-down"></i> <a className='btn' onClick={() => this.deleteProduct(data)}>delete</a>
- 
+
             <br />
           </span>
         );
@@ -70,14 +70,48 @@ class Products extends React.Component {
 
   render() {
 
-    const { data, loading, error } = this.props.categoriesProductsData;
-    console.log('**************From render() data=' + data +'  loading=' + loading+ '  eror=' + error);
+    const { categoriesDetails, productsDetails, productDelete, errorLoading } = this.props.dataToProps;
+    var productsArr = [];
+    const categoriesProductsArr = [];
 
-    if (error) {
-      return <div className="container"><h1>Products</h1><h3>Loading...</h3></div>
-    } else if (error) {
+    //console.log('**************From render() data=', this);
+    if (errorLoading.loading) {
+      return <div className="container"><h1>Loading...</h1></div>
+    }
+
+    if (errorLoading.error) {
       return <div className="alert alert-danger">Error: {error.message}</div>
     }
+
+    //combine categories and products
+    if (categoriesDetails.data.length > 0 && productsDetails.data.length > 0) {
+      categoriesDetails.data.map(function (data, index) {
+        productsDetails.data.map(function (data2, index2) {
+          if (data2.category_id == data.id) {
+            productsArr.push({
+              prodId: data2.id,
+              prodCategoryId: data2.category_id,
+              prodName: data2.name,
+              prodprice: data2.price,
+              prodDescription: data2.description,
+            });
+          }
+        })
+        categoriesProductsArr.push({
+          catId: data.id,
+          catName: data.name,
+          catDescription: data.description,
+          products: productsArr
+        })
+        productsArr = [];
+      })
+    }
+
+
+
+
+
+
 
     return (
       <div className="container">
@@ -89,7 +123,7 @@ class Products extends React.Component {
         </div>
 
         <ul className="list-group">
-          {this.renderPosts(data)}
+          {this.renderPosts(categoriesProductsArr)}
         </ul>
       </div>
     );
