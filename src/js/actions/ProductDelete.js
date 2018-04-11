@@ -17,16 +17,15 @@ export const RESET_PRODUCT = 'RESET_PRODUCT';
 const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost/Reactjs-Weather-App/api/' : '/api';
 
 
-export function deleteProduct(data) {
-  let id = 0;
-  if (id === undefined) {
-    id = id;
+export function deleteProduct(pid) {
+  if (pid === undefined) {
+    pid = 0;
   }
   const request = axios({
     method: 'post',
     url: `${ROOT_URL}product/delete.php`,
     //data:JSON.stringify({id:data}),
-    data: { id: id },
+    data: { id: pid },
     headers: []
   });
   return {
@@ -48,3 +47,7 @@ export function deleteProductFailure(error) {
     payload: error
   };
 }
+
+
+
+

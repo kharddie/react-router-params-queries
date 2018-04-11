@@ -11,15 +11,11 @@ class Products extends React.Component {
     }
   }
 
-
-
   componentWillMount() {
     this.props.fetchProducts();
     this.props.fetchCategories();
-    this.props.deleteProduct();
+    //this.props.deleteProduct();
   }
-
-
 
   registerUser = (e) => {
     e.preventDefault();
@@ -33,7 +29,7 @@ class Products extends React.Component {
 
   deleteProduct = (event) => {
     this.props.deleteProduct(event.prodId);
-    this.setState({numOfClicks: this.state.numOfClicks + 1});
+    //this.setState({numOfClicks: this.state.numOfClicks + 1});
   }
 
   handleClick = () =>{
@@ -49,7 +45,7 @@ class Products extends React.Component {
           <span>
             <span key={key}> {data.prodCategoryId} ({data.prodName}) {data.prodDescription} {data.prodprice}
             </span>
-            <button onClick={() => this.deleteProduct(data)}>delete</button>
+            <i class="fas fa-arrow-alt-down"></i> <a className='btn' onClick={() => this.deleteProduct(data)}>delete</a>
  
             <br />
           </span>
@@ -75,7 +71,7 @@ class Products extends React.Component {
   render() {
 
     const { data, loading, error } = this.props.categoriesProductsData;
-    //console.log('From render()', this);
+    console.log('**************From render() data=' + data +'  loading=' + loading+ '  eror=' + error);
 
     if (error) {
       return <div className="container"><h1>Products</h1><h3>Loading...</h3></div>

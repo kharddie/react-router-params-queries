@@ -48,17 +48,19 @@
     "font-awesome-sass-loader": "^2.0.1",
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.4.0",
+    "node-sass": "^4.8.3",
     "react-bootstrap-modal": "^4.0.0",
     "react-redux": "^5.0.7",
     "redux-promise": "^0.5.3",
     "redux-thunk": "^2.2.0",
+    "sass-loader": "^6.0.7",
     "webpack": "^4.5.0",
     "webpack-cli": "^2.0.14",
     "webpack-dev-server": "^3.1.3"
   },
   "scripts": {
     "dev": "webpack-dev-server --content-base src --inline --hot --watch",
-    "start": "webpack-dev-server --content-base src --inline --hot --mode development",
+    "start": "webpack-dev-server --devtool source-map --content-base src --inline --hot --mode development",
     "build": "webpack --mode production"
   },
   "author": "",

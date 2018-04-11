@@ -74,36 +74,20 @@ const mapDispatchToProps = (dispatch) => {
     fetchProducts: () => {
       dispatch(fetchProducts()).then((response) => {
         //clean the payload  fetching
-        if ("records" in response.payload.data) {
-          let data = response.payload.data.records;
-          !response.error ? dispatch(fetchProductsSuccess(data)) : dispatch(fetchCategoriesFailure(data));
-        } else {
-          !response.error ? dispatch(fetchProductsSuccess(response.payload.data)) : dispatch(fetchCategoriesFailure(response.payload.data));
-        }
+          !response.error ? dispatch(fetchProductsSuccess(response.payload.data.data)) : dispatch(fetchCategoriesFailure(response.payload.data.data));
       });
     },
     fetchCategories: () => {
       dispatch(fetchCategories()).then((response) => {
         //clean the payload  fetching
-        if ("records" in response.payload.data) {
-          let data = response.payload.data.records;
-          !response.error ? dispatch(fetchCategoriesSuccess(data)) : dispatch(fetchCategoriesFailure(data));
-        } else {
-          !response.error ? dispatch(fetchCategoriesSuccess(response.payload.data)) : dispatch(fetchCategoriesFailure(response.payload.data));
+          !response.error ? dispatch(fetchCategoriesSuccess(response.payload.data.data)) : dispatch(fetchCategoriesFailure(response.payload.data));
 
-        }
       });
     },
     deleteProduct: (event) => {
       dispatch(deleteProduct(event)).then((response) => {
         //clean the payload  fetching
-        if ("records" in response.payload.data) {
-          let data = response.payload.data.records;
-          !response.error ? dispatch(deleteProductSuccess(data)) : dispatch(deleteProductFailure(data));
-        } else {
-          !response.error ? dispatch(deleteProductSuccess(response.payload.data)) : dispatch(deleteProductFailure(response.payload.data));
-
-        }
+        !response.error ? dispatch(deleteProductSuccess(response.payload.data)) :  dispatch(deleteProductFailure(response.payload.data));
       });
     }
   }

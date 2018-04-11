@@ -39,20 +39,27 @@ module.exports = {
           plugins: ['react-html-attrs', 'transform-class-properties', 'transform-decorators-legacy'],
         }
       },
-
-  
-
       {
-
-        test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader,"css-loader"],  //******* use[] instead of loaders[]
-        
-
+        test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+        use: [{
+          loader: 'file-loader',
+          options: {
+            name: '[name].[ext]',
+            outputPath: 'fonts/'
+          }
+        }]
+      },
+      {
+        test: /\.scss$/,
+        loader: 'style-loader!css-loader!sass-loader'
       },
 
+      {
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader, "css-loader"],  //******* use[] instead of loaders[]
+      },
       { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=10000&mimetype=application/font-woff" },
       { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader" },
-  
       {
         test: /\.(png|jpg|svg)$/,
         loader: "url-loader",
@@ -66,17 +73,17 @@ module.exports = {
       inject: 'body',
     }),
     new CleanWebpackPlugin(PATHS.build),
-      new webpack.ProvidePlugin({
-         $: "jquery",
-         jQuery: "jquery"
-     }),
-     new MiniCssExtractPlugin({
+    new webpack.ProvidePlugin({
+      $: "jquery",
+      jQuery: "jquery"
+    }),
+    new MiniCssExtractPlugin({
       // Options similar to the same options in webpackOptions.output
       // both options are optional
       filename: "[name].css",
       chunkFilename: "[id].css"
     })
-     
+
   ],
 };
 
