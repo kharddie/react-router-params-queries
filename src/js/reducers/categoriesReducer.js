@@ -12,6 +12,9 @@ export default function (state = INITIAL_STATE, action) {
         case FETCH_CATEGORIES:// start fetching categoriesList and set loading = true
             return { ...state, categoriesList: { categories: [], error: null, loading: true } };
         case FETCH_CATEGORIES_SUCCESS:// return list of posts and make loading = false
+            /*
+            The below function takes the current "categoriesList" inside "...state" and merges new "categoriesList" and creates a **new** state(json), if the action is "FECTH_POSTS_SUCCESS" case FETCH_POSTS_SUCCESS:
+            */
             return { ...state, categoriesList: { categories: action.payload, error: null, loading: false } };
         case FETCH_CATEGORIES_FAILURE:// return error and make loading = false
             error = action.payload || { message: action.payload.message };//2nd one is network or server down errors

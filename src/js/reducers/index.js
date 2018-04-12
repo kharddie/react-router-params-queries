@@ -1,13 +1,11 @@
 import { combineReducers } from 'redux';
 import ProductsReducer from './productsReducer';
 import CategoriesReducer from "./categoriesReducer"
-import ProductsDeleteReducer from './productsDeleteReducer';
 import { reducer as formReducer } from 'redux-form';
 
 const rootReducer = combineReducers({
-  posts: ProductsReducer, //<-- Posts
+  products: ProductsReducer, //<-- Posts
   categories: CategoriesReducer,
-  productDelete:ProductsDeleteReducer,
   form: formReducer, // <-- redux-form
 });
 

@@ -4,11 +4,8 @@ Not every component will be connected, or subscribed, to the store.
  container component OR "stateful", components will be connected to the store..
  */
 import { connect } from 'react-redux';
-import { fetchProducts, fetchProductsSuccess, fetchProductsFailure } from '../actions/Products';
+import { fetchProducts, fetchProductsSuccess, fetchProductsFailure, deleteProduct, deleteProductSuccess, deleteProductFailure } from '../actions/Products';
 import { fetchCategories, fetchCategoriesSuccess, fetchCategoriesFailure } from '../actions/Categories';
-
-import { deleteProduct, deleteProductSuccess, deleteProductFailure } from '../actions/ProductDelete';
-
 
 import Products from '../components/Products';
 
@@ -23,12 +20,14 @@ const mapStateToProps = (state) => {
   let error = null;
   let loading = false;
 
+
+
   //set loading and error
-  if (state.categories.categoriesList.error || state.posts.productList.error || state.productDelete.deleteProduct.error) {
+  if (state.categories.categoriesList.error || state.products.productList.error || state.products.deletedProduct.error) {
     error = true;
   }
 
-  if (state.categories.categoriesList.loading === true || state.posts.productList.loading === true || state.productDelete.deleteProduct.loading === true) {
+  if (state.categories.categoriesList.loading === true || state.products.productList.loading === true || state.products.deletedProduct.loading === true) {
     loading = true;
   }
 
@@ -38,24 +37,23 @@ const mapStateToProps = (state) => {
     loading: state.categories.categoriesList.loading,
     error: state.categories.categoriesList.error
   };
-//products
+  //products
   let productsDetails = {
-    data: state.posts.productList.products,
-    loading: state.posts.productList.loading,
-    error: state.posts.productList.error
+    data: state.products.productList.products,
+    loading: state.products.productList.loading,
+    error: state.products.productList.error
   };
-//product delete
-  let productDelete = {
-    data: state.productDelete.deleteProduct.deleteProduct,
-    loading: state.productDelete.deleteProduct.loading,
-    error: state.productDelete.deleteProduct.error
+  //deleted products
+  let deletedProductDetails = {
+    data: state.products.deletedProduct.deletedProduct.data,
+    loading: state.products.deletedProduct.loading,
+    error: state.products.deletedProduct.error
   };
-
   let dataToProps = {
     categoriesDetails: categoriesDetails,
     productsDetails: productsDetails,
-    productDelete: productDelete,
-    errorLoading: { error:error, loading:loading}
+    deletedProductDetails: deletedProductDetails,
+    errorLoading: { error: error, loading: loading }
   }
 
   return {

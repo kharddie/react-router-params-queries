@@ -1,6 +1,4 @@
-import { FETCH_PRODUCTS, FETCH_PRODUCTS_SUCCESS, FETCH_PRODUCTS_FAILURE, RESET_PRODUCTS } from '../actions/Products';
-
-
+import {FETCH_PRODUCTS, FETCH_PRODUCTS_SUCCESS, FETCH_PRODUCTS_FAILURE, RESET_PRODUCTS,DELETE_PRODUCT, DELETE_PRODUCT_SUCCESS, DELETE_PRODUCT_FAILURE, RESET_DELETED_PRODUCT} from '../actions/Products';
 
 /* 
 reducer that will be able to handle receiving action creator.
@@ -10,7 +8,8 @@ Reducer should return a brand-new object, with copies of any objects it
 needs from the previous state, and never alter the previous state
 New state becomes available to any component subscribed to the store*/
 const INITIAL_STATE = {
-    productList: { products: [], error: null, loading: false }
+    productList: { products: [], error: null, loading: false },
+    deletedProduct: {deletedProduct: {}, error:null, loading: false}
 };
 
 export default function (state = INITIAL_STATE, action) {
@@ -26,6 +25,27 @@ export default function (state = INITIAL_STATE, action) {
             return { ...state, productList: { products: [], error: error, loading: false } };
         case RESET_PRODUCTS:// reset postList to initial state
             return { ...state, productList: { products: [], error: null, loading: false } };
+
+        case DELETE_PRODUCT:
+            return { ...state, deletedProduct: { deletedProduct: {}, error: null, loading: true } } //...state.deletedProduct, loading: true 
+        case DELETE_PRODUCT_SUCCESS:
+        //delete the product from product list
+        const newState = Object.assign({}, state);
+        const indexOfProductToDelete = newState.productList.products.findIndex( data => {
+            return data.id == action.payload.data
+        })
+        newState.productList.products.splice(indexOfProductToDelete,1); // remove the deleted product at this position "indexOfProductToDelete"
+
+      
+
+            return { ...newState, deletedProduct: { deletedProduct: {}, error: null, loading: false } }
+
+
+        case DELETE_PRODUCT_FAILURE:
+            error = action.payload || { message: action.payload.message };//2nd one is network or server down errors
+            return { ...state, deletedProduct: { deletedProduct: {}, error: error, loading: false } }
+        case RESET_DELETED_PRODUCT: // reset postList to initial state
+            return { ...state, deletedProduct: { deletedProduct: {}, error: null, loading: false } }
 
         default:
             return state;

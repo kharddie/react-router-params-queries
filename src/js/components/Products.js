@@ -70,7 +70,7 @@ class Products extends React.Component {
 
   render() {
 
-    const { categoriesDetails, productsDetails, productDelete, errorLoading } = this.props.dataToProps;
+    const { categoriesDetails, productsDetails, errorLoading, deletedProductDetails } = this.props.dataToProps;
     var productsArr = [];
     const categoriesProductsArr = [];
 
@@ -107,12 +107,6 @@ class Products extends React.Component {
       })
     }
 
-
-
-
-
-
-
     return (
       <div className="container">
         <h1>Posts</h1>
@@ -129,6 +123,5 @@ class Products extends React.Component {
     );
   }
 }
-
 
 export default Products;
