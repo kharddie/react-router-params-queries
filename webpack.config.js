@@ -25,7 +25,7 @@ module.exports = {
   devServer: {
     inline: true,
     host: '127.0.0.1', // in this section, I have tried to change IP address by server IP
-    port: 3000
+    port: 4050
   },
 
   module: {

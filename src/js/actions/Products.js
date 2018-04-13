@@ -20,7 +20,13 @@ export const DELETE_PRODUCT_SUCCESS = 'DELETE_PRODUCT_SUCCESS';
 export const DELETE_PRODUCT_FAILURE = 'DELETE_PRODUCT_FAILURE';
 export const RESET_DELETED_PRODUCT = 'RESET_DELETED_PRODUCT';
 
-const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost/Reactjs-Weather-App/api/' : '/api';
+//create products
+export const CREATE_PRODUCT = 'CREATE_PRODUCT';
+export const CREATE_PRODUCT_SUCCESS = 'CREATE_PRODUCT_SUCCESS';
+export const CREATE_PRODUCT_FAILURE = 'CREATE_PRODUCT_FAILURE';
+export const RESET_NEW_PRODUCT = 'RESET_NEW_PRODUCT';
+
+const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost/react-router-params-queries-api/' : '/api';
 
 export function fetchProducts() {
   const request = axios({
@@ -83,6 +89,42 @@ export function deleteProductFailure(error) {
 export function resetDeletedProduct() {
   return {
     type: RESET_DELETED_PRODUCT
+  }
+}
+
+export function createProduct(props, tokenFromStorage) {
+  const request = axios({
+    method: 'post',
+    data: props,
+    url: `${ROOT_URL}/product/create.php`,
+    headers: {
+      'Authorization': `Bearer ${tokenFromStorage}`
+    }
+  });
+
+  return {
+    type: CREATE_PRODUCT,
+    payload: request
+  };
+}
+
+export function createProductSuccess(newProduct) {
+  return {
+    type: CREATE_PRODUCT_SUCCESS,
+    payload: newProduct
+  };
+}
+
+export function createProductFailure(error) {
+  return {
+    type: CREATE_PRODUCT_FAILURE,
+    payload: error
+  };
+}
+
+export function resetNewProduct() {
+  return {
+    type: RESET_NEW_PRODUCT
   }
 }
 

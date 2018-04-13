@@ -15,10 +15,6 @@ class Products extends React.Component {
     //this.props.deleteProduct();
   }
 
-  reloadProducts() {
-    this.props.fetchProducts();
-  }
-
   registerUser = (e) => {
     e.preventDefault();
     const username = e.target.elements.userName.value;
@@ -31,7 +27,7 @@ class Products extends React.Component {
     selectedOption: ''
   }
 
-
+ 
   //modal
   showModal = () => {
     this.setState({ modalvisible: true });
@@ -57,13 +53,18 @@ class Products extends React.Component {
     e.preventDefault();
     const productName = e.target.elements.productName.value;
     const categoryId = this.state.selectedOption.value;
-    // this.props.createProduct(categoryId,productName);
+    this.props.createProduct(categoryId,productName);
   }
 
   //end select component
 
 
 
+
+  handleClick = () => {
+    // console.log('From handleClick()', this);
+    this.setState({ numOfClicks: this.state.numOfClicks + 1 });
+  }
 
   renderProducts = (data) => {
     if (data.length > 0) {
@@ -142,16 +143,51 @@ class Products extends React.Component {
 
     return (
       <div className="container">
-        <h1>DashBoard</h1>
+        <h1>Posts</h1>
 
-        <button className="btn btn-primary" onClick={this.showModal}>Create new product</button>
+        <div>
+          <button onClick={this.handleClick}>Click Me!</button>
+          <p>Number of Times Clicked = {this.state.numOfClicks}</p>
+        </div>
+
+        <button className="btn btn-primary" onClick={this.showModal}>Show modal</button>
         <Modal visible={this.state.modalvisible} onClickBackdrop={this.modalBackdropClicked}>
+        <form onSubmit={this.createProduct}>
           <div className="modal-header">
             <h5 className="modal-title">Create new category</h5>
           </div>
           <div className="modal-body">
             <div class="container">
-              <CreateNewProductForm reloadProducts={this.reloadProducts} props={this.props} hideModal={this.hideModal}></CreateNewProductForm>
+
+
+
+
+              
+                <div class="row">
+                  <div class="col">Choose product category</div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <Select
+                      name="form-field-name"
+                      value={value}
+                      onChange={this.handleChange}
+                      options={catOptions}
+                    /></div>
+                </div>
+                <div class="row">
+                
+                  <div class="col">
+                    <input type="text" name="productName" placeholder="Product name..." />
+                  </div>
+                  
+                </div>
+             
+
+
+
+
+
             </div>
           </div>
           <div className="modal-footer">
@@ -160,7 +196,30 @@ class Products extends React.Component {
               close
           </button>
           </div>
+          </form>
         </Modal>
+
+        <CreateNewProductForm props = {this.props}></CreateNewProductForm>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -4,9 +4,8 @@ Not every component will be connected, or subscribed, to the store.
  container component OR "stateful", components will be connected to the store..
  */
 import { connect } from 'react-redux';
-import { fetchProducts, fetchProductsSuccess, fetchProductsFailure, deleteProduct, deleteProductSuccess, deleteProductFailure } from '../actions/Products';
+import { fetchProducts, fetchProductsSuccess, fetchProductsFailure, deleteProduct, deleteProductSuccess, deleteProductFailure, createProduct, createProductSuccess, createProductFailure, resetNewProduct } from '../actions/Products';
 import { fetchCategories, fetchCategoriesSuccess, fetchCategoriesFailure } from '../actions/Categories';
-
 import Products from '../components/Products';
 
 /*
@@ -19,8 +18,6 @@ const mapStateToProps = (state) => {
 
   let error = null;
   let loading = false;
-
-
 
   //set loading and error
   if (state.categories.categoriesList.error || state.products.productList.error || state.products.deletedProduct.error) {
@@ -49,11 +46,19 @@ const mapStateToProps = (state) => {
     loading: state.products.deletedProduct.loading,
     error: state.products.deletedProduct.error
   };
+
+  //new products
+  let newProductDetails = {
+    data: state.products.newProduct.newProduct,
+    loading: state.products.newProduct.loading,
+    error: state.products.newProduct.error
+  };
   let dataToProps = {
     categoriesDetails: categoriesDetails,
     productsDetails: productsDetails,
     deletedProductDetails: deletedProductDetails,
-    errorLoading: { error: error, loading: loading }
+    newProductDetails:newProductDetails,
+    errorLoading: { error: error, loading: loading },
   }
 
   return {
@@ -82,7 +87,18 @@ const mapDispatchToProps = (dispatch) => {
         //clean the payload  fetching
         !response.error ? dispatch(deleteProductSuccess(response.payload.data)) : dispatch(deleteProductFailure(response.payload.data));
       });
-    }
+    },
+
+    createProduct: (event) => {
+      dispatch(createProduct(event)).then((response) => {
+        //clean the payload  fetching
+        !response.error ? dispatch(createProductSuccess(response.payload.data)) : dispatch(createProductFailure(response.payload.data));
+      });
+    },
+
+    resetMe: () => {
+      dispatch(resetNewProduct());
+    },
   }
 }
 
