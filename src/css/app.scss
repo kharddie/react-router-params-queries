@@ -12,6 +12,14 @@ body {
     align-items: center;
   }
 
+  /* utilities*/
+  .btn.no-text-wrap {
+    white-space: normal;
+  }
+
+  .spacer5 {
+    height: 15px;
+  }
 
   
   .main {

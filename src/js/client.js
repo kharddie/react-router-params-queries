@@ -4,6 +4,12 @@ import { Router, Route, IndexRoute, hashHistory } from "react-router";
 import 'bootstrap/dist/css/bootstrap.css';
 //import 'font-awesome/css/font-awesome.css';
 
+//import 'font-awesome/less/font-awesome.less';
+
+import 'font-awesome/css/font-awesome.css';
+import 'bootstrap/dist/css/bootstrap.css';
+
+
 /* import "jquery"; */
 
 import "../css/app.scss";

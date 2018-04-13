@@ -6,6 +6,22 @@ import 'react-select/dist/react-select.css';
 import CreateNewProductForm from "./CreateNewProductForm";
 
 
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import faTimes from '@fortawesome/fontawesome-free-solid/faTimes';
+
+import faEdit from '@fortawesome/fontawesome-free-solid/faEdit';
+
+
+
+
+
+
+const element = (
+  <FontAwesomeIcon icon={faTimes} />
+)
+
+
+
 
 class Products extends React.Component {
 
@@ -33,8 +49,11 @@ class Products extends React.Component {
 
 
   //modal
-  showModal = () => {
+  showModalProduct = () => {
     this.setState({ modalvisible: true });
+  }
+  showModalCategory = () => {
+    //
   }
 
   hideModal = () => {
@@ -71,9 +90,11 @@ class Products extends React.Component {
         //console.log('From renderProducts()', this);
         return (
           <span>
-            <span key={key}> {data.prodCategoryId} ({data.prodName}) {data.prodDescription} {data.prodprice}
+            <span key={key}> [{data.prodCategoryId}] ({data.prodName})
             </span>
-            <i class="fas fa-arrow-alt-down"></i> <a className='btn' onClick={() => this.deleteProduct(data)}>delete</a>
+            <a className='btn' onClick={() => this.deleteProduct(data)}>delete</a>
+
+            <FontAwesomeIcon size="lg" icon={faTimes} /><FontAwesomeIcon size="lg" icon={faEdit} />
 
             <br />
           </span>
@@ -86,12 +107,46 @@ class Products extends React.Component {
     //console.log('From renderPosts()', this);
     return data.map((data) => {
       return (
+
+
+
         <div>
-          <span> <strong>{data.catName} ({data.catId}) {data.catDescription}</strong></span><br />
-          <span>
-            {this.renderProducts(data.products)}
-          </span>
+          <div class="card">
+            <div class="card-header" id="headingThree">
+              <h5 class="mb-0">
+                <button class="btn btn-link collapsed no-text-wrap" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                  {data.catName} ({data.catId})<br /> {data.catDescription}
+                </button>
+
+
+
+
+              </h5>
+            </div>
+            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+              <div class="card-body">
+                {this.renderProducts(data.products)}
+              </div>
+            </div>
+          </div>
         </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       );
     })
   }
@@ -141,10 +196,10 @@ class Products extends React.Component {
     }
 
     return (
-      <div className="container">
+      <div>
         <h1>DashBoard</h1>
 
-        <button className="btn btn-primary" onClick={this.showModal}>Create new product</button>
+
         <Modal visible={this.state.modalvisible} onClickBackdrop={this.modalBackdropClicked}>
           <div className="modal-header">
             <h5 className="modal-title">Create new category</h5>
@@ -154,26 +209,22 @@ class Products extends React.Component {
               <CreateNewProductForm reloadProducts={this.reloadProducts} props={this.props} hideModal={this.hideModal}></CreateNewProductForm>
             </div>
           </div>
-          <div className="modal-footer">
-            <button className="btn btn-primary" type="submit">Create product</button>
-            <button type="button" className="btn btn-primary" onClick={this.hideModal}>
-              close
-          </button>
-          </div>
+          <div className="modal-footer"></div>
         </Modal>
 
 
 
-
-
-
-
-
-
-
-        <ul className="list-group">
+        <div className="row ">
+          <div className="col-12 col-sm-3">Admin Dashboard</div>
+          <div class="spacer5  col d-sm-none d-md-none d-lg-none"></div>
+          <div className="col-12 col-sm-4 col-md-3"><button className="btn btn-primary" onClick={this.showModalProduct}>Create new Category</button></div>
+          <div class="spacer5 col d-sm-none d-md-none d-lg-none"></div>
+          <div className="col-12 col-sm-4 col-md-3"><button className="btn btn-secondary" onClick={this.showModalCategory}>Create new product</button></div>
+        </div>
+        <div class="spacer5"></div>
+        <div id="accordion">
           {this.renderPosts(categoriesProductsArr)}
-        </ul>
+        </div>
       </div>
     );
   }

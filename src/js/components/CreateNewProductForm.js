@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from "react";
 
 import { Link } from 'react-router';
-import { reduxForm, Field, SubmissionError,touched  } from 'redux-form';
+import { reduxForm, Field, SubmissionError, touched } from 'redux-form';
 import renderField from './renderField';
 import { validateProductFields, validateProductFieldsSuccess, validateProductFieldsFailure } from '../actions/Products';
 import { createProduct, createProductSuccess, createProductFailure, resetNewProduct } from '../actions/Products';
@@ -120,11 +120,9 @@ class CreateNewProductForm extends React.Component {
                   </Field>
                 </div>
               </div>
-
-
               <div>
                 <label>First Name</label>
-                <div>
+                <div class="form-group">
                   <Field
                     name="name"
                     component="input"
@@ -133,22 +131,18 @@ class CreateNewProductForm extends React.Component {
                   />
                 </div>
               </div>
-
-   <div className="help-block">
-      {touched && ((error && <span>{error}</span>) || (warning && <span>{warning}</span>))}
-      </div>
-
-
-
-              <div>
+              <div className="help-block">
+                {touched && ((error && <span>{error}</span>) || (warning && <span>{warning}</span>))}
+              </div>
+              <div class="form-group">
                 <label>Description</label>
                 <div>
                   <Field name="description" component="textarea" />
                 </div>
               </div>
-              <div>
-                <button type="submit" disabled={pristine || submitting}> Create product</button>
-                <button type="button" disabled={pristine || submitting} onClick={reset}> Reset </button>
+              <div class="form-group">
+                  <button className="btn btn-secondary btn-lg btn-block" type="button" disabled={pristine || submitting} onClick={reset}> Reset </button> 
+                  <button className="btn btn-primary btn-lg btn-block" type="submit" disabled={pristine || submitting}> Create product</button>          
               </div>
             </form>
           </div>
