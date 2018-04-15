@@ -89,15 +89,18 @@ class Products extends React.Component {
       return data.map((data, key) => {
         //console.log('From renderProducts()', this);
         return (
-          <span>
-            <span key={key}> [{data.prodCategoryId}] ({data.prodName})
-            </span>
-            <a className='btn' onClick={() => this.deleteProduct(data)}>delete</a>
-
-            <FontAwesomeIcon size="lg" icon={faTimes} /><FontAwesomeIcon size="lg" icon={faEdit} />
-
+          <div>
+            <div class="row text-left">
+              <div class="col-12 col-sm-6">
+                <span key={key}> [{data.prodCategoryId}] ({data.prodName})</span>
+              </div>
+              <div class="col-6 col-xs-12 col-sm-2">
+                <a className='btn' onClick={() => this.deleteProduct(data)}><FontAwesomeIcon size="xs" icon={faTimes} /></a><span>&nbsp;&nbsp;&nbsp;</span>
+                <a className='btn' onClick={() => this.deleteProduct(data)}><FontAwesomeIcon size="xs" icon={faEdit} /></a>
+              </div>
+            </div>
             <br />
-          </span>
+          </div>
         );
       })
     }
@@ -105,48 +108,27 @@ class Products extends React.Component {
 
   renderPosts = (data) => {
     //console.log('From renderPosts()', this);
-    return data.map((data) => {
+    return data.map((data, key) => {
       return (
-
-
-
         <div>
+
+
+
           <div class="card">
-            <div class="card-header" id="headingThree">
+            <div class="card-header" id={"heading" + key}>
               <h5 class="mb-0">
-                <button class="btn btn-link collapsed no-text-wrap" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                  {data.catName} ({data.catId})<br /> {data.catDescription}
+                <button class="btn btn-link collapsed no-text-wrap" data-toggle="collapse" data-target={"#collapse" + key} aria-expanded="false" aria-controls={"collapse"+key}>
+                  {data.catName}[{data.products.length}] ({data.catId})<br /> {data.catDescription}
                 </button>
-
-
-
-
               </h5>
             </div>
-            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+            <div id={"collapse" + key} class="collapse" aria-labelledby={"heading" + key} data-parent="#accordion">
               <div class="card-body">
                 {this.renderProducts(data.products)}
               </div>
             </div>
           </div>
         </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       );
     })
   }
@@ -199,7 +181,6 @@ class Products extends React.Component {
       <div>
         <h1>DashBoard</h1>
 
-
         <Modal visible={this.state.modalvisible} onClickBackdrop={this.modalBackdropClicked}>
           <div className="modal-header">
             <h5 className="modal-title">Create new category</h5>
@@ -211,8 +192,6 @@ class Products extends React.Component {
           </div>
           <div className="modal-footer"></div>
         </Modal>
-
-
 
         <div className="row ">
           <div className="col-12 col-sm-3">Admin Dashboard</div>
