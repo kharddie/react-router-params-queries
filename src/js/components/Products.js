@@ -44,7 +44,10 @@ class Products extends React.Component {
   state = {
     modalvisible: false,
     numOfClicks: 0,
-    selectedOption: ''
+    selectedOption: '',
+    productUpdatedName: '',
+    productUpdatedId: '',
+    isProductUpdateHidden: true
   }
 
 
@@ -62,8 +65,32 @@ class Products extends React.Component {
 
   deleteProduct = (event) => {
     this.props.deleteProduct(event.prodId);
-    //this.setState({numOfClicks: this.state.numOfClicks + 1});
   }
+
+  updateProduct = (id) => {
+    let data = {
+      name: event.prodName,
+      id: event.prodId
+    }
+    console.log(event)
+    this.props.updateProduct(data);
+  }
+
+  handleProductUpdate = (event) => {
+    event.preventDefault();
+    this.setState({
+      productUpdatedName: event.target.newName.value,
+      productUpdatedId: event.target.newName.id
+    });
+
+    let data = {
+      name: event.target.newName.value,
+      id: event.target.newName.id
+    }
+    console.log(data)
+    this.props.updateProduct(data);
+  }
+
   //end modal
 
   //select component
@@ -80,10 +107,6 @@ class Products extends React.Component {
   }
 
   //end select component
-
-
-
-
   renderProducts = (data) => {
     if (data.length > 0) {
       return data.map((data, key) => {
@@ -93,10 +116,19 @@ class Products extends React.Component {
             <div class="row text-left">
               <div class="col-12 col-sm-6">
                 <span key={key}> [{data.prodCategoryId}] ({data.prodName})</span>
+
+
+
+                <form id={data.prodId} className="updateProduct" onSubmit={this.handleProductUpdate}>
+                  <input id={data.prodId} key={"input" + key} type="text" name="newName" className="" defaultValue={data.prodName} />
+                  <button type="submit" >Update</button>
+                </form>
+
+
               </div>
               <div class="col-6 col-xs-12 col-sm-2">
                 <a className='btn' onClick={() => this.deleteProduct(data)}><FontAwesomeIcon size="xs" icon={faTimes} /></a><span>&nbsp;&nbsp;&nbsp;</span>
-                <a className='btn' onClick={() => this.deleteProduct(data)}><FontAwesomeIcon size="xs" icon={faEdit} /></a>
+                <a className='btn' onClick={() => this.updateProduct(data.prodId)}><FontAwesomeIcon size="xs" icon={faEdit} /></a>
               </div>
             </div>
             <br />
@@ -117,7 +149,7 @@ class Products extends React.Component {
           <div class="card">
             <div class="card-header" id={"heading" + key}>
               <h5 class="mb-0">
-                <button class="btn btn-link collapsed no-text-wrap" data-toggle="collapse" data-target={"#collapse" + key} aria-expanded="false" aria-controls={"collapse"+key}>
+                <button class="btn btn-link collapsed no-text-wrap" data-toggle="collapse" data-target={"#collapse" + key} aria-expanded="false" aria-controls={"collapse" + key}>
                   {data.catName}[{data.products.length}] ({data.catId})<br /> {data.catDescription}
                 </button>
               </h5>
@@ -196,9 +228,9 @@ class Products extends React.Component {
         <div className="row ">
           <div className="col-12 col-sm-3">Admin Dashboard</div>
           <div class="spacer5  col d-sm-none d-md-none d-lg-none"></div>
-          <div className="col-12 col-sm-4 col-md-3"><button className="btn btn-primary" onClick={this.showModalProduct}>Create new Category</button></div>
+          <div className="col-12 col-sm-4 col-md-3"><button className="btn btn-primary" onClick={this.showModalProduct}>Create new Product</button></div>
           <div class="spacer5 col d-sm-none d-md-none d-lg-none"></div>
-          <div className="col-12 col-sm-4 col-md-3"><button className="btn btn-secondary" onClick={this.showModalCategory}>Create new product</button></div>
+          <div className="col-12 col-sm-4 col-md-3"><button className="btn btn-secondary" onClick={this.showModalCategory}>Create new Category</button></div>
         </div>
         <div class="spacer5"></div>
         <div id="accordion">

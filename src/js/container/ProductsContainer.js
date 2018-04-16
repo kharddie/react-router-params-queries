@@ -4,7 +4,12 @@ Not every component will be connected, or subscribed, to the store.
  container component OR "stateful", components will be connected to the store..
  */
 import { connect } from 'react-redux';
-import { fetchProducts, fetchProductsSuccess, fetchProductsFailure, deleteProduct, deleteProductSuccess, deleteProductFailure, createProduct, createProductSuccess, createProductFailure, resetNewProduct } from '../actions/Products';
+import {
+  fetchProducts, fetchProductsSuccess, fetchProductsFailure,
+  deleteProduct, deleteProductSuccess, deleteProductFailure,
+  updateProduct, updateProductSuccess, updateProductFailure,
+  createProduct, createProductSuccess, createProductFailure, resetNewProduct
+} from '../actions/Products';
 import { fetchCategories, fetchCategoriesSuccess, fetchCategoriesFailure } from '../actions/Categories';
 import Products from '../components/Products';
 
@@ -14,7 +19,7 @@ receive application state from the store whenever state has changed and make dat
 available to the component as props.
 http://www.thegreatcodeadventure.com/react-redux-tutorial-part-iv-the-index-feature/
 */
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
 
   let error = null;
   let loading = false;
@@ -47,6 +52,14 @@ const mapStateToProps = (state) => {
     error: state.products.deletedProduct.error
   };
 
+
+  //updated products
+  let updatedProductDetails = {
+    data: state.products.updateProduct.updateProduct.data,
+    loading: state.products.updateProduct.loading,
+    error: state.products.updateProduct.error
+  };
+
   //new products
   let newProductDetails = {
     data: state.products.newProduct.newProduct,
@@ -57,7 +70,8 @@ const mapStateToProps = (state) => {
     categoriesDetails: categoriesDetails,
     productsDetails: productsDetails,
     deletedProductDetails: deletedProductDetails,
-    newProductDetails:newProductDetails,
+    newProductDetails: newProductDetails,
+    updatedProductDetails: updatedProductDetails,
     errorLoading: { error: error, loading: loading },
   }
 
@@ -87,6 +101,18 @@ const mapDispatchToProps = (dispatch) => {
         //clean the payload  fetching
         !response.error ? dispatch(deleteProductSuccess(response.payload.data)) : dispatch(deleteProductFailure(response.payload.data));
       });
+    },
+
+    updateProduct: (event) => {
+      dispatch(updateProduct(event)).then((response) => {
+        //clean the payload  fetching
+        if (!response.error  &&  response.payload.data.error !== 'true') {
+          dispatch(updateProductSuccess(response.payload))
+        } else {
+          dispatch(updateProductFailure(response.payload))
+        }
+      });
+
     },
 
     createProduct: (event) => {

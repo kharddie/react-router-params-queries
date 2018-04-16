@@ -3,6 +3,7 @@ import React, { Component, PropTypes } from "react";
 import { Link } from 'react-router';
 import { reduxForm, Field, SubmissionError, touched } from 'redux-form';
 import renderField from './renderField';
+import renderTextArea from './renderTextArea';
 import { validateProductFields, validateProductFieldsSuccess, validateProductFieldsFailure } from '../actions/Products';
 import { createProduct, createProductSuccess, createProductFailure, resetNewProduct } from '../actions/Products';
 
@@ -21,7 +22,7 @@ const validateAndCreatePost = (values, dispatch, props) => {
       }
       //let other components know that everything is fine by updating the redux` state
       dispatch(createProductSuccess(result.payload.data)); //ps: this is same as dispatching RESET_USER_FIELDS
-      props.reloadProducts();
+      //props.reloadProducts();
     });
 }
 
@@ -31,10 +32,10 @@ const validate = values => {
   const errors = {};
 
   if (!values.name || values.name.trim() === '') {
-    errors.name = 'Enter a Title';
+    errors.name = 'Enter a Product name';
   }
   if (!values.categories || values.categories.trim() === '') {
-    errors.categories = 'Enter categories';
+    errors.categories = 'Chose product category';
   }
   if (!values.description || values.description.trim() === '') {
     errors.description = 'Enter some content';
@@ -63,8 +64,8 @@ class CreateNewProductForm extends React.Component {
     //  this.context.router.push('/');
     // }
 
-    if (nextProps.props.dataToProps.newProductDetails.data.data !== undefined) {
-      console.log(nextProps.props.dataToProps.newProductDetails.data.data);
+    if (nextProps.props.dataToProps.newProductDetails.data !== undefined) {
+      console.log(nextProps.props.dataToProps.newProductDetails.data);
       //nextProps.props.fetchCategories();
     }
   }
@@ -81,11 +82,11 @@ class CreateNewProductForm extends React.Component {
 
   }
 
-  renderError(newPost) {
-    if (newPost && newPost.error && newPost.error.message) {
+  renderError(newProductDetails) {
+    if (newProductDetails && newProductDetails.error && newProductDetails.error.message) {
       return (
         <div className="alert alert-danger">
-          {newPost ? newPost.error.message : ''}
+          {newProductDetails ? newProductDetails.error.message : ''}
         </div>
       );
     } else {
@@ -97,11 +98,12 @@ class CreateNewProductForm extends React.Component {
 
 
   render() {
-    const { handleSubmit, hideModal, pristine, reset, submitting } = this.props
+    const { handleSubmit, hideModal, pristine, reset, submitting } = this.props;
+
+    const { categoriesDetails, newProductDetails } = this.props.props.dataToProps;
 
     //Get categories for select
-    const catOptions = this.props.props.dataToProps.categoriesDetails.data.map((data, index, currentElement) => {
-
+    const catOptions = categoriesDetails.data.map((data, index, currentElement) => {
       return (<option key={index} value={data.id}>{data.name}</option>)
     })
 
@@ -110,6 +112,7 @@ class CreateNewProductForm extends React.Component {
       <div>
         <div className="row">
           <div className="col-12">
+            {this.renderError(newProductDetails)}
             <form onSubmit={handleSubmit(validateAndCreatePost)}>
               <div>
                 <label>Select Categories</label>
@@ -120,29 +123,44 @@ class CreateNewProductForm extends React.Component {
                   </Field>
                 </div>
               </div>
-              <div>
-                <label>First Name</label>
-                <div class="form-group">
-                  <Field
-                    name="name"
-                    component="input"
-                    type="text"
-                    placeholder="First Name"
-                  />
-                </div>
-              </div>
-              <div className="help-block">
-                {touched && ((error && <span>{error}</span>) || (warning && <span>{warning}</span>))}
-              </div>
+
+
+
+
+
+
+              <Field
+                name="name"
+                type="text"
+                component={renderField}
+                label="Product Name*" />
+
+              <Field
+                name="description"
+                component={renderTextArea}
+                label="Description*" />
+
+
+
+
+
+
+
+
               <div class="form-group">
-                <label>Description</label>
-                <div>
-                  <Field name="description" component="textarea" />
-                </div>
-              </div>
-              <div class="form-group">
-                  <button className="btn btn-secondary btn-lg btn-block" type="button" disabled={pristine || submitting} onClick={reset}> Reset </button> 
-                  <button className="btn btn-primary btn-lg btn-block" type="submit" disabled={pristine || submitting}> Create product</button>          
+                <button
+                  className="btn btn-secondary btn-lg btn-block"
+                  type="button"
+                  disabled={pristine || submitting}
+                  onClick={reset}>
+                  Reset
+                 </button>
+                <button
+                  className="btn btn-primary btn-lg btn-block"
+                  type="submit"
+                  disabled={pristine || submitting}>
+                  Create product
+                </button>
               </div>
             </form>
           </div>

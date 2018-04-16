@@ -26,6 +26,13 @@ export const CREATE_PRODUCT_SUCCESS = 'CREATE_PRODUCT_SUCCESS';
 export const CREATE_PRODUCT_FAILURE = 'CREATE_PRODUCT_FAILURE';
 export const RESET_NEW_PRODUCT = 'RESET_NEW_PRODUCT';
 
+//update products
+export const UPDATE_PRODUCT = 'UPDATE_PRODUCT';
+export const UPDATE_PRODUCT_SUCCESS = 'UPDATE_PRODUCT_SUCCESS';
+export const UPDATE_PRODUCT_FAILURE = 'UPDATE_PRODUCT_FAILURE';
+export const RESET_UPDATED_PRODUCT = 'RESET_UPDATED_PRODUCT';
+
+
 const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost/react-router-params-queries-api/' : '/api';
 
 export function fetchProducts() {
@@ -92,6 +99,7 @@ export function resetDeletedProduct() {
   }
 }
 
+// CREATE
 export function createProduct(props, tokenFromStorage) {
   const request = axios({
     method: 'post',
@@ -125,6 +133,45 @@ export function createProductFailure(error) {
 export function resetNewProduct() {
   return {
     type: RESET_NEW_PRODUCT
+  }
+}
+
+
+
+// UPDATE
+export function updateProduct(props, tokenFromStorage) {
+  const request = axios({
+    method: 'post',
+    data: props,
+    url: `${ROOT_URL}/product/update.php`,
+    headers: {
+      'Authorization': `Bearer ${tokenFromStorage}`
+    }
+  });
+
+  return {
+    type: UPDATE_PRODUCT,
+    payload: request
+  };
+}
+
+export function updateProductSuccess(updateProduct) {
+  return {
+    type: UPDATE_PRODUCT_SUCCESS,
+    payload: updateProduct
+  };
+}
+
+export function updateProductFailure(payload) {
+  return {
+    type: UPDATE_PRODUCT_FAILURE,
+    payload: payload
+  };
+}
+
+export function resetUpdatedProduct() {
+  return {
+    type: RESET_UPDATED_PRODUCT
   }
 }
 
