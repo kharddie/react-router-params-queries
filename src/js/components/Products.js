@@ -12,23 +12,20 @@ import faTimes from '@fortawesome/fontawesome-free-solid/faTimes';
 import faEdit from '@fortawesome/fontawesome-free-solid/faEdit';
 
 
-
-
-
-
-const element = (
-  <FontAwesomeIcon icon={faTimes} />
-)
-
-
-
-
 class Products extends React.Component {
 
   componentWillMount() {
     this.props.fetchProducts();
     this.props.fetchCategories();
     //this.props.deleteProduct();
+  }
+
+  componentDidMount() {
+    $(".updateProductForm").hide();
+  }
+
+  componentDidUpdate() {
+    $(".updateProductForm").hide();
   }
 
   reloadProducts() {
@@ -50,7 +47,6 @@ class Products extends React.Component {
     isProductUpdateHidden: true
   }
 
-
   //modal
   showModalProduct = () => {
     this.setState({ modalvisible: true });
@@ -67,25 +63,22 @@ class Products extends React.Component {
     this.props.deleteProduct(event.prodId);
   }
 
-  updateProduct = (id) => {
-    let data = {
-      name: event.prodName,
-      id: event.prodId
-    }
-    console.log(event)
-    this.props.updateProduct(data);
+  showProductUpdateView = (id) => {
+    $(".updateProductForm").hide();
+    $(".updateThisProductForm"+id).toggle(); 
   }
 
   handleProductUpdate = (event) => {
     event.preventDefault();
     this.setState({
-      productUpdatedName: event.target.newName.value,
-      productUpdatedId: event.target.newName.id
+      productUpdatedName: event.target.updateName.value,
+      productUpdatedId: event.target.updateName.id
     });
 
     let data = {
-      name: event.target.newName.value,
-      id: event.target.newName.id
+      name: event.target.updateName.value,
+      id: event.target.updateName.id,
+      category_id: event.target.updateCategoryId.id,
     }
     console.log(data)
     this.props.updateProduct(data);
@@ -117,18 +110,16 @@ class Products extends React.Component {
               <div class="col-12 col-sm-6">
                 <span key={key}> [{data.prodCategoryId}] ({data.prodName})</span>
 
-
-
-                <form id={data.prodId} className="updateProduct" onSubmit={this.handleProductUpdate}>
-                  <input id={data.prodId} key={"input" + key} type="text" name="newName" className="" defaultValue={data.prodName} />
+                <form id={data.prodId} className={"updateProductForm updateThisProductForm"+ data.prodId} onSubmit={this.handleProductUpdate}>
+                  <input id={data.prodId} key={"input1" + key} type="text" name="updateName" className="" defaultValue={data.prodName} />
+                  <input id={data.prodCategoryId} key={"input2" + key} type="hidden" name="updateCategoryId" className="" />
                   <button type="submit" >Update</button>
                 </form>
 
-
               </div>
               <div class="col-6 col-xs-12 col-sm-2">
-                <a className='btn' onClick={() => this.deleteProduct(data)}><FontAwesomeIcon size="xs" icon={faTimes} /></a><span>&nbsp;&nbsp;&nbsp;</span>
-                <a className='btn' onClick={() => this.updateProduct(data.prodId)}><FontAwesomeIcon size="xs" icon={faEdit} /></a>
+                <a className='btn' onClick={() => this.deleteProduct(data)}><FontAwesomeIcon size="sm" icon={faTimes} /></a><span>&nbsp;&nbsp;&nbsp;</span>
+                <a className='btn' onClick={() => this.showProductUpdateView(data.prodId)}><FontAwesomeIcon size="sm" icon={faEdit} /></a>
               </div>
             </div>
             <br />
@@ -194,7 +185,6 @@ class Products extends React.Component {
               prodId: data2.id,
               prodCategoryId: data2.category_id,
               prodName: data2.name,
-              prodprice: data2.price,
               prodDescription: data2.description,
             });
           }

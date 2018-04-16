@@ -36,12 +36,24 @@ export default function (state = INITIAL_STATE, action) {
         case UPDATE_PRODUCT:// start fetching posts and set loading = true
             return { ...state, updateProduct: { updateProduct: [], error: null, loading: true } };
         case UPDATE_PRODUCT_SUCCESS:// return list of posts and make loading = false
-            return { ...state, updateProduct: { updateProduct: action.payload, error: null, loading: false } };
+            const newStateUPS = Object.assign({}, state);
+            newStateUPS.productList.products.findIndex(data => {
+                if (data.id == action.payload.data.data.id) {
+                    data.name = action.payload.data.data.name
+                }
+            })
+
+            return { ...newStateUPS, updateProduct: { updateProduct: action.payload.data, error: null, loading: false } }
+
+
+
+
+
         case UPDATE_PRODUCT_FAILURE:// return error and make loading = false
             error = action.payload || { error: error, loading: false };//2nd one is network or server down errors
-            if (action.payload.error !== undefined && action.payload.data.error !== "true" ) {
+            if (action.payload.error !== undefined && action.payload.data.error !== "true") {
                 error = false;
-            }else{
+            } else {
                 error = true;
             }
 
