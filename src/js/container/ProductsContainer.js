@@ -158,7 +158,7 @@ const mapDispatchToProps = (dispatch) => {
       });
     },
 
-    //products
+    //categories
     fetchCategories: () => {
       dispatch(fetchCategories()).then((response) => {
         //clean the payload  fetching

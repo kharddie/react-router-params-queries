@@ -5,6 +5,8 @@ import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import CreateNewProductForm from "./CreateNewProductForm";
 
+import CreateNewCategoriesForm from "./CreateNewCategoriesForm";
+
 
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import faTimes from '@fortawesome/fontawesome-free-solid/faTimes';
@@ -67,6 +69,7 @@ class Products extends React.Component {
 
   modalBackdropClicked = () => {
     this.setState({ modalvisibleProducts: false });
+    this.setState({ modalvisibleCategories: false });
   }
 
 
@@ -252,7 +255,7 @@ class Products extends React.Component {
       <div>
         <h1>DashBoard</h1>
 
-        <Modal visible={this.state.modalvisibleProducts} onClickBackdrop={this.modalBackdropClicked}>
+        <Modal visible={this.state.modalvisibleProducts} onClickBackdrop={this.modalBackdropClicked} dialogClassName="modal-sm">
           <div className="modal-header">
             <h5 className="modal-title">Add new product</h5>
           </div>
@@ -264,13 +267,13 @@ class Products extends React.Component {
           <div className="modal-footer"></div>
         </Modal>
 
-        <Modal visible={this.state.modalvisibleCategories} onClickBackdrop={this.modalBackdropClicked}>
+        <Modal visible={this.state.modalvisibleCategories} onClickBackdrop={this.modalBackdropClicked} dialogClassName="modal-sm">
           <div className="modal-header">
             <h5 className="modal-title">Create new category</h5>
           </div>
           <div className="modal-body">
             <div class="container">
-              <CreateNewProductForm reloadProducts={this.reloadProducts} props={this.props} hideModal={this.hideModal}></CreateNewProductForm>
+              <CreateNewCategoriesForm reloadProducts={this.reloadProducts} props={this.props} hideModal={this.hideModal}></CreateNewCategoriesForm>
             </div>
           </div>
           <div className="modal-footer"></div>

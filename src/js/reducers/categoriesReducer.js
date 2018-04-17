@@ -57,10 +57,10 @@ export default function (state = INITIAL_STATE, action) {
         case DELETE_CATEGORIES_SUCCESS:
             //delete the product from product list
             const newStateDPS = Object.assign({}, state);
-            const indexOfCategoriesToDelete = newStateDPS.productList.products.findIndex(data => {
+            const indexOfCategoriesToDelete = newStateDPS.categoriesList.categories.findIndex(data => {
                 return data.id == action.payload.data
             })
-            newStateDPS.productList.categories.splice(indexOfCategoriesToDelete, 1); // remove the deleted product at this position "indexOfCategoriesToDelete"
+            newStateDPS.categoriesList.categories.splice(indexOfCategoriesToDelete, 1); // remove the deleted product at this position "indexOfCategoriesToDelete"
             return { ...newStateDPS, deletedCategories: { deletedCategories: {}, error: null, loading: false } }
         case DELETE_CATEGORIES_FAILURE:
             error = action.payload || { message: action.payload.message };//2nd one is network or server down errors
@@ -68,11 +68,13 @@ export default function (state = INITIAL_STATE, action) {
         case RESET_DELETED_CATEGORIES: // reset postList to initial state
             return { ...state, deletedCategories: { deletedCategories: {}, error: null, loading: false } }
 
+
+
         case CREATE_CATEGORIES:
             return { ...state, newCategories: { newCategories: {}, loading: true } }
         case CREATE_CATEGORIES_SUCCESS:
             const newStateCPS = Object.assign({}, state);
-            newStateCPS.productList.categories.push(action.payload.data);
+            newStateCPS.categoriesList.categories.push(action.payload.data);
             // push it in product list object
             return { ...newStateCPS, newCategories: { newCategories: action.payload.data, error: null, loading: false } }
         case CREATE_CATEGORIES_FAILURE:

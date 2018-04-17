@@ -62,7 +62,7 @@ export function deleteCategories(pid , tokenFromStorage) {
   }
   const request = axios({
     method: 'post',
-    url: `${ROOT_URL}product/delete.php`,
+    url: `${ROOT_URL}category/delete.php`,
     //data:JSON.stringify({id:data}),
     data: { id: pid },
     headers: []
