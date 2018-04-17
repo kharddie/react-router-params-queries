@@ -10,7 +10,7 @@ export default class Layout extends React.Component {
     const containerStyle = {
       marginTop: "60px"
     };
-    console.log("layoutxxxx");
+    console.log("THIS IS THE LAYOUT COMPONENT");
     return (
       <div>
 
@@ -18,7 +18,7 @@ export default class Layout extends React.Component {
 
         <div className="container" style={containerStyle}>
           <div className="row">
-            <div class="col-lg-12">
+            <div className="col-lg-12">
               {this.props.children}
             </div>
           </div>

@@ -3,7 +3,7 @@ import Article from "../components/Article";
 import ProductsContainer from "../container/ProductsContainer";
 import CategoriesContainer from "../container/CategoriesContainer";
 
-export default class Featured extends React.Component {
+export default class Dashboard extends React.Component {
   render() {
     return (
       <div>
