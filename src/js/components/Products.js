@@ -22,10 +22,12 @@ class Products extends React.Component {
 
   componentDidMount() {
     $(".updateProductForm").hide();
+    $(".updateProductForm").hide();
   }
 
   componentDidUpdate() {
-    $(".updateProductForm").hide();
+    $(".updateCategoriesForm").hide();
+    $(".updateCategoriesForm").hide();
   }
 
   reloadProducts() {
@@ -39,7 +41,8 @@ class Products extends React.Component {
   }
 
   state = {
-    modalvisible: false,
+    modalvisibleProducts: false,
+    modalvisibleCategories: false,
     numOfClicks: 0,
     selectedOption: '',
     productUpdatedName: '',
@@ -49,39 +52,70 @@ class Products extends React.Component {
 
   //modal
   showModalProduct = () => {
-    this.setState({ modalvisible: true });
-  }
-  showModalCategory = () => {
-    //
+    this.setState({ modalvisibleProducts: true });
   }
 
   hideModal = () => {
-    this.setState({ modalvisible: false });
+    this.setState({ modalvisibleProducts: false });
+    this.setState({ modalvisibleCategories: false });
   }
 
-  deleteProduct = (event) => {
-    this.props.deleteProduct(event.prodId);
+
+  showModalCategory = () => {
+    this.setState({ modalvisibleCategories: true });
   }
 
-  showProductUpdateView = (id) => {
-    $(".updateProductForm").hide();
-    $(".updateThisProductForm"+id).toggle(); 
+  modalBackdropClicked = () => {
+    this.setState({ modalvisibleProducts: false });
   }
 
-  handleProductUpdate = (event) => {
-    event.preventDefault();
-    this.setState({
-      productUpdatedName: event.target.updateName.value,
-      productUpdatedId: event.target.updateName.id
-    });
 
-    let data = {
-      name: event.target.updateName.value,
-      id: event.target.updateName.id,
-      category_id: event.target.updateCategoryId.id,
+
+  deleteObject = (action, event) => {
+    if (action === 'product') {
+      this.props.deleteProduct(event.prodId);
     }
-    console.log(data)
-    this.props.updateProduct(data);
+    if (action === 'categories') {
+      this.props.deleteCategories(event.prodId);
+    }
+  }
+
+  showObjectUpdateView = (action, id) => {
+    $(".updateThisProductForm" + id).toggle();
+    $(".updateProductName" + id).toggle();
+
+    $(".updateThisCategoriesForm" + id).toggle();
+    $(".updateCategoriesName" + id).toggle();
+  }
+
+  handleObjectUpdate = (event) => {
+    event.preventDefault();
+
+
+    if (event.currentTarget.name === "updateProductForm") {
+      let data = {
+        name: event.target.updateName.value,
+        id: event.target.updateName.id,
+        category_id: event.target.updateCategoryId.id,
+      }
+      console.log(data)
+      this.props.updateProduct(data);
+      $(".updateProductName" + event.target.updateName.id).show();
+      $(".updateThisProductForm" + event.target.updateName.id).hide()
+
+    }
+
+    if (event.currentTarget.name === "updateCategoriesForm") {
+      let data = {
+        name: event.target.updateName.value,
+        description: event.target.updateCategoryDescription.value,
+        id: event.target.updateName.id,
+      }
+      console.log(data)
+      this.props.updateCategories(data);
+      $(".updateCategoriesName" + event.target.updateName.id).show();
+      $(".updateThisCategoriesForm" + event.target.updateName.id).hide()
+    }
   }
 
   //end modal
@@ -108,18 +142,19 @@ class Products extends React.Component {
           <div>
             <div class="row text-left">
               <div class="col-12 col-sm-6">
-                <span key={key}> [{data.prodCategoryId}] ({data.prodName})</span>
+                <span key={key} className={"updateProductName updateProductName" + data.prodId}> [{data.prodCategoryId}] ({data.prodName}) </span>
 
-                <form id={data.prodId} className={"updateProductForm updateThisProductForm"+ data.prodId} onSubmit={this.handleProductUpdate}>
+                <form name="updateProductForm" id={data.prodId} className={"updateProductForm updateThisProductForm" + data.prodId} onSubmit={this.handleObjectUpdate}>
                   <input id={data.prodId} key={"input1" + key} type="text" name="updateName" className="" defaultValue={data.prodName} />
                   <input id={data.prodCategoryId} key={"input2" + key} type="hidden" name="updateCategoryId" className="" />
-                  <button type="submit" >Update</button>
+                  <div class="spacer5"></div>
+                  <button className="btn btn-primary" type="submit" >Update</button>
                 </form>
 
               </div>
               <div class="col-6 col-xs-12 col-sm-2">
-                <a className='btn' onClick={() => this.deleteProduct(data)}><FontAwesomeIcon size="sm" icon={faTimes} /></a><span>&nbsp;&nbsp;&nbsp;</span>
-                <a className='btn' onClick={() => this.showProductUpdateView(data.prodId)}><FontAwesomeIcon size="sm" icon={faEdit} /></a>
+                <a className='btn' onClick={() => this.deleteObject('product', data)}><FontAwesomeIcon size="sm" icon={faTimes} /></a><span>&nbsp;&nbsp;&nbsp;</span>
+                <a className='btn' onClick={() => this.showObjectUpdateView("categories", data.prodId)}><FontAwesomeIcon size="sm" icon={faEdit} /></a>
               </div>
             </div>
             <br />
@@ -134,16 +169,30 @@ class Products extends React.Component {
     return data.map((data, key) => {
       return (
         <div>
-
-
-
           <div class="card">
             <div class="card-header" id={"heading" + key}>
-              <h5 class="mb-0">
-                <button class="btn btn-link collapsed no-text-wrap" data-toggle="collapse" data-target={"#collapse" + key} aria-expanded="false" aria-controls={"collapse" + key}>
-                  {data.catName}[{data.products.length}] ({data.catId})<br /> {data.catDescription}
-                </button>
-              </h5>
+              <div class="row text-left">
+                <div class="col-12 col-sm-6">
+
+
+
+
+                  <button className={"accord btn btn-link collapsed no-text-wrap updateCategoriesName updateCategoriesName" + data.catId} data-toggle="collapse" data-target={"#collapse" + key} aria-expanded="false" aria-controls={"collapse" + key}>
+                    {data.catName}[{data.products.length}] ({data.catId})<br /> {data.catDescription}
+                  </button>
+                  <form name="updateCategoriesForm" id={data.catId} className={"updateCategoriesForm updateThisCategoriesForm" + data.catId} onSubmit={this.handleObjectUpdate}>
+                    <input id={data.catId} key={"input1" + key} type="text" name="updateName" className="" defaultValue={data.catName} />
+                    <input key={"input2" + key} type="text" name="updateCategoryDescription" className="" defaultValue={data.catDescription} />
+                    <div class="spacer5"></div>
+                    <button className="btn btn-primary" type="submit" >Update</button>
+                  </form>
+
+                </div>
+                <div class="col-6 col-xs-12 col-sm-2">
+                  <a className='btn' onClick={() => this.deleteObject("categories", data)}><FontAwesomeIcon size="sm" icon={faTimes} /></a><span>&nbsp;&nbsp;&nbsp;</span>
+                  <a className='btn' onClick={() => this.showObjectUpdateView("categories", data.catId)}><FontAwesomeIcon size="sm" icon={faEdit} /></a>
+                </div>
+              </div>
             </div>
             <div id={"collapse" + key} class="collapse" aria-labelledby={"heading" + key} data-parent="#accordion">
               <div class="card-body">
@@ -203,7 +252,19 @@ class Products extends React.Component {
       <div>
         <h1>DashBoard</h1>
 
-        <Modal visible={this.state.modalvisible} onClickBackdrop={this.modalBackdropClicked}>
+        <Modal visible={this.state.modalvisibleProducts} onClickBackdrop={this.modalBackdropClicked}>
+          <div className="modal-header">
+            <h5 className="modal-title">Add new product</h5>
+          </div>
+          <div className="modal-body">
+            <div class="container">
+              <CreateNewProductForm reloadProducts={this.reloadProducts} props={this.props} hideModal={this.hideModal}></CreateNewProductForm>
+            </div>
+          </div>
+          <div className="modal-footer"></div>
+        </Modal>
+
+        <Modal visible={this.state.modalvisibleCategories} onClickBackdrop={this.modalBackdropClicked}>
           <div className="modal-header">
             <h5 className="modal-title">Create new category</h5>
           </div>
@@ -214,6 +275,7 @@ class Products extends React.Component {
           </div>
           <div className="modal-footer"></div>
         </Modal>
+
 
         <div className="row ">
           <div className="col-12 col-sm-3">Admin Dashboard</div>

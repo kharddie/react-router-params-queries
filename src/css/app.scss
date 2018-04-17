@@ -1,6 +1,6 @@
 @import '~font-awesome/css/font-awesome.css';
 body {
-    font-family: "Open Sans", serif;
+    
 
   }
   
@@ -17,12 +17,24 @@ body {
     white-space: normal;
   }
 
+  .hide{
+    display:none;
+  }
+
+  .show{
+    display:show;
+  }
+
   .spacer5 {
     height: 15px;
   }
 
   a.btn {
     padding:0;
+  }
+
+  .accord.btn {
+    text-align: left;
   }
 
   

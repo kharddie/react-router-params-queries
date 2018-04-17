@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import ProductsReducer from './productsReducer';
-import CategoriesReducer from "./categoriesReducer"
+import CategoriesReducer from "./categoriesReducer";
 import { reducer as formReducer } from 'redux-form';
 
 const rootReducer = combineReducers({

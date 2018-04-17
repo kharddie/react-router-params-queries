@@ -8,9 +8,16 @@ import {
   fetchProducts, fetchProductsSuccess, fetchProductsFailure,
   deleteProduct, deleteProductSuccess, deleteProductFailure,
   updateProduct, updateProductSuccess, updateProductFailure,
-  createProduct, createProductSuccess, createProductFailure, resetNewProduct
+  createProduct, createProductSuccess, createProductFailure, resetNewProduct,
 } from '../actions/Products';
-import { fetchCategories, fetchCategoriesSuccess, fetchCategoriesFailure } from '../actions/Categories';
+
+import {
+  fetchCategories, fetchCategoriesSuccess, fetchCategoriesFailure,
+  deleteCategories, deleteCategoriesSuccess, deleteCategoriesFailure,
+  updateCategories, updateCategoriesSuccess, updateCategoriesFailure,
+  createCategories, createCategoriesSuccess, createCategoriesFailure, resetNewCategories,
+} from '../actions/Categories';
+
 import Products from '../components/Products';
 
 /*
@@ -33,12 +40,7 @@ const mapStateToProps = (state, ownProps) => {
     loading = true;
   }
 
-  //categories
-  let categoriesDetails = {
-    data: state.categories.categoriesList.categories,
-    loading: state.categories.categoriesList.loading,
-    error: state.categories.categoriesList.error
-  };
+
   //products
   let productsDetails = {
     data: state.products.productList.products,
@@ -51,21 +53,60 @@ const mapStateToProps = (state, ownProps) => {
     loading: state.products.deletedProduct.loading,
     error: state.products.deletedProduct.error
   };
-
-
   //updated products
   let updatedProductDetails = {
     data: state.products.updateProduct.updateProduct.data,
     loading: state.products.updateProduct.loading,
     error: state.products.updateProduct.error
   };
-
   //new products
   let newProductDetails = {
     data: state.products.newProduct.newProduct,
     loading: state.products.newProduct.loading,
     error: state.products.newProduct.error
   };
+
+  //categories
+  let categoriesDetails = {
+    data: state.categories.categoriesList.categories,
+    loading: state.categories.categoriesList.loading,
+    error: state.categories.categoriesList.error
+  };
+  //deleted categories
+  let deletedCategoriesDetails = {
+    data: state.categories.deletedCategories.deletedCategories.data,
+    loading: state.categories.deletedCategories.loading,
+    error: state.categories.deletedCategories.error
+  };
+  //updated categories
+  let updatedCategoriesDetails = {
+    data: state.categories.updateCategories.updateCategories.data,
+    loading: state.categories.updateCategories.loading,
+    error: state.categories.updateCategories.error
+  };
+  //new category
+  let newCategoryDetails = {
+    data: state.categories.newCategories.newProduct,
+    loading: state.categories.newCategories.loading,
+    error: state.categories.newCategories.error
+  };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   let dataToProps = {
     categoriesDetails: categoriesDetails,
     productsDetails: productsDetails,
@@ -82,18 +123,13 @@ const mapStateToProps = (state, ownProps) => {
 
 //sends our API payload to the reducer, via the store.
 const mapDispatchToProps = (dispatch) => {
+
+  //products
   return {
     fetchProducts: () => {
       dispatch(fetchProducts()).then((response) => {
         //clean the payload  fetching
         !response.error ? dispatch(fetchProductsSuccess(response.payload.data.data)) : dispatch(fetchCategoriesFailure(response.payload.data.data));
-      });
-    },
-    fetchCategories: () => {
-      dispatch(fetchCategories()).then((response) => {
-        //clean the payload  fetching
-        !response.error ? dispatch(fetchCategoriesSuccess(response.payload.data.data)) : dispatch(fetchCategoriesFailure(response.payload.data));
-
       });
     },
     deleteProduct: (event) => {
@@ -106,7 +142,7 @@ const mapDispatchToProps = (dispatch) => {
     updateProduct: (event) => {
       dispatch(updateProduct(event)).then((response) => {
         //clean the payload  fetching
-        if (!response.error  &&  response.payload.data.error !== 'true') {
+        if (!response.error && response.payload.data.error !== 'true') {
           dispatch(updateProductSuccess(response.payload))
         } else {
           dispatch(updateProductFailure(response.payload))
@@ -119,6 +155,40 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(createProduct(event)).then((response) => {
         //clean the payload  fetching
         !response.error ? dispatch(createProductSuccess(response.payload.data)) : dispatch(createProductFailure(response.payload.data));
+      });
+    },
+
+    //products
+    fetchCategories: () => {
+      dispatch(fetchCategories()).then((response) => {
+        //clean the payload  fetching
+        !response.error ? dispatch(fetchCategoriesSuccess(response.payload.data.data)) : dispatch(fetchCategoriesFailure(response.payload.data));
+      });
+    },
+
+    deleteCategories: (event) => {
+      dispatch(deleteCategories(event)).then((response) => {
+        //clean the payload  fetching
+        !response.error ? dispatch(deleteCategoriesSuccess(response.payload.data)) : dispatch(deleteCategoriesFailure(response.payload.data));
+      });
+    },
+
+    updateCategories: (event) => {
+      dispatch(updateCategories(event)).then((response) => {
+        //clean the payload  fetching
+        if (!response.error && response.payload.data.error !== 'true') {
+          dispatch(updateCategoriesSuccess(response.payload))
+        } else {
+          dispatch(updateCategoriesFailure(response.payload))
+        }
+      });
+
+    },
+
+    createCategories: (event) => {
+      dispatch(createCategories(event)).then((response) => {
+        //clean the payload  fetching
+        !response.error ? dispatch(createCategoriesSuccess(response.payload.data)) : dispatch(createCategoriesFailure(response.payload.data));
       });
     },
 
