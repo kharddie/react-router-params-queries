@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Router, Route, IndexRoute, hashHistory } from "react-router";
+import { Router, Route, IndexRoute, hashHistory,browserHistory,routes } from "react-router";
 import 'bootstrap/dist/css/bootstrap.css';
 //import 'font-awesome/css/font-awesome.css';
 
@@ -29,6 +29,7 @@ import Profile from './pages/Profile';
 import ValidateEmail from './pages/ValidateEmail';
 import configureStore from "./store/configureStore.js";
 import { Provider } from "react-redux";
+import Home from "./pages/Home";
 
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
@@ -38,12 +39,13 @@ const app = document.getElementById('app');
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router history={hashHistory}>
+    <Router history={browserHistory} routes={routes}>
       <Route path="/" component={Layout}>
-        <IndexRoute component={SignIn}></IndexRoute>
-        <Route path="dashboard" name="dashboard" component={Dashboard}></Route> 
-        <Route path="signUp" name="signup" component={SignUp}></Route>     
-        <Route path="archives(/:article)" name="archives" component={Archives}></Route>
+        <IndexRoute component={Home}></IndexRoute>
+        <Route path="/signIn" name="SignIn" component={SignIn}></Route> 
+        <Route path="/dashboard" name="dashboard" component={Dashboard}></Route> 
+        <Route path="/signUp" name="signup" component={SignUp}></Route>     
+        <Route path="/archives(/:article)" name="archives" component={Archives}></Route>
         <Route path="/validateEmail/:token" component={ValidateEmail} />
         <Route path="settings" name="settings" component={Settings}></Route>
         <Route path="/profile" component={Profile} />

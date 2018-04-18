@@ -5,6 +5,7 @@ import { reduxForm, Field, SubmissionError } from 'redux-form';
 import renderField from '../components/renderField';
 import { signInUser, signInUserSuccess, signInUserFailure, resetUserFields } from '../actions/users';
 
+
 //Client side validation
 function validate(values) {
   var errors = {};
@@ -57,7 +58,7 @@ class SignInForm extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.user.status === 'authenticated' && nextProps.user.user && !nextProps.user.error) {
-      this.props.history.push('/dashboard');
+      this.props.history.push('/');
     }
 
     //error
