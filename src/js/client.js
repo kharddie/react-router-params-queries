@@ -26,6 +26,12 @@ import Dashboard from "./pages/Dashboard";
 import Layout from "./pages/Layout";
 import Settings from "./pages/Settings";
 import Profile from './pages/Profile';
+import CreateRequest from './pages/CreateRequest';
+
+import BrowseRequests from './pages/BrowseRequests';
+import MyRequests from './pages/MyRequests';
+
+
 import ValidateEmail from './pages/ValidateEmail';
 import configureStore from "./store/configureStore.js";
 import { Provider } from "react-redux";
@@ -48,6 +54,12 @@ ReactDOM.render(
         <Route path="/archives(/:article)" name="archives" component={Archives}></Route>
         <Route path="/validateEmail/:token" component={ValidateEmail} />
         <Route path="settings" name="settings" component={Settings}></Route>
+        <Route path="/request" name="Request" component={CreateRequest}></Route>
+
+        <Route path="/browsRequests" name="BrowseRequests" component={BrowseRequests}></Route>
+        <Route path="/myRequests" name="MyRequests" component={MyRequests}></Route>
+
+
         <Route path="/profile" component={Profile} />
       </Route>
     </Router>
