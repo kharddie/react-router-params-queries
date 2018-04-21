@@ -37,7 +37,7 @@ const validateAndSignInUser = (values, dispatch) => {
       //sessionStorage = persisted only in current tab
 
       sessionStorage.setItem('jwtToken', result.payload.data.token);
-      
+
       //let other components know that everything is fine by updating the redux` state
       dispatch(signInUserSuccess(result.payload.data)); //ps: this is same as dispatching RESET_USER_FIELDS
     });
@@ -70,33 +70,57 @@ class SignInForm extends Component {
   }
 
   render() {
-    const {asyncValidating, handleSubmit, submitting} = this.props;
+    const { asyncValidating, handleSubmit, submitting } = this.props;
     return (
+
       <div className="container">
-        <form onSubmit={ handleSubmit(validateAndSignInUser) }>
-          <Field
-                 name="username"
-                 type="text"
-                 component={ renderField }
-                 label="@username*" />
-          <Field
-                 name="password"
-                 type="password"
-                 component={ renderField }
-                 label="Password*" />
-          <div>
-            <button
-                    type="submit"
-                    className="btn btn-primary"
-                    disabled={ submitting }>
-              Submit
-            </button>
-            <Link
-                  to="/"
-                  className="btn btn-error"> Cancel
-            </Link>
+        <div class="row sign-in">
+          <div class="col sign-in-left-cont">
+            <div class="row sign-in-right">
+              <div class="col-md-8">
+                <h1 class="title-page title-page-margin">
+                  Existing customer?</h1>
+                <form onSubmit={handleSubmit(validateAndSignInUser)}>
+                  <Field
+                    name="username"
+                    type="text"
+                    component={renderField}
+                    label="Username*" />
+                  <Field
+                    name="password"
+                    type="password"
+                    component={renderField}
+                    label="Password*" />
+                  <div className="text-right">
+                    <button
+                      type="submit"
+                      className="btn btn-primary"
+                      disabled={submitting}>
+                      Submit
+                </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div className="row sign-in-right">
+              <div className="col-md-8">
+                <div className="row sign-in-links">
+                  <div className="col-sm-12 col-md-6">Find my username </div>
+                  <div className="col-sm-12 col-md-6"> Reset my password </div>
+                </div>
+              </div>
+            </div>
           </div>
-        </form>
+          <div className="col sign-in-right-cont">
+            <div className="row">
+              <div className="col-md-8">
+                <h1 className="title-page title-page-margin">New customer?</h1>
+                <p> Set up a go via account to make travelling onQueensland toll roads easier.</p>
+                <button type="button" className="btn btn-primary">Open account</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     )
   }

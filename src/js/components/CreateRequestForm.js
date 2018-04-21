@@ -3,8 +3,15 @@ import { Link } from 'react-router';
 import { reduxForm, Field, SubmissionError } from 'redux-form';
 import renderField from './renderField';
 import renderTextArea from './renderTextArea';
+import RenderDatePickerField from './RenderDatePickerField';
+ 
 import { validateRequestFields, validateRequestFieldsSuccess, validateRequestFieldsFailure } from '../actions/requests';
 import { createRequest, createRequestSuccess, createRequestFailure, resetNewRequest } from '../actions/requests';
+
+import Moment from 'moment'
+
+
+
 
 //Client side validation
 function validate(values) {
@@ -53,6 +60,7 @@ const asyncValidate = (values, dispatch) => {
 //For any field errors upon submission (i.e. not instant check)
 const validateAndCreateRequest = (values, dispatch,props) => {
  values.id =  props.user.id;
+ values.due_date = Moment(values.due_date ,"MM,DD,YYYY").toISOString()
   return dispatch(createRequest(values, sessionStorage.getItem('jwtToken')))
     .then(result => {
       // Note: Error's "data" is in result.payload.response.data (inside "response")
@@ -122,11 +130,20 @@ class CreateRequestForm extends Component {
             label="Address*" />
 
 
+    
+
+
+
+
           <Field
-            name="due_date"
-            type="text"
-            component={renderField}
-            label="Due Date*" />
+          name="due_date"
+          showTime={false}
+          component={RenderDatePickerField}
+          label="Due Date*"  />
+
+
+
+
 
 
           <Field
