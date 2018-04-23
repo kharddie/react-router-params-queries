@@ -41,7 +41,9 @@ footer {
   margin-top: 20px;
   border-top: 1px solid gray;
 }
-
+help-block {
+  color: orange;
+}
 
 
 
@@ -180,9 +182,14 @@ footer {
       }
     }
 
-    .payment-panel div:nth-child(3) {
-      height: auto;
-    }  
+    .payment-panel div:last-child {
+      height: auto!important;
+      border-bottom: none!important;
+    }
+
+
+    
+    :last-child
 
     .payment-panel > div {
         height: 30px;
@@ -260,4 +267,29 @@ footer {
   }
 }
 
-  
+  /*carousel*/
+.carousel{
+
+  .carousel-inner {
+    .carousel-item >div {
+
+      height: 100%;
+      width: 100%;
+    }
+  }
+  .carousel-control-prev,.carousel-control-prev{
+    display:none;
+
+  }
+
+  .carousel-indicators {
+    display:none;
+    li {
+      background-color:red;
+      width:50px;
+      height: 50px;
+     }
+
+    }
+
+}

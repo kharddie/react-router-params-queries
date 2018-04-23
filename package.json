@@ -59,6 +59,7 @@
     "react-bootstrap-modal": "^4.0.0",
     "react-bootstrap4-modal": "^1.2.2",
     "react-collapsible": "^2.0.4",
+    "react-google-maps": "^9.4.5",
     "react-moment": "^0.7.0",
     "react-redux": "^5.0.7",
     "react-select": "^1.2.1",

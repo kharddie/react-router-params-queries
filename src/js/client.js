@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Router, Route, IndexRoute, hashHistory,browserHistory,routes } from "react-router";
+import { Router, Route, IndexRoute, hashHistory, browserHistory , routes } from "react-router";
 import 'bootstrap/dist/css/bootstrap.css';
 //import 'font-awesome/css/font-awesome.css';
 
@@ -48,16 +48,16 @@ ReactDOM.render(
     <Router history={browserHistory} routes={routes}>
       <Route path="/" component={Layout}>
         <IndexRoute component={Home}></IndexRoute>
-        <Route path="/signIn" name="SignIn" component={SignIn}></Route> 
-        <Route path="/dashboard" name="dashboard" component={Dashboard}></Route> 
-        <Route path="/signUp" name="signup" component={SignUp}></Route>     
-        <Route path="/archives(/:article)" name="archives" component={Archives}></Route>
+        <Route path="/signIn" name="SignIn" component={SignIn}/>
+        <Route path="/dashboard" name="dashboard" component={Dashboard}/>
+        <Route path="/signUp" name="signup" component={SignUp}/>
+        <Route path="/archives(/:article)" name="archives" component={Archives}/>
         <Route path="/validateEmail/:token" component={ValidateEmail} />
-        <Route path="settings" name="settings" component={Settings}></Route>
-        <Route path="/request" name="Request" component={CreateRequest}></Route>
+        <Route path="settings" name="settings" component={Settings}/>
+        <Route path="/createRequest" name="CreateRequest" component={CreateRequest}/>
 
-        <Route path="/browsRequests" name="BrowseRequests" component={BrowseRequests}></Route>
-        <Route path="/myRequests" name="MyRequests" component={MyRequests}></Route>
+        <Route path="/browseRequests" name="BrowseRequests" component={BrowseRequests}/>
+        <Route path="/myRequests" name="MyRequests" component={MyRequests}/>
 
 
         <Route path="/profile" component={Profile} />

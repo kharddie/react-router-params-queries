@@ -1,23 +1,15 @@
-import CreateRequestForm from '../components/CreateRequestForm';
-import { resetNewRequest } from '../actions/requests';
-import { connect } from 'react-redux';
+import React, { Component } from "react";
+import CreateRequestContainer from '../containers/CreateRequestContainer.js';
 
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    resetMe: () => {
-      dispatch(resetNewRequest());
-    }
+class CreateRequest extends React.Component {
+  render() {
+    const { history } = this.props;
+    return (
+      <div>
+        <CreateRequestContainer history={history} />
+      </div>
+    )
   }
 }
 
-
-
-function mapStateToProps(state, ownProps) {
-  return {
-    newRequest: state.requests.newRequest,
-    user:state.user.user
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(CreateRequestForm);
+export default CreateRequest;

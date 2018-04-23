@@ -1,7 +1,5 @@
 import React from "react";
-import Article from "../components/Article";
-import ProductsContainer from "../container/ProductsContainer";
-import CategoriesContainer from "../container/CategoriesContainer";
+import ProductsContainer from "../containers/ProductsContainer";
 
 export default class Dashboard extends React.Component {
   render() {
@@ -9,8 +7,7 @@ export default class Dashboard extends React.Component {
       <div>
         <div class="row">
           <div class="col-lg-12">
-            <div class="well text-center">
-        
+            <div class="well text-center">       
               <ProductsContainer/>
             </div>
           </div>

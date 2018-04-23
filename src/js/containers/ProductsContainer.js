@@ -90,23 +90,6 @@ const mapStateToProps = (state, ownProps) => {
     loading: state.categories.newCategories.loading,
     error: state.categories.newCategories.error
   };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   let dataToProps = {
     categoriesDetails: categoriesDetails,
     productsDetails: productsDetails,

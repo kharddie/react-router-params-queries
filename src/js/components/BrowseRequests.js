@@ -7,6 +7,8 @@ import faCalendar from '@fortawesome/fontawesome-free-solid/faCalendar';
 import faMapMarker from '@fortawesome/fontawesome-free-solid/faMapMarker';
 import faUser from '@fortawesome/fontawesome-free-solid/faUser';
 
+
+
 class BrowseRequests extends Component {
     componentWillMount() {
         this.props.fetchRequests();
@@ -147,6 +149,10 @@ class BrowseRequests extends Component {
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-4">
+                    <p>Google maps</p>
+                    </div>
+
                 </div>
 
             </div>

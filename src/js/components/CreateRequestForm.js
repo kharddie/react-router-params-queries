@@ -1,17 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
-import { reduxForm, Field, SubmissionError } from 'redux-form';
+import { reduxForm, Field, SubmissionError, reset } from 'redux-form';
 import renderField from './renderField';
 import renderTextArea from './renderTextArea';
 import RenderDatePickerField from './RenderDatePickerField';
- 
+
 import { validateRequestFields, validateRequestFieldsSuccess, validateRequestFieldsFailure } from '../actions/requests';
 import { createRequest, createRequestSuccess, createRequestFailure, resetNewRequest } from '../actions/requests';
 
 import Moment from 'moment'
-
-
-
 
 //Client side validation
 function validate(values) {
@@ -58,9 +55,10 @@ const asyncValidate = (values, dispatch) => {
 };
 
 //For any field errors upon submission (i.e. not instant check)
-const validateAndCreateRequest = (values, dispatch,props) => {
- values.id =  props.user.id;
- values.due_date = Moment(values.due_date ,"MM,DD,YYYY").toISOString()
+const validateAndCreateRequest = (values, dispatch, props) => {
+  values.id = props.user.id;
+  values.due_date = Moment(values.due_date, "MM,DD,YYYY").toISOString();
+
   return dispatch(createRequest(values, sessionStorage.getItem('jwtToken')))
     .then(result => {
       // Note: Error's "data" is in result.payload.response.data (inside "response")
@@ -71,6 +69,7 @@ const validateAndCreateRequest = (values, dispatch,props) => {
       }
       //let other components know that everything is fine by updating the redux` state
       dispatch(createRequestSuccess(result.payload.data)); //ps: this is same as dispatching RESET_USER_FIELDS
+      dispatch(reset('CreateRequestForm'));
     });
 
 }
@@ -88,81 +87,59 @@ class CreateRequestForm extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.newRequest.request && !nextProps.newRequest.error) {
-      // this.context.router.push('/');
-      //this.props.history.push('/');
+      this.props.history.push('/');
       this.props.resetMe();
     }
   }
 
-  renderError(newRequest) {
-    if (newRequest && newRequest.error && newRequest.error.message) {
-      return (
-        <div className="alert alert-danger">
-          {newRequest ? newRequest.error.message : ''}
-        </div>
-      );
-    } else {
-      return <span>Request was successfully created</span>
-    }
-  }
   render() {
     const { handleSubmit, submitting, newRequest, user } = this.props;
     return (
       <div className='container'>
-        {this.renderError(newRequest)}
-        <form onSubmit={handleSubmit(validateAndCreateRequest)}>
-          <Field
-            name="id"
-            type="hidden"
-            component={renderField}
-            value='222'
-            label="" />
-          <Field
-            name="title"
-            type="text"
-            component={renderField}
-            label="Request title*" />
+        <div class="row justify-content-md-center">
+          <div class="col-md-7 ">
+            <form onSubmit={handleSubmit(validateAndCreateRequest)}>
+              <Field
+                name="id"
+                type="hidden"
+                component={renderField}
+                value='222'
+                label="" />
+              <Field
+                name="title"
+                type="text"
+                component={renderField}
+                label="Request title*" />
 
-          <Field
-            name="address"
-            type="text"
-            component={renderField}
-            label="Address*" />
-
-
-    
-
-
-
-
-          <Field
-          name="due_date"
-          showTime={false}
-          component={RenderDatePickerField}
-          label="Due Date*"  />
-
-
-
-
-
-
-          <Field
-            name="content"
-            component={renderTextArea}
-            label="Describe your Request in more detail*" />
-          <div>
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={submitting}>
-              Submit
+              <Field
+                name="address"
+                type="text"
+                component={renderField}
+                label="Address*" />
+              <Field
+                name="due_date"
+                showTime={false}
+                component={RenderDatePickerField}
+                label="Due Date*" />
+              <Field
+                name="content"
+                component={renderTextArea}
+                label="Describe your Request in more detail*" />
+              <div>
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={submitting}>
+                  Submit
             </button>
-            <Link
-              to="/"
-              className="btn btn-error"> Cancel
+                <Link
+                  to="/"
+                  className="btn btn-error"> Cancel
             </Link>
+              </div>
+            </form>
           </div>
-        </form>
+        </div>
       </div>
     )
   }
@@ -174,3 +151,6 @@ export default reduxForm({
   validate // <--- validation function given to redux-form
 
 })(CreateRequestForm)
+
+
+

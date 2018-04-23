@@ -56,7 +56,7 @@ class Layout extends React.Component {
     this.props.loadUserFromToken();
   }
   render() {
-    const { location } = this.props;
+    const { location, history } = this.props;
     const containerStyle = {
       marginTop: "40px"
     };
@@ -64,7 +64,7 @@ class Layout extends React.Component {
     return (
       <div>
 
-        <Nav location={location} />
+        <Nav location={location}  history={history} />
 
         <div className="container" style={containerStyle}>
           <div className="row">
