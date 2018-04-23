@@ -48,6 +48,13 @@ class Nav extends React.Component {
         renderError: nextProps.newRequest.request.message
       })
     }
+    if (nextProps.user.error) {
+      //this.props.history.push('/');
+      console.log(nextProps.user.error);
+      this.setState({
+        renderError: nextProps.user.error
+      })
+    }
 
   }
   componentWillUnmount() {
@@ -207,7 +214,7 @@ class Nav extends React.Component {
         <div className="row">
           <div className="col-12 text-center">
             <div class="alert alert-success" role="alert">
-              info goes here {this.state.renderError}
+               {this.state.renderError}
             </div>
           </div>
         </div>

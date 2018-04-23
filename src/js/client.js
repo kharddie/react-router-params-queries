@@ -27,6 +27,7 @@ import Layout from "./pages/Layout";
 import Settings from "./pages/Settings";
 import Profile from './pages/Profile';
 import CreateRequest from './pages/CreateRequest';
+import ForgotPwd from './pages/ForgotPwd';
 
 import BrowseRequests from './pages/BrowseRequests';
 import MyRequests from './pages/MyRequests';
@@ -55,11 +56,9 @@ ReactDOM.render(
         <Route path="/validateEmail/:token" component={ValidateEmail} />
         <Route path="settings" name="settings" component={Settings}/>
         <Route path="/createRequest" name="CreateRequest" component={CreateRequest}/>
-
+        <Route path="/forgotPwd" name="ForgotPwd" component={ForgotPwd}/>
         <Route path="/browseRequests" name="BrowseRequests" component={BrowseRequests}/>
         <Route path="/myRequests" name="MyRequests" component={MyRequests}/>
-
-
         <Route path="/profile" component={Profile} />
       </Route>
     </Router>

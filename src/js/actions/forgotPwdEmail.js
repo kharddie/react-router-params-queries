@@ -7,13 +7,16 @@ export const FORGOT_PWD_EMAIL_FAILURE = 'FORGOT_PWD_EMAIL_FAILURE';
 export const RESET_RESEND_EMAIL_STATE = 'RESET_FORGOT_PWD_EMAIL_STATE';
 
 
-const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/api' : '/api';
+const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost/react-router-params-queries-api/' : '/api';
+
+
+
 
 export function forgotPwdEmail(props, tokenFromStorage) {
   const request = axios({
     method: 'post',
      data: props,   
-    url: `${ROOT_URL}/forgotPwdEmail`,
+    url: `${ROOT_URL}users/forgotPwd.php`,
     headers: {'Authorization': `Bearer ${tokenFromStorage}`}
   });
 

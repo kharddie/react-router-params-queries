@@ -6,7 +6,7 @@ class CreateRequest extends React.Component {
     const { history } = this.props;
     return (
       <div>
-        <CreateRequestContainer history={history} />
+        <CreateRequestContainer location={location} history={history} />
       </div>
     )
   }

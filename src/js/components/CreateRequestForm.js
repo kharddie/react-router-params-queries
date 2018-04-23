@@ -20,8 +20,8 @@ function validate(values) {
   if (!values.address || values.address.trim() === '') {
     errors.address = 'Enter address';
   }
-  if (!values.date || values.date.trim() === '') {
-    errors.date = 'Enter date';
+  if (!values.date || values.date === '') {
+    errors.date = 'Enter due date';
   }
   if (!values.content || values.content.trim() === '') {
     errors.content = 'Enter some content';
@@ -57,7 +57,7 @@ const asyncValidate = (values, dispatch) => {
 //For any field errors upon submission (i.e. not instant check)
 const validateAndCreateRequest = (values, dispatch, props) => {
   values.id = props.user.id;
-  values.due_date = Moment(values.due_date, "MM,DD,YYYY").toISOString();
+  values.due_date = Moment(values.date, "MM,DD,YYYY").toISOString();
 
   return dispatch(createRequest(values, sessionStorage.getItem('jwtToken')))
     .then(result => {
@@ -79,15 +79,26 @@ class CreateRequestForm extends Component {
     router: PropTypes.object
   };
 
+  state = {
+    divClass: "",
+    formWidthBg:""
+  }
+
   componentWillMount() {
     //Important! If your component is navigating based on some global state(from say componentWillReceiveProps)
     //always reset that global state back to null when you REMOUNT
     this.props.resetMe();
+    if (this.props.location.href.indexOf("createRequest") > -1) {
+      this.setState({
+        divClass: " col-md-6",
+        formWidthBg:"form-width-bg"
+      })
+    }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.newRequest.request && !nextProps.newRequest.error) {
-      this.props.history.push('/');
+      this.props.history.push('/browseRequests');
       this.props.resetMe();
     }
   }
@@ -97,11 +108,15 @@ class CreateRequestForm extends Component {
     return (
       <div className='container'>
         <div class="row justify-content-md-center">
-          <div class="col-md-7 ">
-            <form onSubmit={handleSubmit(validateAndCreateRequest)}>
+          <div class={"col-sm-12" + this.state.divClass}>
+            <div><h2>Create Request</h2>
+            </div>
+
+            <form className={"request-form " + this.state.formWidthBg} onSubmit={handleSubmit(validateAndCreateRequest)}>
               <Field
                 name="id"
                 type="hidden"
+                className="form-width-bg"
                 component={renderField}
                 value='222'
                 label="" />
@@ -117,7 +132,7 @@ class CreateRequestForm extends Component {
                 component={renderField}
                 label="Address*" />
               <Field
-                name="due_date"
+                name="date"
                 showTime={false}
                 component={RenderDatePickerField}
                 label="Due Date*" />

@@ -16,7 +16,18 @@ class BrowseRequests extends Component {
 
     getRequestsTotal(requests) {
         if (requests.hasOwnProperty("data")) {
-            return <a className="btn btn-secondary btn-request" >{requests.data.length} NEW REQUESTS</a>
+            return (
+                <div className="row">
+                    <div className="col">
+                        <div className="row">
+                            <div className="col">
+                                <a className="btn btn-secondary btn-request" >{requests.data.length} NEW REQUESTS</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )
+
         }
     }
 
@@ -73,7 +84,7 @@ class BrowseRequests extends Component {
 
         return (
             <div className="container">
-                <h1>Requests</h1>
+
                 {this.getRequestsTotal(requests)}
 
                 <div class="row">
@@ -150,7 +161,7 @@ class BrowseRequests extends Component {
                         </div>
                     </div>
                     <div class="col-md-4">
-                    <p>Google maps</p>
+                        <p>Google maps</p>
                     </div>
 
                 </div>
