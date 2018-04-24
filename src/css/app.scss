@@ -1,4 +1,19 @@
 @import '~font-awesome/css/font-awesome.css';
+
+
+$font-stack:    Helvetica, sans-serif;
+$primary-color: #333;
+
+
+@mixin width-ligh-blue-bg {
+  background-color: #e3ebef;
+  padding: 30px;
+  border-radius: 0.5rem;
+}
+
+
+
+
 body {
   background-color: #f5f9fb;
   font-family: 'Source Sans Pro', sans-serif;
@@ -259,16 +274,16 @@ help-block {
 
 
 form.form-width-bg {
-  background-color: #e3ebef;
-  padding: 30px;
-  border-radius: 0.5rem;
+  @include width-ligh-blue-bg;
 }
 form.request-form > div:first-of-type {
     display: none;
 }
 
-
-
+/* Profile */
+.profile {
+  @include width-ligh-blue-bg;
+}
 
 
 

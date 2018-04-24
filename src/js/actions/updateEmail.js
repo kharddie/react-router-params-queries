@@ -7,13 +7,13 @@ export const UPDATE_EMAIL_SUCCESS = 'UPDATE_EMAIL_SUCCESS';
 export const UPDATE_EMAIL_FAILURE = 'UPDATE_EMAIL_FAILURE';
 export const RESET_UPDATE_EMAIL_STATE = 'RESET_UPDATE_EMAIL_STATE';
 
-const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/api' : '/api';
+const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost/react-router-params-queries-api/' : '/api';
 
 export function updateEmail(email, tokenFromStorage) {
   const request = axios({
     method: 'post',
     data: email,
-    url: `${ROOT_URL}/updateEmail`,
+    url: `${ROOT_URL}/users/update_profile.php`,
     headers: {'Authorization': `Bearer ${tokenFromStorage}`}
   });
 

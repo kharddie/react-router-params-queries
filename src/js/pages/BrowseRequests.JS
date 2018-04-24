@@ -4,17 +4,23 @@ import BrowseRequests from '../components/BrowseRequests';
 
 
 const mapStateToProps = (state) => {
-  return { 
+  return {
     requestsList: state.requests.requestsList
   };
 }
 
 const mapDispatchToProps = (dispatch) => {
+  let jwtToken = sessionStorage.getItem('jwtToken');
+  //   if(!jwtToken || jwtToken === '') {
+  //     alert('Please Sign In');
+  //     reject();
+
+  //   }
   return {
     fetchRequests: () => {
-      dispatch(fetchRequests()).then((response) => {
-            !response.error ? dispatch(fetchRequestsSuccess(response.payload.data)) : dispatch(fetchRequestsFailure(response.payload.data));
-          });
+      dispatch(fetchRequests(jwtToken)).then((response) => {
+        !response.error ? dispatch(fetchRequestsSuccess(response.payload.data)) : dispatch(fetchRequestsFailure(response.payload.data));
+      });
     }
   }
 }

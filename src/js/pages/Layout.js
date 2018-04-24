@@ -51,6 +51,10 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
+const mapStateToProps =(state) => {
+  updateProfile: state.updateEmail
+}
+
 class Layout extends React.Component {
   componentWillMount() {
     this.props.loadUserFromToken();

@@ -33,12 +33,13 @@ export const RESET_DELETED_REQUEST = 'RESET_DELETED_REQUEST';
 
 const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost/react-router-params-queries-api/' : '/api';
 
-export function fetchRequests() {
+export function fetchRequests(token) {
   const request = axios({
     method: 'get',
     url: `${ROOT_URL}/requests/read.php`,
-    headers: []
+    headers: {'Authorization': `Bearer ${token}`}
   });
+
 
   return {
     type: FETCH_REQUESTS,

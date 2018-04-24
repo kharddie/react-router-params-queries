@@ -28,7 +28,7 @@ const asyncValidate = (values, dispatch) => {
         return;
       }
 
-      let {data, status} = result.payload.response;
+      let { data, status } = result.payload.response;
       //if status is not 200 or any one of the fields exist, then there is a field error
       if (status != 200 || data.username || data.email) {
         //let other components know of error by updating the redux` state
@@ -43,8 +43,8 @@ const asyncValidate = (values, dispatch) => {
 
 
 //For any field errors upon submission (i.e. not instant check)
-const validateAndUpdateEmail = (values, dispatch) => {
-
+const validateAndUpdateEmail = (values, dispatch,props) => {
+  values.id = props.user.id;
   return dispatch(updateEmail(values, sessionStorage.getItem('jwtToken')))
     .then((result) => {
       // Note: Error's "data" is in result.payload.response.data (inside "response")
@@ -74,41 +74,54 @@ class UpdateEmailForm extends Component {
 
 
   getMessage() {
-    const {error, emailUpdated} = this.props.updateEmail;
+    const { error, emailUpdated } = this.props.updateEmail;
     if (error) {
       return <div className="alert alert-danger">
-               { error.email}
-             </div>
+        {error.email}
+      </div>
     } else if (emailUpdated) {
       return <div className="alert alert-info">
-               Email was updated!
+        Email was updated!
              </div>
     } else {
-      return <span/>
+      return <span />
     }
   }
 
   render() {
-    const {handleSubmit, submitting} = this.props;
+    const { handleSubmit, submitting } = this.props;
 
     return (
       <div>
-         {this.getMessage() }
-        <form onSubmit={ handleSubmit(validateAndUpdateEmail.bind(this)) }>
+        {this.getMessage()}
+        <form onSubmit={handleSubmit(validateAndUpdateEmail.bind(this))}>
           <Field
-                 name="email"
-                 type="email"
-                 component={ renderField }
-                 label="Update Email*" />
+            name="name"
+            type="text"
+            component={renderField}
+            label="Update Name*" />
+
+          <Field
+            name="user_name"
+            type="text"
+            component={renderField}
+            label="Update User name*" />
+
+          <Field
+            name="email"
+            type="email"
+            component={renderField}
+            label="Update Email*" />
+
           <button
-                  type="submit"
-                  className="btn btn-primary"
-                  disabled={ submitting }>
+            type="submit"
+            className="btn btn-primary"
+            disabled={submitting}>
             Update Email
           </button>
         </form>
       </div>
-      );
+    );
   }
 }
 

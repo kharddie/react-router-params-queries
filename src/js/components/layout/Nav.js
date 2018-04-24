@@ -56,6 +56,19 @@ class Nav extends React.Component {
       })
     }
 
+    const { error, emailUpdated } = this.props.updateEmail;
+    if (error) {
+      return <div className="alert alert-danger">
+        {error.email}
+      </div>
+    } else if (emailUpdated) {
+      return <div className="alert alert-info">
+        Email was updated!
+             </div>
+    } else {
+      return <span />
+    }
+
   }
   componentWillUnmount() {
     //Important! If your component is navigating based on some global state(from say componentWillReceiveProps)
@@ -112,7 +125,7 @@ class Nav extends React.Component {
 
 
 
-  renderLinks(authenticatedUser, signInClass, archivesClass, settingsClass, dashboardClass, signUpClass, createRequestClass, myRequestsClass, browseRequestsClass) {
+  renderLinks(authenticatedUser, signInClass, archivesClass, settingsClass, dashboardClass, signUpClass, createRequestClass, myRequestsClass, browseRequestsClass,profileClass) {
     if (authenticatedUser) {
       return (
         <ul class="navbar-nav mr-auto">
@@ -192,6 +205,9 @@ class Nav extends React.Component {
     const browseRequestsClass = location.pathname.match(/^\/browsRequests/) ? "active" : "";
     const dashboardClass = location.pathname.match(/^\/dashboard/) ? "active" : "";
     const signUpClass = location.pathname.match(/^\/signUp/) ? "active" : "";
+    const profileClass = location.pathname.match(/^\/profile/) ? "active" : "";
+
+    
     const navClass = collapsed ? "collapse" : "";
 
     return (
