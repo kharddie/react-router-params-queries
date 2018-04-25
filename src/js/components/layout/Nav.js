@@ -10,6 +10,7 @@ function mapStateToProps(state) {
     user: state.user,
     sems: "from nav class",
     newRequest: state.requests.newRequest,
+    updateProfile: state.updateProfile
   };
 }
 
@@ -56,19 +57,10 @@ class Nav extends React.Component {
       })
     }
 
-    const { error, emailUpdated } = this.props.updateEmail;
-    if (error) {
-      return <div className="alert alert-danger">
-        {error.email}
-      </div>
-    } else if (emailUpdated) {
-      return <div className="alert alert-info">
-        Email was updated!
-             </div>
-    } else {
-      return <span />
-    }
-
+    const { error, profileUpdated, message } = this.props.updateProfile;
+      this.setState({
+        renderError: message
+      })
   }
   componentWillUnmount() {
     //Important! If your component is navigating based on some global state(from say componentWillReceiveProps)
@@ -125,7 +117,7 @@ class Nav extends React.Component {
 
 
 
-  renderLinks(authenticatedUser, signInClass, archivesClass, settingsClass, dashboardClass, signUpClass, createRequestClass, myRequestsClass, browseRequestsClass,profileClass) {
+  renderLinks(authenticatedUser, signInClass, archivesClass, settingsClass, dashboardClass, signUpClass, createRequestClass, myRequestsClass, browseRequestsClass, profileClass) {
     if (authenticatedUser) {
       return (
         <ul class="navbar-nav mr-auto">
@@ -207,7 +199,7 @@ class Nav extends React.Component {
     const signUpClass = location.pathname.match(/^\/signUp/) ? "active" : "";
     const profileClass = location.pathname.match(/^\/profile/) ? "active" : "";
 
-    
+
     const navClass = collapsed ? "collapse" : "";
 
     return (
@@ -230,7 +222,7 @@ class Nav extends React.Component {
         <div className="row">
           <div className="col-12 text-center">
             <div class="alert alert-success" role="alert">
-               {this.state.renderError}
+              {this.state.renderError}
             </div>
           </div>
         </div>

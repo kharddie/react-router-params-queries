@@ -1,12 +1,12 @@
-import UpdateEmailForm from '../components/UpdateEmailForm.js';
-import { resetUpdateEmailState } from '../actions/updateEmail';
+import UpdateProfileForm from '../components/UpdateProfileForm.js';
+import { resetUpdateProfileState } from '../actions/updateProfile';
 import { resetValidateUserFields } from '../actions/validateUserFields';
 import { connect } from 'react-redux';
 
 const mapDispatchToProps = (dispatch) => {
   return {
    resetMe: () =>{
-     dispatch(resetUpdateEmailState());
+     dispatch(resetUpdateProfileState());
      dispatch(resetValidateUserFields());
     }
   }
@@ -15,7 +15,7 @@ const mapDispatchToProps = (dispatch) => {
 function mapStateToProps(state, ownProps) {
   return { 
     user: state.user.user,
-    updateEmail: state.updateEmail,
+    updateProfile: state.updateProfile,
     initialValues: {
       email: state.user.user && state.user.user.email,
       name: state.user.user && state.user.user.name,
@@ -25,4 +25,4 @@ function mapStateToProps(state, ownProps) {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(UpdateEmailForm);
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateProfileForm);

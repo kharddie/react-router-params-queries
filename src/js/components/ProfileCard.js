@@ -7,34 +7,13 @@ export default class ProfileCard extends Component {
     let user = this.props.user.user;
     return (
       <div>
-
-
-        <div className='container'>
-          <div className="row justify-content-md-center">
-            <div className={"col-sm-12 col-md-6"}>
-              <div className="profile">
-                <h2>Profile</h2>
+          <div className="row">
+            <div className="col-sm-12">
                 <div>Name: {user && user.name}</div>
-                <div>Username: {user && user.username}</div>
+                <div>Username: {user && user.user_name}</div>
                 <div>Email: {user && user.email}</div>
-              </div>
             </div>
           </div>
-        </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       </div>
     );
   }

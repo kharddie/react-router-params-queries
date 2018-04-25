@@ -22,8 +22,8 @@ export const VALIDATE_EMAIL = 'VALIDATE_EMAIL';
 export const VALIDATE_EMAIL_SUCCESS = 'VALIDATE_EMAIL_SUCCESS';
 export const VALIDATE_EMAIL_FAILURE = 'VALIDATE_EMAIL_FAILURE';
 
-//called when email is updated in profile to update main user's email state
-export const UPDATE_USER_EMAIL = 'UPDATE_USER_EMAIL';
+//called when profile is updated in profile to update main user's profile state
+export const UPDATE_USER_PROFILE = 'UPDATE_USER_PROFILE';
 
 //log out user
 export const LOGOUT_USER = 'LOGOUT_USER';
@@ -128,10 +128,10 @@ export function signInUser(formValues) {
   };
 }
 
-export function signInUserSuccess(user) {
+export function signInUserSuccess(payload) {
   return {
     type: SIGNIN_USER_SUCCESS,
-    payload: user
+    payload: payload
   };
 }
 
@@ -147,10 +147,12 @@ export function logoutUser() {
     type: LOGOUT_USER
   };
 }
-export function updateUserEmail(email) {
+
+
+export function updateUserProfile(payload) {
   return {
-    type: UPDATE_USER_EMAIL,
-    payload:email
+    type: UPDATE_USER_PROFILE,
+    payload: payload
   };
 }
 

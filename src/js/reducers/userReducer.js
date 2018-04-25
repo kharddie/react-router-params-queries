@@ -4,7 +4,7 @@ import {
     ME_FROM_TOKEN, ME_FROM_TOKEN_SUCCESS, ME_FROM_TOKEN_FAILURE, RESET_TOKEN,
       SIGNUP_USER, SIGNUP_USER_SUCCESS, SIGNUP_USER_FAILURE, RESET_USER,
       SIGNIN_USER, SIGNIN_USER_SUCCESS,  SIGNIN_USER_FAILURE,
-      LOGOUT_USER, UPDATE_USER_EMAIL
+      LOGOUT_USER, UPDATE_USER_PROFILE
   } from '../actions/users';
   
   
@@ -56,17 +56,18 @@ import {
       case SIGNIN_USER:// sign in user,  set loading = true and status = signin
       return { ...state, user: null, status:'signin', error:null, loading: true}; 
       case SIGNIN_USER_SUCCESS://return authenticated user,  make loading = false and status = authenticated
-      return { ...state, user: action.payload.user, status:'authenticated', error:null, loading: false}; //<-- authenticated
+      return { ...state, user: action.payload.data.user, status:'authenticated', error:null, loading: false}; //<-- authenticated
       case SIGNIN_USER_FAILURE:// return error and make loading = false
       //error = action.payload.data || {message: action.payload.error};//2nd one is network or server down errors  
       error = action.payload.error.text;    
       return { ...state, user: null, status:'signin', error:error, loading: false};
   
-  
-      case UPDATE_USER_EMAIL:
-      return{...state, user:{...state.user, email:action.payload.email}};
-      
-  
+      case UPDATE_USER_PROFILE:
+      const newState = Object.assign({}, state);
+      delete newState.user;
+
+      return { ...newState, user: action.payload.data.user, status:'authenticated', error:null, loading: false}; //<-- authenticated
+     
       case LOGOUT_USER:
         return {...state, user:null, status:'logout', error:null, loading: false};
   

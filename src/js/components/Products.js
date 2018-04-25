@@ -10,7 +10,6 @@ import CreateNewCategoriesForm from "./CreateNewCategoriesForm";
 
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import faTimes from '@fortawesome/fontawesome-free-solid/faTimes';
-
 import faEdit from '@fortawesome/fontawesome-free-solid/faEdit';
 
 

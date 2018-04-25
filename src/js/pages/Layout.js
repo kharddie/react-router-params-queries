@@ -6,6 +6,7 @@ import { meFromToken, meFromTokenSuccess, meFromTokenFailure, resetToken } from 
 import { connect } from "react-redux"
 //import { connect } from "http2";
 
+
 const mapDispatchToProps = (dispatch) => {
   return {
     loadUserFromToken: () => {
@@ -51,8 +52,8 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-const mapStateToProps =(state) => {
-  updateProfile: state.updateEmail
+const mapStateToProps = (state) => {
+  profileUpdated: state.profileUpdated
 }
 
 class Layout extends React.Component {
@@ -70,7 +71,7 @@ class Layout extends React.Component {
 
         <Nav location={location}  history={history} />
 
-        <div className="container" style={containerStyle}>
+        <div className="container main-content" style={containerStyle}>
           <div className="row">
             <div className="col-lg-12">
               {this.props.children}

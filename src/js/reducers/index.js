@@ -3,9 +3,7 @@ import ProductsReducer from './productsReducer';
 import CategoriesReducer from "./categoriesReducer";
 import RequestsReducer from "./requestsReducer";
 import UserReducer from './userReducer';
-import ValidateUserFieldsReducer from './reducer_validateUserFields';
-import ResendEmailReducer from './reducer_resendEmail';
-import UpdateEmailReducer from './reducer_updateEmail';
+import UpdateProfileReducer from './reducerUpdateProfile';
 import { reducer as formReducer } from 'redux-form';
 
 const rootReducer = combineReducers({
@@ -14,9 +12,7 @@ const rootReducer = combineReducers({
   categories: CategoriesReducer,
   requests: RequestsReducer,
   form: formReducer, // <-- redux-form
-  validateFields: ValidateUserFieldsReducer,
-  resendEmail: ResendEmailReducer,
-  updateEmail: UpdateEmailReducer
+  updateProfile: UpdateProfileReducer
 });
 
 export default rootReducer;
