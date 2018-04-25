@@ -81,7 +81,7 @@ class CreateRequestForm extends Component {
 
   state = {
     divClass: "",
-    formWidthBg:""
+    formWidthBg: ""
   }
 
   componentWillMount() {
@@ -91,7 +91,7 @@ class CreateRequestForm extends Component {
     if (this.props.location.href.indexOf("createRequest") > -1) {
       this.setState({
         divClass: " col-md-6",
-        formWidthBg:"form-width-bg"
+        formWidthBg: "form-width-bg"
       })
     }
   }
@@ -140,7 +140,7 @@ class CreateRequestForm extends Component {
                 name="content"
                 component={renderTextArea}
                 label="Describe your Request in more detail*" />
-              <div>
+              <div className="form-footer">
                 <button
                   type="submit"
                   className="btn btn-primary"
@@ -149,7 +149,7 @@ class CreateRequestForm extends Component {
             </button>
                 <Link
                   to="/"
-                  className="btn btn-error"> Cancel
+                  className="btn btn btn-secondary"> Cancel
             </Link>
               </div>
             </form>

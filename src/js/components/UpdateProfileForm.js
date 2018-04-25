@@ -54,7 +54,7 @@ const asyncValidate = (values, dispatch) => {
 
 
 //For any field errors upon submission (i.e. not instant check)
-const validateAndUpdateProfile = (values, dispatch,props) => {
+const validateAndUpdateProfile = (values, dispatch, props) => {
   values.id = props.user.id;
   return dispatch(updateProfile(values, sessionStorage.getItem('jwtToken')))
     .then((result) => {
@@ -85,11 +85,11 @@ class UpdateProfileForm extends Component {
 
   componentWillReceiveProps() {
     const { error, profileUpdated } = this.props.updateProfile;
-    if(profileUpdated){
-      $('.carousel').carousel(0); 
+    if (profileUpdated) {
+      $('.carousel').carousel(0);
     }
 
-}
+  }
 
 
   getMessage() {
@@ -131,13 +131,14 @@ class UpdateProfileForm extends Component {
             type="email"
             component={renderField}
             label="Update Email*" />
-
-          <button
-            type="submit"
-            className="btn btn-primary"
-            disabled={submitting}>
-            Update Profile
+          <div className="form-footer">
+            <button
+              type="submit"
+              className="btn btn-primary btn-block"
+              disabled={submitting}>
+              Update Profile
           </button>
+          </div>
         </form>
       </div>
     );

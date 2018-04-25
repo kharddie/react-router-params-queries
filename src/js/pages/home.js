@@ -36,7 +36,9 @@ export default class Home extends React.Component {
                                 <div className="container">
                                     <div className="row">
                                         <div className="col text-left"> <h5 className="modal-title">Create a request</h5></div>
-                                        <div className="col text-right"><a onClick={this.modalBackdropClicked}><FontAwesomeIcon className="" size="lg" icon={faTimes} /></a></div>
+                                        <div className="col text-right">
+                                        <button type="button" class="close" onClick={this.modalBackdropClicked} data-dismiss="alert">&times;</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -74,7 +76,7 @@ export default class Home extends React.Component {
                     <div className="col">
                         <div className="intro"><h1 className="text-h1-lg intro-2" >Get more done</h1>
                             <h4 className="intro-3">Over 1.6M trusted people ready to complete your task today Australia-wide</h4>
-                            <button className="btn btn-primary" onClick={this.showModalCreateRequest}>Get started now</button>                        
+                            <button className="btn btn-primary btn-lg" onClick={this.showModalCreateRequest}>Get started now</button>                        
                         </div>
                     </div>
                     <div className="col"></div>
