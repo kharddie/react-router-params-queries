@@ -45,14 +45,14 @@ const asyncValidate = (values, dispatch) => {
 
 //For any field errors upon submission (i.e. not instant check)
 const validateAndCreateOffer = (values, dispatch, props) => {
-    values.id = props.user.id;
+    values.user_id = props.user.id;
     values.created = moment(moment(), "YYY,MM,DD").toISOString();
     values.request_id = props.requestId;
     return dispatch(createOffer(values, sessionStorage.getItem('jwtToken')))
         .then(result => {
             // Note: Error's "data" is in result.payload.response.data (inside "response")
             // success's "data" is in result.payload.data
-            if (result.payload.response && result.payload.response.status !== 200) {
+            if (result.payload && result.payload.status !== 200) {
                 dispatch(createOfferFailure(result.payload.response.data));
                 throw new SubmissionError(result.payload.response.data);
             }
