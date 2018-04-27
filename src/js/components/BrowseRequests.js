@@ -2,12 +2,15 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import moment from 'moment'
 import Moment from 'react-moment';
-
+import Modal from 'react-bootstrap4-modal';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import faCalendar from '@fortawesome/fontawesome-free-solid/faCalendar';
 import faMapMarker from '@fortawesome/fontawesome-free-solid/faMapMarker';
 import faUser from '@fortawesome/fontawesome-free-solid/faUser';
 import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner';
+
+import CreateOfferContainer from '../containers/CreateOfferContainer.js';
+
 
 import GoogleMapReact from 'google-map-react';
 
@@ -17,16 +20,25 @@ class BrowseRequests extends Component {
     }
 
     state = {
+        modalvisibleProducts: false,
         title: '',
         address: '',
         content: '',
         created: '',
         due_date: '',
-        id: '',
+        request_id: '',
         modified: '',
         name: '',
         status: '',
 
+    }
+
+    modalBackdropClicked = () => {
+        this.setState({ modalvisible: false });
+    }
+
+    showModal = () => {
+        this.setState({ modalvisible: true });
     }
 
     requestDetails = (data) => {
@@ -37,6 +49,7 @@ class BrowseRequests extends Component {
             content: data.content,
             created: data.created,
             due_date: data.due_date,
+            request_id: data.id,
             modified: data.modified,
             name: data.name,
             status: data.status,
@@ -135,7 +148,11 @@ class BrowseRequests extends Component {
     render() {
         const { requests, loading, error } = this.props.requestsList;
 
-
+        $(document).ready(function () {
+            $('.carousel').carousel({
+                interval: false
+            })
+        });
 
         if (loading) {
             $(".loader-spinner-container").removeClass("loader-hide")
@@ -220,7 +237,7 @@ class BrowseRequests extends Component {
                                         <div className="payment-panel">
                                             <div class="header text-uppercase">REQUEST BUDGET</div>
                                             <div class="amount text-uppercase">$50</div>
-                                            <div><button type="button" class="btn btn-success">Offer to assist</button></div>
+                                            <div><button type="button" class="btn btn-success" onClick={this.showModal}>Offer to assist</button></div>
                                         </div>
                                     </div>
                                 </div>
@@ -242,6 +259,45 @@ class BrowseRequests extends Component {
                         <p>Google maps</p>
                     </div>
                 </div>
+                <Modal visible={this.state.modalvisible} onClickBackdrop={this.modalBackdropClicked} dialogClassName="modal-md">
+                    <div className="modal-header">
+                        <div className="container">
+                            <div className="row">
+                                <div className="col text-left"> <h5 className="modal-title">Create a request</h5></div>
+                                <div className="col text-right">
+                                    <button type="button" class="close" onClick={this.modalBackdropClicked} data-dismiss="alert">&times;</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="modal-body">
+                        <div className="container">
+                            <div id="carouselExampleIndicators" className="carousel slide" data-ride="carousel">
+                                <ol className="carousel-indicators">
+                                    <li data-target="#carouselExampleIndicators" data-slide-to="0" className="active"></li>
+                                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                                </ol>
+                                <div className="carousel-inner">
+                                    <div className="carousel-item active">
+                                        <div><CreateOfferContainer requestId={this.state.request_id} location={location} history={history} /></div>
+                                    </div>
+                                    <div className="carousel-item">
+                                        <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</div>
+                                    </div>
+                                </div>
+                                <a className="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                                    <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span className="sr-only">Previous</span>
+                                </a>
+                                <a className="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                                    <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span className="sr-only">Next</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="modal-footer"></div>
+                </Modal>
             </div>
         );
     }
