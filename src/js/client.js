@@ -21,7 +21,7 @@ import 'bootstrap/dist/js/bootstrap.js';
 console.log("The current working directory is " + process.cwd());
 
 
-import Archives from "./pages/Archives";
+import AboutUs from "./pages/AboutUs";
 import Dashboard from "./pages/Dashboard";
 import Layout from "./pages/Layout";
 import Settings from "./pages/Settings";
@@ -52,7 +52,7 @@ ReactDOM.render(
         <Route path="/signIn" name="SignIn" component={SignIn}/>
         <Route path="/dashboard" name="dashboard" component={Dashboard}/>
         <Route path="/signUp" name="signup" component={SignUp}/>
-        <Route path="/archives(/:article)" name="archives" component={Archives}/>
+        <Route path="/aboutUs(/:aboutUs)" name="aboutUs" component={AboutUs}/>
         <Route path="/validateEmail/:token" component={ValidateEmail} />
         <Route path="settings" name="settings" component={Settings}/>
         <Route path="/createRequest" name="CreateRequest" component={CreateRequest}/>

@@ -1,21 +1,17 @@
 import { connect } from 'react-redux'
-import { fetchRequests, fetchRequestsSuccess, fetchRequestsFailure } from '../actions/requests';
+import { fetchRequests, fetchRequestsSuccess, fetchRequestsFailure} from '../actions/requests';
 import BrowseRequests from '../components/BrowseRequests';
 
 
 const mapStateToProps = (state) => {
   return {
-    requestsList: state.requests.requestsList
+    requestsList: state.requests.requestsList,
+    displayRequestsDetails:state.requests.displayRequestsDetails
   };
 }
 
 const mapDispatchToProps = (dispatch) => {
   let jwtToken = sessionStorage.getItem('jwtToken');
-  //   if(!jwtToken || jwtToken === '') {
-  //     alert('Please Sign In');
-  //     reject();
-
-  //   }
   return {
     fetchRequests: () => {
       dispatch(fetchRequests(jwtToken)).then((response) => {

@@ -8,7 +8,8 @@ import RenderDatePickerField from './RenderDatePickerField';
 import { validateRequestFields, validateRequestFieldsSuccess, validateRequestFieldsFailure } from '../actions/requests';
 import { createRequest, createRequestSuccess, createRequestFailure, resetNewRequest } from '../actions/requests';
 
-import Moment from 'moment'
+import moment from 'moment'
+import Moment from 'react-moment';
 
 //Client side validation
 function validate(values) {
@@ -57,8 +58,8 @@ const asyncValidate = (values, dispatch) => {
 //For any field errors upon submission (i.e. not instant check)
 const validateAndCreateRequest = (values, dispatch, props) => {
   values.id = props.user.id;
-  values.due_date = Moment(values.date, "MM,DD,YYYY").toISOString();
-
+  values.due_date = moment(moment(values.date), "YYY,MM,DD").toISOString();
+  values.created = moment(moment(), "YYY,MM,DD").toISOString();
   return dispatch(createRequest(values, sessionStorage.getItem('jwtToken')))
     .then(result => {
       // Note: Error's "data" is in result.payload.response.data (inside "response")

@@ -73,13 +73,16 @@ export default class Home extends React.Component {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col">
+                    <div className="col-sm-7">
                         <div className="intro"><h1 className="text-h1-lg intro-2" >Get more done</h1>
                             <h4 className="intro-3">Over 1.6M trusted people ready to complete your task today Australia-wide</h4>
-                            <button className="btn btn-primary btn-lg" onClick={this.showModalCreateRequest}>Get started now</button>                        
+                            <div className="form-footer">
+                            <button className="btn btn-primary btn-lg" onClick={this.showModalCreateRequest}>Get started now</button>    
+                            <button className="btn btn-primary btn-lg" onClick={this.showModalCreateRequest}>More Info</button>
+                            </div>                    
                         </div>
                     </div>
-                    <div className="col"></div>
+                    <div className="col-sm-5">XXX</div>
                 </div>
             </div>
         );

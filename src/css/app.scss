@@ -12,6 +12,49 @@ $primary-color: #333;
 }
 
 
+@mixin justify-content-left {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@mixin justify-content-right {
+  display: flex;
+  justify-content: flex-start;
+}
+
+@mixin justify-content-center {
+  display: flex;
+  justify-content: center;
+}
+
+@mixin justify-content-center-center {
+  position: absolute;
+  margin: auto;
+  top: 0;
+  z-index: 303463462346234;
+  bottom: 0;
+  left: 0;
+  display: block;
+  right: 0;
+}
+
+@mixin col-padding-left-0{
+  padding-left:0;
+}
+@mixin col-padding-left-0{
+  padding-left:0;
+}
+
+html, 
+body {
+    height: 100%;
+}
+
+//requestst
+.scrollable-content {
+  overflow: auto;
+}
+
 
 
 body {
@@ -46,7 +89,6 @@ h2, .h2 {
     margin-right: 6px;
 }
 
-
 .btn {
   border-radius: 0;
 }
@@ -73,8 +115,30 @@ h1.title-page {
 .container.main-content{
   min-height: 400px;
 }
+.container.alert-success{
+  max-width: 100%;
+  margin:0;
+  padding:0;
+}
 
+.alert {
+ margin-bottom: 0; 
+}
 
+.loader-show{
+  width: 100%;
+  height: 100%;
+  @include justify-content-center-center;
+} 
+.loader-hide{
+  width: 1px!important;
+  height: 1px!important;
+  left: -60px!important;
+  display: none!important;
+} 
+.spinner{
+  @include justify-content-center-center;
+}
 
 
 help-block {
@@ -180,6 +244,7 @@ help-block {
     background-color: #26272b;
     height: 60px;
     padding-top: 15px;
+    color: #808288;
 
     @media screen and (min-width:400px){
       height: 90px;
@@ -188,6 +253,10 @@ help-block {
   }
 
  /* requests*/
+ .requests{
+   .requests-small{
+     height:500px;
+   }
   .request-box{
     border: 1px solid #dee8ec;
     margin-bottom: 10px;
@@ -196,17 +265,35 @@ help-block {
     padding-bottom: 15px;
     border-left: 4px solid #ff9e19;
     background-color: white;
-
-    .content{
-        padding-top: 15px;
+    color:#839094;  
+    font-size: 13px;
+    cursor: pointer;
+    .btn.more-details{
+      margin-top: 5px;
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      padding: 0;  
     }
+    .arrow-down{
+        transform: rotate(0deg);
+    }
+    .arrow-up{
+      transform: rotate(180deg);
+  }
+  .more-info-btn{
+    @include justify-content-right;
+  }  
 
-    .title{
+  .content{
+    padding-top: 15px;
+  }
+  .title{
       font-size: 17px;
-      line-height: 20px;
+      line-height: 17px;
       color: #3a3d3e;
-      font-weight: bold;
-      margin-bottom: 20px;
+      font-weight: 300;
+      margin-bottom: 10px;
     }
     .tiny-text{
       font-size: 12px;
@@ -215,51 +302,104 @@ help-block {
     .request-status{
       color: #9fc104;
     }
+
+    .footer{
+      border-top: 1px solid #e7eef1;
+      padding-top: 3px;
+      margin-top: 10px;
+    }
+    .user-image{
+      @include justify-content-center-center;
+      height: 30px;
+      width: 30px;
+      border-radius: 30px;
+      overflow: hidden;
+      left: 20px !important;
+    }
   }
+.loader-spinner-container{
+    @include justify-content-center-center;
+    z-index: 303463462346234;
+    width:100%;
+    height:100%;
+ }
+
+
+
+
+}
 
   .request-box.request-box-details{
       border-left: 1px solid #dee8ec;
+
+      .payment-panel {
+        .amount {
+          font-size: x-large;
+          color: #e7eef1;
+        }
+        .header {
+          font-size: 17px;
+          background-color: transparent;
+        }
+      }
+
       .title {
         height: auto;
         font-weight: 300;
         overflow: hidden;
         text-overflow: ellipsis;
-        color: #3a3d3e;
-        font-size: 30px;
-        line-height: 1.2;
-        margin-top: 15px;
+        color: #3a3d3e; 
+        margin-bottom: 0;
+        font-size: 23px;
+        margin: 23px 0 35px;
+        line-height: 35px;
       }
-      .payment-panel {
-        button{
-          border-radius: 50px;
-          margin-top:10px;
-          margin-bottom:10px;
-          height: auto;
-          width:90%;
-        }
+      button{
+        width:90%;
       }
+      .payment-panel > div {
+        padding: 0 10px;
+        border-bottom: 1px solid #f1f1f1;
+        color: #839094;
+        padding: 15px 10px;
+      }
+
+
+      .user-image{
+        position: relative;
+        left: 0 !important;
+        margin-left: 0;
+      }
+      .icon-image{
+          width: 20px;
+      }
+
+      .col-padding-left-0{
+        @include col-padding-left-0;
+      }
+
+      .col-padding-right-0{
+        @include col-padding-left-0;   
+      }
+      .separator{
+        margin: 7px 0;
+      }
+
+      .separator div:nth-last-child(1){
+        border-top: 1px solid #e7eef1;
+      }
+
+
 
       .payment-panel div:last-child {
         height: auto!important;
         border-bottom: none!important;
       }
 
-      .payment-panel > div {
-          height: 30px;
-          line-height: 26px;
-          padding: 0 10px;
-          border-bottom: 1px solid #f1f1f1;
-          color: #839094;
-        }
-
-      .payment-panel div:nth-child(2) {
-          height: 40px;
-        }
-
 
     .payment-panel {
       border: 1px solid #cad7dc;
-      border-radius: 6px;
+      border-radius: 0;
       transform: translateZ(0);
     }
 
@@ -291,6 +431,7 @@ help-block {
   .btn-request {
     color: white!important;
     margin-bottom: 15px;
+    @include justify-content-center;
 }
 
 
@@ -313,8 +454,7 @@ form.request-form > div:first-of-type {
 
 
 .form-footer {
-  display: flex;
-  justify-content:flex-end;
+@include justify-content-left;
 
   > :not(:last-child) {
   margin-right: .25rem;
@@ -412,6 +552,7 @@ form.request-form > div:first-of-type {
 
   .carousel-indicators {
     top:0;
+    display:none;
     li {
       text-indent:0;
       width:200px;

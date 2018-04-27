@@ -2,6 +2,8 @@ import React from "react";
 import { IndexLink, Link } from "react-router";
 import { connect } from "react-redux";
 import { logoutUser } from '../../actions/users';
+import { toTitleCase } from '../../helper/index.js';
+import { resetUpdateProfileState } from '../../actions/updateProfile';
 
 
 function mapStateToProps(state) {
@@ -24,6 +26,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     logout: () => {
       sessionStorage.removeItem('jwtToken');
       dispatch(logoutUser());
+    },
+
+    resetUpdateProfileState: () =>{
+      dispatch(resetUpdateProfileState());
     }
   }
 }
@@ -35,37 +41,67 @@ class Nav extends React.Component {
     hideLinks: false,
     renderError: ""
   }
+
+  hideInfoBox = () => {
+    $(".infoBox").hide(() => {
+      this.setState({
+        renderError: ""
+      })
+    });
+  }
+
+  showInfoBox = (text) => {
+    $(".infoBox").show("slow", () => {
+      this.setState({
+        renderError: text
+      })
+    });
+  }
+
   componentWillReceiveProps(nextProps) {
     console.log("---------this is from nav props --------------");
-    //console.log(this.props);
+    console.log(this.props);
+    console.log("---------this is from nav nextProps --------------");
+    console.log(nextProps);
+
     if (this.props.user.user && !nextProps.user.user) {//logout (had user(this.props.user.user) but no loger the case (!nextProps.user.user))
-      // this.props.history.push('/browseRequests');
+      this.props.history.push('/');
     }
 
     if (nextProps.newRequest.request && !nextProps.newRequest.error) {
-      //this.props.history.push('/');
-      console.log(nextProps.newRequest.request);
-      this.setState({
-        renderError: nextProps.newRequest.request.message
-      })
-    }
-    if (nextProps.user.error) {
-      //this.props.history.push('/');
-      console.log(nextProps.user.error);
-      this.setState({
-        renderError: nextProps.user.error
-      })
+      //this.showInfoBox(nextProps.newRequest.request.message)
     }
 
+    //show user messages
+    if (nextProps.user.error) {
+      //this.showInfoBox(nextProps.user.error)
+    }
+    //show update profile messages
     const { error, profileUpdated, message } = this.props.updateProfile;
-      this.setState({
-        renderError: message
-      })
+    if (profileUpdated) {
+      this.props.resetUpdateProfileState();
+      this.showInfoBox(message);
+    }
+
+    //hide the info panel
+    if (this.props.location.pathname !== nextProps.location.pathname) {
+      this.hideInfoBox();
+    }
+    this.props.history.listen((location, action) => {
+      //console.log(`The current URL is ${this.props.location.pathname}${this.props.location.search}${this.props.location.hash}`)
+      //console.log(`The last navigation action was ${this.props.action}`)
+    })
   }
+
   componentWillUnmount() {
     //Important! If your component is navigating based on some global state(from say componentWillReceiveProps)
     //always reset that global state back to null when you REMOUNT
     this.props.resetMe();
+    $(".infoBox").hide();
+  }
+
+  componentWillMount() {
+    $(".infoBox").hide();
   }
 
   toggleCollapse = () => {
@@ -73,41 +109,39 @@ class Nav extends React.Component {
     this.setState({ collapsed });
   }
 
-  showHideUserLinks = (authenticatedUser) => {
-    if (authenticatedUser) {
-      // this.setState({
-      // hideLinks: true,
-      // });
-    }
-  }
-
   renderSignInLinks(authenticatedUser) {
     if (authenticatedUser) {
       return (
         <ul className="nav  nav-pills navbar-right">
-          <li style={{ paddingRight: '10px' }} role="presentation">
-            <Link role="presentation" style={{ color: '#996633', fontSize: '17px' }} to="/profile">
-              {authenticatedUser.name}
-            </Link>
+
+          <li class="nav-item dropdown" role="presentation">
+            <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              {toTitleCase(authenticatedUser.name)}
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">
+              <Link class="dropdown-item" to="myRequests" onClick={this.toggleCollapse.bind(this)}>View my requests</Link>
+              <Link class="dropdown-item" to="profile" onClick={this.toggleCollapse.bind(this)}>View my profile</Link>
+            </div>
           </li>
-          <li style={{ paddingRight: '10px' }} role="presentation">
-            <a style={{ color: '#996633', fontSize: '17px' }} onClick={this.props.logout} href="javascript:void(0)">
+          <li class="nav-item" role="presentation">
+            <a class="nav-item nav-link" onClick={this.props.logout} href="javascript:void(0)">
               Log out
               </a>
           </li>
+
         </ul>
       );
     }
 
     return (
       <ul className="nav  nav-pills navbar-right">
-        <li style={{ paddingRight: '10px' }} role="presentation">
-          <Link role="presentation" style={{ color: '#996633', fontSize: '17px' }} to="/signup">
+        <li role="presentation" class="nav-item">
+          <Link class="dropdown-item" role="presentation" to="/signup">
             Sign up
             </Link>
         </li>
-        <li style={{ paddingRight: '10px' }} role="presentation">
-          <Link style={{ color: '#996633', fontSize: '17px' }} to="/signin">
+        <li role="presentation" class="nav-item">
+          <Link class="dropdown-item" to="/signin">
             Sign in
             </Link>
         </li>
@@ -117,12 +151,16 @@ class Nav extends React.Component {
 
 
 
-  renderLinks(authenticatedUser, signInClass, archivesClass, settingsClass, dashboardClass, signUpClass, createRequestClass, myRequestsClass, browseRequestsClass, profileClass) {
+  renderLinks(authenticatedUser, signInClass, aboutUsClass, settingsClass, dashboardClass, signUpClass, createRequestClass, myRequestsClass, browseRequestsClass, profileClass) {
     if (authenticatedUser) {
       return (
         <ul class="navbar-nav mr-auto">
           <li class={"nav-item " + signInClass}>
             <IndexLink class="nav-link" to="/" onClick={this.toggleCollapse.bind(this)}>Home</IndexLink>
+          </li>
+
+          <li class={"nav-item " + aboutUsClass}>
+            <Link class="nav-link" to="aboutUs" onClick={this.toggleCollapse.bind(this)}>AboutUs</Link>
           </li>
           <li class={"nav-item " + createRequestClass} >
             <Link class="nav-link" to="createRequest" onClick={this.toggleCollapse.bind(this)}>Create a Request</Link>
@@ -133,9 +171,7 @@ class Nav extends React.Component {
           <li class={"nav-item " + browseRequestsClass} >
             <Link class="nav-link" to="browseRequests" onClick={this.toggleCollapse.bind(this)}>Browse request</Link>
           </li>
-          <li class={"nav-item " + archivesClass}>
-            <Link class="nav-link" to="archives" onClick={this.toggleCollapse.bind(this)}>Archives</Link>
-          </li>
+
           <li class={"nav-item " + settingsClass}>
             <Link class="nav-link" to="settings" onClick={this.toggleCollapse.bind(this)}>Settings</Link>
           </li>
@@ -152,6 +188,11 @@ class Nav extends React.Component {
         <li class={"nav-item " + signInClass}>
           <IndexLink class="nav-link" to="/" onClick={this.toggleCollapse.bind(this)}>Home</IndexLink>
         </li>
+
+        <li class={"nav-item " + aboutUsClass}>
+          <Link class="nav-link" to="aboutUs" onClick={this.toggleCollapse.bind(this)}>AboutUs</Link>
+        </li>
+
         <li class={"nav-item " + signInClass} >
           <IndexLink class="nav-link" to="/signin" onClick={this.toggleCollapse.bind(this)}>Login</IndexLink>
         </li>
@@ -165,9 +206,7 @@ class Nav extends React.Component {
           <Link class="nav-link" to="browseRequests" onClick={this.toggleCollapse.bind(this)}>Browse request</Link>
         </li>
 
-        <li class={"nav-item " + archivesClass}>
-          <Link class="nav-link" to="archives" onClick={this.toggleCollapse.bind(this)}>Archives</Link>
-        </li>
+
         <li class={"nav-item " + settingsClass}>
           <Link class="nav-link" to="settings" onClick={this.toggleCollapse.bind(this)}>Settings</Link>
         </li>
@@ -184,13 +223,14 @@ class Nav extends React.Component {
 
   render() {
     const { authenticatedUser, newRequest } = this.props;
+    
 
     //this.showHideUserLinks(authenticatedUser);
 
     const { location } = this.props;
     const { collapsed } = this.state;
     const signInClass = location.pathname === "/" ? "active" : "";
-    const archivesClass = location.pathname.match(/^\/archives/) ? "active" : "";
+    const aboutUsClass = location.pathname.match(/^\/aboutUs/) ? "active" : "";
     const settingsClass = location.pathname.match(/^\/settings/) ? "active" : "";
     const createRequestClass = location.pathname.match(/^\/createRequest/) ? "active" : "";
     const myRequestsClass = location.pathname.match(/^\/myRequests/) ? "active" : "";
@@ -212,19 +252,23 @@ class Nav extends React.Component {
               <span class="navbar-toggler-icon"></span>
             </button>
             <div class={"collapse navbar-collapse " + navClass} id="navbarSupportedContent">
-              {this.renderLinks(authenticatedUser, signInClass, archivesClass, settingsClass, dashboardClass, signUpClass, myRequestsClass, browseRequestsClass)}
+              {this.renderLinks(authenticatedUser, signInClass, aboutUsClass, settingsClass, dashboardClass, signUpClass, myRequestsClass, browseRequestsClass)}
               <span className="navbar-text">
                 {this.renderSignInLinks(authenticatedUser)}
               </span>
             </div>
           </nav>
         </div>
-        <div className="row">
-          <div className="col-12 text-center">
-            <div class="alert alert-success" role="alert">
-              {this.state.renderError}
+
+        <div class="container alert-success infoBox">
+          <div className="row">
+            <div className="col-12 text-center">
+              <div class="alert alert-successalert-success" role="alert">
+                {this.state.renderError}
+              </div>
             </div>
           </div>
+
         </div>
       </div>
 

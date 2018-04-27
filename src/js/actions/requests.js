@@ -31,6 +31,8 @@ export const DELETE_REQUEST_FAILURE = 'DELETE_REQUEST_FAILURE';
 export const RESET_DELETED_REQUEST = 'RESET_DELETED_REQUEST';
 
 
+
+
 const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost/react-router-params-queries-api/' : '/api';
 
 export function fetchRequests(token) {
@@ -194,3 +196,7 @@ export function deleteRequestFailure(response) {
     payload: response
   };
 }
+
+
+
+
