@@ -8,15 +8,19 @@ import faCalendar from '@fortawesome/fontawesome-free-solid/faCalendar';
 import faMapMarker from '@fortawesome/fontawesome-free-solid/faMapMarker';
 import faUser from '@fortawesome/fontawesome-free-solid/faUser';
 import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner';
-
 import CreateOfferContainer from '../containers/CreateOfferContainer.js';
-
-
 import GoogleMapReact from 'google-map-react';
 
 class BrowseRequests extends Component {
     componentWillMount() {
         this.props.fetchRequests();
+    }
+
+    componentWillReceiveProps(nextProps){
+        if(nextProps.newOffer.offer){
+            this.setState({ modalvisible: false });
+            this.props.resetNewOffer();
+        }
     }
 
     state = {

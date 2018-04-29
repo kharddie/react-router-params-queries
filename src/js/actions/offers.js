@@ -30,9 +30,6 @@ export const DELETE_OFFER_SUCCESS = 'DELETE_OFFER_SUCCESS';
 export const DELETE_OFFER_FAILURE = 'DELETE_OFFER_FAILURE';
 export const RESET_DELETED_OFFER = 'RESET_DELETED_OFFER';
 
-
-
-
 const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost/react-router-params-queries-api/' : '/api';
 
 export function fetchOffers(token) {
@@ -90,9 +87,7 @@ export function resetOfferFields() {
   return {
     type: RESET_OFFER_FIELDS
   }
-}
-;
-
+};
 
 export function createOffer(props, tokenFromStorage) {
   const offer = axios({
@@ -167,7 +162,6 @@ export function resetActiveOffer() {
     type: RESET_ACTIVE_OFFER
   }
 }
-
 
 export function deleteOffer(id, tokenFromStorage) {
   const offer = axios({

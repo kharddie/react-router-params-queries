@@ -58,7 +58,7 @@ export function meFromToken(tokenFromStorage) {
   //check if the token is still valid, if so, get me from the server
   const request = axios({
     method: 'get',
-    url: `${ROOT_URL}/me/from/token?token=${tokenFromStorage}`,
+    url: `${ROOT_URL}/users/meFromToken.php`,
     headers: {
       'Authorization': `Bearer ${tokenFromStorage}`
     }
@@ -77,10 +77,10 @@ export function meFromTokenSuccess(currentUser) {
   };
 }
 
-export function meFromTokenFailure(error) {
+export function meFromTokenFailure(payload) {
   return {
     type: ME_FROM_TOKEN_FAILURE,
-    payload: error
+    payload: payload
   };
 }
 
@@ -135,10 +135,10 @@ export function signInUserSuccess(payload) {
   };
 }
 
-export function signInUserFailure(error) {
+export function signInUserFailure(payload) {
   return {
     type: SIGNIN_USER_FAILURE,
-    payload: error
+    payload: payload
   };
 }
 

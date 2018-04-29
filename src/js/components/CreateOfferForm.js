@@ -86,11 +86,7 @@ class CreateOfferForm extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        /* if (!nextProps.newOffer.offer && !nextProps.newOffer.error) {
-             this.props.history.push('/browseOffers');
-             this.props.resetMe();
-         }
-         */
+
     }
 
     render() {

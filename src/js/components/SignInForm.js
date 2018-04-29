@@ -33,10 +33,9 @@ const validateAndSignInUser = (values, dispatch) => {
         sessionStorage.setItem('jwtToken', result.payload.data.token);
         dispatch(signInUserSuccess(result.payload.data));
       }
-
-      if (result.payload.data.error) { //success
+      if (result.payload.data.error) { //failed
         dispatch(signInUserFailure(result.payload.data));
-        //throw new SubmissionError(result.payload.response.data);
+        throw new SubmissionError(result.payload.data);
       }
 
     });
@@ -128,7 +127,7 @@ class SignInForm extends Component {
 }
 
 export default reduxForm({
-  form: 'SignInFormForm', // a unique identifier for this form
+  form: 'SignInForm', // a unique identifier for this form
   validate // <--- validation function given to redux-form
 })(SignInForm)
 

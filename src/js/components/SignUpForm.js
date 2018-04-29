@@ -3,7 +3,8 @@ import { Link } from 'react-router';
 import { reduxForm, Field, SubmissionError } from 'redux-form';
 import renderField from '../components/renderField';
 import { validateUserFields, validateUserFieldsSuccess, validateUserFieldsFailure, resetValidateUserFields } from '../actions/validateUserFields';
-import { signUpUser, signUpUserSuccess, signUpUserFailure, } from '../actions/users';
+import { signUpUser, signUpUserSuccess, signUpUserFailure,resetToken, } from '../actions/users';
+import { appInfoDisplay, resetAppInfoDisplay } from '../actions/appInfoDisplay';
 
 //Client side validation
 function validate(values) {
@@ -42,6 +43,7 @@ function validate(values) {
 
 
 // //For instant async server validation
+/*
 const asyncValidate = (values, dispatch) => {
   return dispatch(validateUserFields(values))
     .then((result) => {
@@ -64,6 +66,7 @@ const asyncValidate = (values, dispatch) => {
       }
     });
 };
+*/
 
 
 
@@ -75,19 +78,17 @@ const validateAndSignUpUser = (values, dispatch) => {
       // Note: Error's "data" is in result.payload.response.data (inside "response")
       // success's "data" is in result.payload.data
       if (result.payload.response && result.payload.response.status !== 200) {
+        dispatch(resetToken());      
+        dispatch(appInfoDisplay(result.payload.response.data));
         dispatch(signUpUserFailure(result.payload.response.data));
         throw new SubmissionError(result.payload.response.data);
       }
-
-      //Store JWT Token to browser session storage 
-      //If you use localStorage instead of sessionStorage, then this w/ persisted across tabs and new windows.
-      //sessionStorage = persisted only in current tab
       sessionStorage.setItem('jwtToken', result.payload.data.token);
-      //let other components know that everything is fine by updating the redux` state
-      dispatch(signUpUserSuccess(result.payload.data)); //ps: this is same as dispatching RESET_USER_FIELDS
+      dispatch(resetToken());   
+      dispatch(appInfoDisplay(result.payload.data.message));
+      dispatch(signUpUserSuccess(result.payload.data)); 
     });
 };
-
 
 class SignUpForm extends Component {
   static contextTypes = {
@@ -102,7 +103,7 @@ class SignUpForm extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.user.status === 'authenticated' && nextProps.user.user && !nextProps.user.error) {
-      this.context.router.push('/');
+      this.props.history.push('/');
     }
   }
 
@@ -158,7 +159,7 @@ class SignUpForm extends Component {
 export default reduxForm({
   form: 'SignUpForm', // a unique identifier for this form
   validate, // <--- validation function given to redux-form
-  asyncValidate
+  //asyncValidate
 })(SignUpForm)
 
 

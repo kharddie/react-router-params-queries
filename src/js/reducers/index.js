@@ -5,6 +5,7 @@ import RequestsReducer from "./requestsReducer";
 import OffersReducer from "./offersReducer";
 import UserReducer from './userReducer';
 import UpdateProfileReducer from './reducerUpdateProfile';
+import AppInfoDisplayReducer from './AppInfoDisplayReducer';
 import { reducer as formReducer } from 'redux-form';
 
 const rootReducer = combineReducers({
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   categories: CategoriesReducer,
   requests: RequestsReducer,
   offers: OffersReducer,
+  appInfoDisplay: AppInfoDisplayReducer,
   form: formReducer, // <-- redux-form
   updateProfile: UpdateProfileReducer
 });

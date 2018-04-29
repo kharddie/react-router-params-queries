@@ -6,30 +6,43 @@ import { toTitleCase } from '../../helper/index.js';
 import { resetUpdateProfileState } from '../../actions/updateProfile';
 
 
+import { resetUser } from '../../actions/users';
+
+import { resetAppInfoDisplay } from '../../actions/appInfoDisplay';
+
+
 function mapStateToProps(state) {
   return {
     authenticatedUser: state.user.status === 'authenticated' ? state.user.user : null,
     user: state.user,
     sems: "from nav class",
     newRequest: state.requests.newRequest,
-    updateProfile: state.updateProfile
+    updateProfile: state.updateProfile,
+    appInfoDisplay: state.appInfoDisplay,
+    newOffer:state.offers.newOffer, 
   };
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-
     resetMe: () => {
       dispatch(resetDeletedPost());
     },
-
     logout: () => {
       sessionStorage.removeItem('jwtToken');
       dispatch(logoutUser());
     },
-
-    resetUpdateProfileState: () =>{
-      dispatch(resetUpdateProfileState());
+    resetUpdateProfileState: () => {
+      dispatch(resetUpdateProfileState())
+    },
+    resetAppInfoDisplay: () => {
+      dispatch(resetAppInfoDisplay());
+    },
+    resetUser: () => {
+      dispatch(resetUser());
+    },
+    resetNewOffer: () =>{
+      dispatch(resetNewOffer());
     }
   }
 }
@@ -39,7 +52,8 @@ class Nav extends React.Component {
   state = {
     collapsed: true,
     hideLinks: false,
-    renderError: ""
+    renderInfoText: "",
+    showInfoBox: "hide"
   }
 
   hideInfoBox = () => {
@@ -64,10 +78,60 @@ class Nav extends React.Component {
     console.log("---------this is from nav nextProps --------------");
     console.log(nextProps);
 
-    if (this.props.user.user && !nextProps.user.user) {//logout (had user(this.props.user.user) but no loger the case (!nextProps.user.user))
+    //sign in user
+    if (this.props.user.user && !nextProps.user.user) { //If nextProps.user.user is true, return false. Otherwise return true.
+      //this.props.history.push('/');
+    }
+
+    if (this.props.user.user && nextProps.user.user == null) {
+      console.log("logout");
+      //is.props.history.push('/signin');
+    }
+
+
+    if (nextProps.user.status === 'signin' && nextProps.user.message) {
+      this.setState({
+        renderInfoText: nextProps.user.message,
+        showInfoBox: "show"
+      })
+      this.props.resetUser();
+    }
+    //this hides the info bar after successfule login
+    if (nextProps.user.status === 'authenticated' && !nextProps.user.error) {
+      this.setState({
+        renderInfoText: '',
+        showInfoBox: "hide"
+      })
+    }
+
+    //log out user
+    if (nextProps.user.status === 'logout') {
+      this.props.history.push('/');
+      this.props.resetUser();
+    }
+
+
+    //sign up user
+    if (this.props.appInfoDisplay.appInfoDisplay.data) {
+      this.setState({
+        renderInfoText: this.props.appInfoDisplay.appInfoDisplay.data,
+        showInfoBox: "show"
+      })
+      this.props.resetAppInfoDisplay();
       this.props.history.push('/');
     }
 
+    //create offers  
+    if (nextProps.newOffer.offer) {
+      this.setState({
+        renderInfoText:nextProps.newOffer.offer.message,
+        showInfoBox: "show"
+      })
+     
+    }
+
+
+    /*reate
     if (nextProps.newRequest.request && !nextProps.newRequest.error) {
       //this.showInfoBox(nextProps.newRequest.request.message)
     }
@@ -91,17 +155,23 @@ class Nav extends React.Component {
       //console.log(`The current URL is ${this.props.location.pathname}${this.props.location.search}${this.props.location.hash}`)
       //console.log(`The last navigation action was ${this.props.action}`)
     })
+    */
   }
 
   componentWillUnmount() {
     //Important! If your component is navigating based on some global state(from say componentWillReceiveProps)
     //always reset that global state back to null when you REMOUNT
-    this.props.resetMe();
-    $(".infoBox").hide();
+    this.setState({
+      renderInfoText: "",
+      showInfoBox: "hide"
+    })
   }
 
   componentWillMount() {
-    $(".infoBox").hide();
+    this.setState({
+      renderInfoText: "",
+      showInfoBox: "hide"
+    })
   }
 
   toggleCollapse = () => {
@@ -113,7 +183,6 @@ class Nav extends React.Component {
     if (authenticatedUser) {
       return (
         <ul className="nav  nav-pills navbar-right">
-
           <li class="nav-item dropdown" role="presentation">
             <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               {toTitleCase(authenticatedUser.name)}
@@ -128,7 +197,6 @@ class Nav extends React.Component {
               Log out
               </a>
           </li>
-
         </ul>
       );
     }
@@ -148,8 +216,6 @@ class Nav extends React.Component {
       </ul>
     );
   }
-
-
 
   renderLinks(authenticatedUser, signInClass, aboutUsClass, settingsClass, dashboardClass, signUpClass, createRequestClass, myRequestsClass, browseRequestsClass, profileClass) {
     if (authenticatedUser) {
@@ -223,7 +289,7 @@ class Nav extends React.Component {
 
   render() {
     const { authenticatedUser, newRequest } = this.props;
-    
+
 
     //this.showHideUserLinks(authenticatedUser);
 
@@ -260,11 +326,11 @@ class Nav extends React.Component {
           </nav>
         </div>
 
-        <div class="container alert-success infoBox">
+        <div class={"container alert-success infoBox " + this.state.showInfoBox}>
           <div className="row">
             <div className="col-12 text-center">
               <div class="alert alert-successalert-success" role="alert">
-                {this.state.renderError}
+                {this.state.renderInfoText}
               </div>
             </div>
           </div>
