@@ -23,7 +23,7 @@ import {
       case FETCH_OFFERS:// start fetching offers and set loading = true
         return { ...state, offersList: { offers: [], error: null, loading: true } };
       case FETCH_OFFERS_SUCCESS:// return list of offers and make loading = false
-        return { ...state, offersList: { offers: action.payload, error: null, loading: false } };
+        return { ...state, offersList: { offers: action.payload.data, error: null, loading: false } };
       case FETCH_OFFERS_FAILURE:// return error and make loading = false
         error = action.payload || { message: action.payload.message };//2nd one is network or server down errors
         return { ...state, offersList: { offers: [], error: error, loading: false } };

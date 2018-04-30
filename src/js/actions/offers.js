@@ -33,16 +33,15 @@ export const RESET_DELETED_OFFER = 'RESET_DELETED_OFFER';
 const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost/react-router-params-queries-api/' : '/api';
 
 export function fetchOffers(token) {
-  const offer = axios({
+  const offers = axios({
     method: 'get',
     url: `${ROOT_URL}/offers/read.php`,
     headers: {'Authorization': `Bearer ${token}`}
   });
 
-
   return {
     type: FETCH_OFFERS,
-    payload: offer
+    payload: offers
   };
 }
 

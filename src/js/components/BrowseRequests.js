@@ -16,8 +16,8 @@ class BrowseRequests extends Component {
         this.props.fetchRequests();
     }
 
-    componentWillReceiveProps(nextProps){
-        if(nextProps.newOffer.offer){
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.newOffer.offer) {
             this.setState({ modalvisible: false });
             this.props.resetNewOffer();
         }
@@ -34,7 +34,6 @@ class BrowseRequests extends Component {
         modified: '',
         name: '',
         status: '',
-
     }
 
     modalBackdropClicked = () => {
@@ -45,7 +44,7 @@ class BrowseRequests extends Component {
         this.setState({ modalvisible: true });
     }
 
-    requestDetails = (data) => {
+    displayRequestDetails = (data) => {
         console.log(data);
         this.setState({
             title: data.title,
@@ -58,6 +57,9 @@ class BrowseRequests extends Component {
             name: data.name,
             status: data.status,
         })
+
+        //Querry the database for this request offers made
+        this.props.fetchOffers(data.id);
     }
 
     getRequestsTotal(requests) {
@@ -89,68 +91,94 @@ class BrowseRequests extends Component {
         return a.from(b);
     }
 
+    renderOffers = (offers) => {
+
+
+        if (offers.length > 0) {
+            return offers.map((data, index) => {
+                return (
+                    <div className="row">
+                        <div className="col-12">
+                            <div className="row" >
+                                <div className="col-sm-2 "><img class="user-image" src="../../images/user.svg" alt="" /></div>
+                                <div className="col-sm-3 col-padding-left-0"><span class="text-uppercase font-weight-bold">{data.user_name}</span></div>
+                                <div className="col-sm-4 col-padding-left-0"><span class="text-uppercase font-weight-bold"><span class="star"><img class="" src="../../images/star.svg" alt="" /></span></span></div>
+                                <div className="col-sm-3 col-padding-left-0"><span class="text-uppercase font-weight-normal">{this.timeSpan(data.created, moment)}</span></div>
+                            </div>
+                        </div>
+                        <div className="col-12 separator"></div>
+                    </div>
+
+                )
+            })
+        }
+
+
+    }
+
     renderRequests(requests) {
         if (requests.hasOwnProperty("data")) {
             return requests.data.map((data, index) => {
-                return (
-                    <div className="row" key={index} onClick={() => this.requestDetails(data)} >
-                        <div className="col request-box">
-                            <div className="row" >
-                                <div className="col-12 text-right">
-                                    <ul class="dropdown-menu">
-                                        <li><a href="#"><i class="fa fa-pencil fa-fw"></i> Edit</a></li>
-                                        <li><a href="#"><i class="fa fa-trash-o fa-fw"></i> Delete</a></li>
-                                        <li class="divider"></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div className="row" >
-                                <div className="col-12 title">{data.title}</div>
-                            </div>
-                            <div className="row">
-                                <div className="col-9">
-                                    <div><FontAwesomeIcon className="fa-right" size="sm" icon={faMapMarker} />{data.address}</div>
-                                    <div><FontAwesomeIcon className="fa-right" size="sm" icon={faCalendar} />{moment(data.due_date).format('d MMM YYYY')}</div>
-                                    <div className="more-info-btn">
-                                        <a class="btn  more-details arrow-down" onclick={() => this.toggleImg()} data-toggle="collapse" data-target={"#mf-" + index}>
-                                            <img src="../../../images/down-arrow.svg" id="arrow" />
-                                        </a>
+                if (data.title != '' && data.address != '' && data.content != '' && data.status) {
+                    return (
+                        <div className="row" key={index} onClick={() => this.displayRequestDetails(data)} >
+                            <div className="col request-box">
+                                <div className="row" >
+                                    <div className="col-12 text-right">
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#"><i class="fa fa-pencil fa-fw"></i> Edit</a></li>
+                                            <li><a href="#"><i class="fa fa-trash-o fa-fw"></i> Delete</a></li>
+                                            <li class="divider"></li>
+                                        </ul>
                                     </div>
                                 </div>
-                                <div className="col-3">
-                                    <img class="user-image" src="../../images/user.svg" alt="" />
+                                <div className="row" >
+                                    <div className="col-12 title">{data.title}</div>
                                 </div>
-                            </div>
-                            <div className="row more-info">
-                                <div className="col-12 col-xs-12">
+                                <div className="row">
+                                    <div className="col-9">
+                                        <div><FontAwesomeIcon className="fa-right" size="sm" icon={faMapMarker} />{data.address}</div>
+                                        <div><FontAwesomeIcon className="fa-right" size="sm" icon={faCalendar} />{moment(data.due_date).format('d MMM YYYY')}</div>
+                                        <div className="more-info-btn">
+                                            <a class="btn  more-details arrow-down" onclick={() => this.toggleImg()} data-toggle="collapse" data-target={"#mf-" + index}>
+                                                <img src="../../../images/down-arrow.svg" id="arrow" />
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div className="col-3">
+                                        <img class="user-image" src="../../images/user.svg" alt="" />
+                                    </div>
+                                </div>
+                                <div className="row more-info">
+                                    <div className="col-12 col-xs-12">
 
-                                    <div id={"mf-" + index} class="collapse">
-                                        <div className="row">
-                                            <div className="col-12">
-                                                <span class="text-uppercase font-weight-bold">Details<br /></span>
-                                                {data.content}
+                                        <div id={"mf-" + index} class="collapse">
+                                            <div className="row">
+                                                <div className="col-12">
+                                                    <span class="text-uppercase font-weight-bold">Details<br /></span>
+                                                    {data.content}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="row footer" >
-                                <div className="col-12 col-md-8 tiny-text">
-                                    <span className="request-status">{data.status}</span>
+                                <div className="row footer" >
+                                    <div className="col-12 col-md-8 tiny-text">
+                                        <span className="request-status">{data.status}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                )
+                    )
+                }
+
             })
         }
     }
 
-
-
-
     render() {
         const { requests, loading, error } = this.props.requestsList;
+        const { offers } = this.props.offersList;
 
         $(document).ready(function () {
             $('.carousel').carousel({
@@ -252,8 +280,13 @@ class BrowseRequests extends Component {
                                     </div>
                                 </div>
                                 <div className="row footer" >
-                                    <div className="col-12 col-md-8 tiny-text">
-                                        fooooooooooter
+                                    <div className="col-12 tiny-text">
+                                        <div className="row">
+                                            <div className="col-12">
+                                                <span class="text-uppercase font-weight-bold">OFFERS<br /></span>
+                                            </div>
+                                        </div>
+                                        {this.renderOffers(offers)}
                                     </div>
                                 </div>
                             </div>
