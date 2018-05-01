@@ -9,7 +9,8 @@ import faMapMarker from '@fortawesome/fontawesome-free-solid/faMapMarker';
 import faUser from '@fortawesome/fontawesome-free-solid/faUser';
 import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner';
 import CreateOfferContainer from '../containers/CreateOfferContainer.js';
-import GoogleMapReact from 'google-map-react';
+import CreateCommentForm from '../containers/CreateCommentFormContainer.js';
+import GoogleApiWrapper from './MapContainer'
 
 class BrowseRequests extends Component {
     componentWillMount() {
@@ -18,13 +19,14 @@ class BrowseRequests extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.newOffer.offer) {
-            this.setState({ modalvisible: false });
+            this.setState({ modalvisibleOffers: false });
             this.props.resetNewOffer();
         }
     }
 
     state = {
         modalvisibleProducts: false,
+        modalvisibleOffers: false,
         title: '',
         address: '',
         content: '',
@@ -37,11 +39,11 @@ class BrowseRequests extends Component {
     }
 
     modalBackdropClicked = () => {
-        this.setState({ modalvisible: false });
+        this.setState({ modalvisibleOffers: false });
     }
 
-    showModal = () => {
-        this.setState({ modalvisible: true });
+    modalvisibleOffers = () => {
+        this.setState({ modalvisibleOffers: true });
     }
 
     displayRequestDetails = (data) => {
@@ -58,8 +60,9 @@ class BrowseRequests extends Component {
             status: data.status,
         })
 
-        //Querry the database for this request offers made
+        //Querry the database for this request offers  made and comments
         this.props.fetchOffers(data.id);
+        this.props.fetchComments(data.id);
     }
 
     getRequestsTotal(requests) {
@@ -92,12 +95,11 @@ class BrowseRequests extends Component {
     }
 
     renderOffers = (offers) => {
-
-
+       // this.props.resetOffers(); 
         if (offers.length > 0) {
             return offers.map((data, index) => {
                 return (
-                    <div className="row">
+                    <div className="row" key={index}>
                         <div className="col-12">
                             <div className="row" >
                                 <div className="col-sm-2 "><img class="user-image" src="../../images/user.svg" alt="" /></div>
@@ -108,13 +110,38 @@ class BrowseRequests extends Component {
                         </div>
                         <div className="col-12 separator"></div>
                     </div>
+                )
+            })
+            
+        }
+    }
 
+    renderComments = (comments) => {
+        //this.props.resetComments(); 
+        if (comments.length > 0) {
+            return comments.map((data, index) => {
+                return (
+                    <div className="row" key={index}>
+                        <div className="col-12">
+                            <div className="row" >
+                                <div className="col-sm-2 "><img class="user-image" src="../../images/user.svg" alt="" /></div>
+                                <div className="col-sm-10 col-padding-left-0">
+                                    <span class="text-uppercase font-weight-bold">{data.user_name}</span>
+                                    <div>{data.content}</div>
+                                </div>
+                            </div>
+                            <div className="row" >
+                                <div className="col-sm-2 "></div>
+                                <div className="col-sm-10"><span class="text-uppercase font-weight-normal">{this.timeSpan(data.created, moment)}</span></div>
+                            </div>
+                        </div>
+                        <div className="col-12 separator"></div>
+                    </div>
                 )
             })
         }
-
-
     }
+
 
     renderRequests(requests) {
         if (requests.hasOwnProperty("data")) {
@@ -179,6 +206,8 @@ class BrowseRequests extends Component {
     render() {
         const { requests, loading, error } = this.props.requestsList;
         const { offers } = this.props.offersList;
+        const { comments } = this.props.commentsList;
+
 
         $(document).ready(function () {
             $('.carousel').carousel({
@@ -267,9 +296,7 @@ class BrowseRequests extends Component {
                                     </div>
                                     <div className="col-12 col-xs-12 col-sm-4 col-xs-12 text-center">
                                         <div className="payment-panel">
-                                            <div class="header text-uppercase">REQUEST BUDGET</div>
-                                            <div class="amount text-uppercase">$50</div>
-                                            <div><button type="button" class="btn btn-success" onClick={this.showModal}>Offer to assist</button></div>
+                                            <div><button type="button" class="btn btn-success" onClick={this.modalvisibleOffers}>Offer to assist</button></div>
                                         </div>
                                     </div>
                                 </div>
@@ -287,20 +314,24 @@ class BrowseRequests extends Component {
                                             </div>
                                         </div>
                                         {this.renderOffers(offers)}
+                                        <CreateCommentForm requestId={this.state.request_id} />
+                                        {this.renderComments(comments)}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <p>Google maps</p>
+                        <div className="map">
+                        <GoogleApiWrapper/>
+                        </div>
                     </div>
                 </div>
-                <Modal visible={this.state.modalvisible} onClickBackdrop={this.modalBackdropClicked} dialogClassName="modal-md">
+                <Modal visible={this.state.modalvisibleOffers} onClickBackdrop={this.modalBackdropClicked} dialogClassName="modal-md">
                     <div className="modal-header">
                         <div className="container">
                             <div className="row">
-                                <div className="col text-left"> <h5 className="modal-title">Create a request</h5></div>
+                                <div className="col text-left"> <h5 className="modal-title">Offer to assist</h5></div>
                                 <div className="col text-right">
                                     <button type="button" class="close" onClick={this.modalBackdropClicked} data-dismiss="alert">&times;</button>
                                 </div>
@@ -316,7 +347,8 @@ class BrowseRequests extends Component {
                                 </ol>
                                 <div className="carousel-inner">
                                     <div className="carousel-item active">
-                                        <div><CreateOfferContainer requestId={this.state.request_id} location={location} history={history} /></div>
+
+                                        <div><CreateOfferContainer fetchOffers={this.props.fetchOffers}  modalvisibleOffers={this.state.modalvisibleOffers} initialValues={this.props.initialValues}  requestId={this.state.request_id} location={location} history={history} /></div>
                                     </div>
                                     <div className="carousel-item">
                                         <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</div>

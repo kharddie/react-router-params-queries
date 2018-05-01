@@ -1,16 +1,25 @@
 import { connect } from 'react-redux'
 import { fetchRequests, fetchRequestsSuccess, fetchRequestsFailure } from '../actions/requests';
 import BrowseRequests from '../components/BrowseRequests';
-import { resetNewOffer, fetchOffers, fetchOffersSuccess, fetchOffersFailure } from '../actions/offers';
-
+import { resetNewOffer, fetchOffers, fetchOffersSuccess, fetchOffersFailure, resetOffers } from '../actions/offers';
+import { fetchComments, fetchCommentsSuccess, fetchCommentsFailure, resetComments } from '../actions/comments';
 
 const mapStateToProps = (state) => {
   return {
     requestsList: state.requests.requestsList,
     displayRequestsDetails: state.requests.displayRequestsDetails,
     newOffer: state.offers.newOffer,
-    offersList:state.offers.offersList
+    offersList: state.offers.offersList,
+    commentsList: state.comments.commentsList,
+    initialValues: {
+      email: state.user.user && state.user.user.email,
+      name: state.user.user && state.user.user.name,
+      user_name: state.user.user && state.user.user.user_name,
+      contact_number: state.user.user && state.user.user.contact_number,
+    }
   };
+
+
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -21,13 +30,24 @@ const mapDispatchToProps = (dispatch) => {
         !response.error ? dispatch(fetchRequestsSuccess(response.payload.data)) : dispatch(fetchRequestsFailure(response.payload.data));
       });
     },
-    resetNewOffer: () => {
+    resetOffers: () => {
+      dispatch(resetOffers());
+    },
+    resetNewOffer: () =>{
       dispatch(resetNewOffer());
     },
-    fetchOffers: () => {
-      dispatch(fetchOffers(jwtToken)).then((response) => {
+    fetchOffers: (requestId) => {
+      dispatch(fetchOffers(jwtToken, requestId)).then((response) => {
         !response.error ? dispatch(fetchOffersSuccess(response.payload.data)) : dispatch(fetchOffersFailure(response.payload.data));
       });
+    },
+    fetchComments: (requestId) => {
+      dispatch(fetchComments(jwtToken, requestId)).then((response) => {
+        !response.error ? dispatch(fetchCommentsSuccess(response.payload.data)) : dispatch(fetchCommentsFailure(response.payload.data));
+      });
+    },
+    resetComments: () => {
+      dispatch(resetComments());
     }
   }
 }

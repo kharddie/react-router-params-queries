@@ -335,10 +335,15 @@ help-block {
 
 
 }
-
+.map{
+  width:100%;
+  height:400px;
+}
   .request-box.request-box-details{
       border-left: 1px solid #dee8ec;
-
+      @media screen and (min-width:400px){
+        padding: 30px;
+      }
       .payment-panel {
         .amount {
           font-size: x-large;

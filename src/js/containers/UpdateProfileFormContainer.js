@@ -20,6 +20,7 @@ function mapStateToProps(state, ownProps) {
       email: state.user.user && state.user.user.email,
       name: state.user.user && state.user.user.name,
       user_name: state.user.user && state.user.user.user_name,
+      contact_number: state.user.user && state.user.user.contact_number,
     }
   };
 }

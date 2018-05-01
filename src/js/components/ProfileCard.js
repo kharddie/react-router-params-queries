@@ -11,6 +11,7 @@ export default class ProfileCard extends Component {
             <div className="col-sm-12">
                 <div>Name: {user && user.name}</div>
                 <div>Username: {user && user.user_name}</div>
+                <div>Contact number: {user && user.contact_number}</div>
                 <div>Email: {user && user.email}</div>
             </div>
           </div>

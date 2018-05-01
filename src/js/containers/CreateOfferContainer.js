@@ -14,7 +14,14 @@ const mapDispatchToProps = (dispatch) => {
 function mapStateToProps(state, ownProps) {
   return {
     newOffer: state.offers.newOffer,
-    user: state.user.user
+    user: state.user.user,
+    initialValues: {
+      email: state.user.user && state.user.user.email,
+      name: state.user.user && state.user.user.name,
+      user_name: state.user.user && state.user.user.user_name,
+      contact_number: state.user.user && state.user.user.contact_number,
+    }
+
   };
 }
 

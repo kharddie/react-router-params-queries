@@ -20,6 +20,11 @@ function validate(values) {
     hasErrors = true;
   }
 
+  if (!values.contact_number || values.contact_number.trim() === '') {
+    errors.name = 'Enter contact number';
+    hasErrors = true;
+  }
+
   if (!values.user_name || values.user_name.trim() === '') {
     errors.user_name = 'Enter user name';
     hasErrors = true;
@@ -83,6 +88,16 @@ class UpdateProfileForm extends Component {
     this.props.resetMe();
   }
 
+  componentDidMount() {
+    // here add this line to initialize the form
+    if (!this.props.initialized)
+      this.props.initialize(this.props.initialValues);
+  }
+
+  componentDidUpdate() {
+    this.props.initialize(this.props.initialValues);
+  }
+
   componentWillReceiveProps() {
     const { error, profileUpdated } = this.props.updateProfile;
     if (profileUpdated) {
@@ -125,7 +140,11 @@ class UpdateProfileForm extends Component {
             type="text"
             component={renderField}
             label="Update User name*" />
-
+          <Field
+            name="contact_number"
+            type="text"
+            component={renderField}
+            label="Update contact number*" />
           <Field
             name="email"
             type="email"

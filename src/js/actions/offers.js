@@ -32,10 +32,10 @@ export const RESET_DELETED_OFFER = 'RESET_DELETED_OFFER';
 
 const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost/react-router-params-queries-api/' : '/api';
 
-export function fetchOffers(token) {
+export function fetchOffers(token,requestId) {
   const offers = axios({
     method: 'get',
-    url: `${ROOT_URL}/offers/read.php`,
+    url: `${ROOT_URL}/offers/read.php?rid=${requestId}`,
     headers: {'Authorization': `Bearer ${token}`}
   });
 
@@ -58,6 +58,15 @@ export function fetchOffersFailure(error) {
     payload: error
   };
 }
+
+
+export function resetOffers() {
+  return {
+    type: RESET_OFFERS
+  }
+};
+
+
 
 export function validateOfferFields(props) {
   //note: we cant have /offers/validateFields because it'll match /offers/:id path!
