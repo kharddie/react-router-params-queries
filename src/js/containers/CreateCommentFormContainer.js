@@ -7,11 +7,6 @@ const mapDispatchToProps = (dispatch) => {
     return {
         resetMe: () => {
             dispatch(resetNewComment());
-        },
-        fetchComments: () => {
-            dispatch(fetchComments(jwtToken)).then((response) => {
-                !response.error ? dispatch(fetchCommentsSuccess(response.payload.data)) : dispatch(fetchCommentsFailure(response.payload.data));
-            });
         }
     }
 }

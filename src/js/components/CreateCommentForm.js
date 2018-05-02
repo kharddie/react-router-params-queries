@@ -37,6 +37,7 @@ const validateAndCreateComment= (values, dispatch, props) => {
       //let other components know that everything is fine by updating the redux` state
       dispatch(createCommentSuccess(result.payload.data)); //ps: this is same as dispatching RESET_USER_FIELDS
       dispatch(reset('CreateCommentForm'));
+      props.fetchComments(props.requestId);
     });
 
 }

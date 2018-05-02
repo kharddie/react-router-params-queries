@@ -10,7 +10,13 @@ import faUser from '@fortawesome/fontawesome-free-solid/faUser';
 import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner';
 import CreateOfferContainer from '../containers/CreateOfferContainer.js';
 import CreateCommentForm from '../containers/CreateCommentFormContainer.js';
-import GoogleApiWrapper from './MapContainer'
+import GoogleApiWrapper from './MapContainer';
+import Geocode from "react-geocode";
+// set Google Maps Geocoding API for purposes of quota management. Its optional but recommended.
+Geocode.setApiKey("AIzaSyCSGUZtwqI8T3N-_qBhy8iJ6AEyrtuTqls");
+
+// Enable or disable logs. Its optional.
+Geocode.enableDebug();
 
 class BrowseRequests extends Component {
     componentWillMount() {
@@ -36,6 +42,8 @@ class BrowseRequests extends Component {
         modified: '',
         name: '',
         status: '',
+        showGoogleMap: "show",
+        showRequestDetails: "hide",
     }
 
     modalBackdropClicked = () => {
@@ -58,6 +66,8 @@ class BrowseRequests extends Component {
             modified: data.modified,
             name: data.name,
             status: data.status,
+            showGoogleMap: "hide",
+            showRequestDetails: "show",
         })
 
         //Querry the database for this request offers  made and comments
@@ -95,7 +105,7 @@ class BrowseRequests extends Component {
     }
 
     renderOffers = (offers) => {
-       // this.props.resetOffers(); 
+        // this.props.resetOffers(); 
         if (offers.length > 0) {
             return offers.map((data, index) => {
                 return (
@@ -112,7 +122,7 @@ class BrowseRequests extends Component {
                     </div>
                 )
             })
-            
+
         }
     }
 
@@ -131,8 +141,8 @@ class BrowseRequests extends Component {
                                 </div>
                             </div>
                             <div className="row" >
-                                <div className="col-sm-2 "></div>
-                                <div className="col-sm-10"><span class="text-uppercase font-weight-normal">{this.timeSpan(data.created, moment)}</span></div>
+                                <div className="col-sm-2"></div>
+                                <div className="col-sm-10 col-padding-left-0"><span class="text-uppercase font-weight-normal">{this.timeSpan(data.created, moment)}</span></div>
                             </div>
                         </div>
                         <div className="col-12 separator"></div>
@@ -142,10 +152,23 @@ class BrowseRequests extends Component {
         }
     }
 
-
     renderRequests(requests) {
+        global.points = [];
         if (requests.hasOwnProperty("data")) {
             return requests.data.map((data, index) => {
+                //get lat long from address
+                Geocode.fromAddress(data.address).then(
+                    response => {
+                        const { lat, lng } = response.results[0].geometry.location;
+                        console.log(lat, lng);
+                        global.points.push(
+                            { lat: lat, lng: lng, title: data.title, body: data.content, address: data.address }
+                        )
+                    },
+                    error => {
+                        //console.error(error);
+                    }
+                )
                 if (data.title != '' && data.address != '' && data.content != '' && data.status) {
                     return (
                         <div className="row" key={index} onClick={() => this.displayRequestDetails(data)} >
@@ -207,6 +230,7 @@ class BrowseRequests extends Component {
         const { requests, loading, error } = this.props.requestsList;
         const { offers } = this.props.offersList;
         const { comments } = this.props.commentsList;
+        global.points = [];
 
 
         $(document).ready(function () {
@@ -242,89 +266,98 @@ class BrowseRequests extends Component {
                     <div class="col-md-8">
                         <div className="row" >
                             <div className="col-12 request-box request-box-details">
-                                <div className="row" >
-                                    <div className="col-12 text-right">
-                                        <ul class="dropdown-menu">
-                                            <li><a href="#"><i class="fa fa-pencil fa-fw"></i> Edit</a></li>
-                                            <li><a href="#"><i class="fa fa-trash-o fa-fw"></i> Delete</a></li>
-                                            <li class="divider"></li>
-                                        </ul>
+                                <div className={"row map " + this.state.showGoogleMap}>
+                                    <div className="col-12 map">
+                                        <GoogleApiWrapper location={location} points={global.points} />
                                     </div>
                                 </div>
+                                <div className={this.state.showRequestDetails}>
+                                    <div className="row" >
+                                        <div className="col-12 text-right">
+                                            <ul class="dropdown-menu">
+                                                <li><a href="#"><i class="fa fa-pencil fa-fw"></i> Edit</a></li>
+                                                <li><a href="#"><i class="fa fa-trash-o fa-fw"></i> Delete</a></li>
+                                                <li class="divider"></li>
+                                            </ul>
+                                        </div>
+                                    </div>
 
-                                <div className="row">
-                                    <div className="col-12 col-xs-12 col-sm-8">
-                                        <div className="row" >
-                                            <div className="col-12 col-xs-12 col-sm-7">
-                                                <div className="row tiny-text" >
-                                                    <div className="col "><span className="request-status request-status-open">Open</span></div>
-                                                    <div className="col "><span className="request-status request-status-assigned">Assigned</span></div>
-                                                    <div className="col "><span className="request-status request-status-completed">Completed</span></div>
+                                    <div className="row">
+                                        <div className="col-12 col-xs-12 col-sm-8">
+                                            <div className="row" >
+                                                <div className="col-12 col-xs-12 col-sm-7">
+                                                    <div className="row tiny-text" >
+                                                        <div className="col "><span className="request-status request-status-open">Open</span></div>
+                                                        <div className="col "><span className="request-status request-status-assigned">Assigned</span></div>
+                                                        <div className="col "><span className="request-status request-status-completed">Completed</span></div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div className="row" >
-                                            <div className="col col-12 title">{this.state.title}</div>
-                                        </div>
-
-                                        <div className="row" >
-                                            <div className="col col-sm-2">
-                                                <img class="user-image" src="../../images/user.svg" alt="" />
+                                            <div className="row" >
+                                                <div className="col col-12 title">{this.state.title}</div>
                                             </div>
-                                            <div className="col col-sm-6 col-padding-left-0 text-uppercase font-weight-bold">Posted by: <br /><span class="text-capitalize"><span class="font-weight-normal">{this.state.name}</span></span></div>
-                                            <div className="col col-sm-4 text-right"><br /><span class="text-capitalize font-weight-normal">{this.timeSpan(this.state.created, moment)}.</span></div>
-                                        </div>
 
-                                        <div className="row separator" >
-                                            <div class="col col-sm-2"></div>
-                                            <div class="col col-sm-10 col-padding-left-0"></div>
-                                        </div>
+                                            <div className="row" >
+                                                <div className="col col-sm-2">
+                                                    <img class="user-image" src="../../images/user.svg" alt="" />
+                                                </div>
+                                                <div className="col col-sm-6 col-padding-left-0 text-uppercase font-weight-bold">Posted by: <br /><span class="text-capitalize"><span class="font-weight-normal">{this.state.name}</span></span></div>
+                                                <div className="col col-sm-4 text-right"><br /><span class="text-capitalize font-weight-normal">{this.timeSpan(this.state.created, moment)}.</span></div>
+                                            </div>
 
-                                        <div className="row" >
-                                            <div className="col-sm-2"><img class="icon-image" src="../../images/placeholder.svg" alt="" /></div>
-                                            <div className="col-sm-10 col-padding-left-0"><span class="text-uppercase font-weight-bold">Address</span><br />{this.state.address}</div>
-                                        </div>
-                                        <div className="row separator" >
-                                            <div class="col col-sm-2"></div>
-                                            <div class="col col-sm-10 col-padding-left-0"></div>
-                                        </div>
+                                            <div className="row separator" >
+                                                <div class="col col-sm-2"></div>
+                                                <div class="col col-sm-10 col-padding-left-0"></div>
+                                            </div>
 
-                                        <div className="row" >
-                                            <div className="col-sm-2 "><img class="icon-image" src="../../images/calendar.svg" alt="" /></div>
-                                            <div className="col-sm-10 col-padding-left-0"><span class="text-uppercase font-weight-bold">Due date</span><br />{moment(this.state.due_date).format('d MMM YYYY')}</div>
-                                        </div>
-                                    </div>
-                                    <div className="col-12 col-xs-12 col-sm-4 col-xs-12 text-center">
-                                        <div className="payment-panel">
-                                            <div><button type="button" class="btn btn-success" onClick={this.modalvisibleOffers}>Offer to assist</button></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-12 content">
-                                        <span class="text-uppercase font-weight-bold">Details<br /></span>
-                                        {this.state.content}
-                                    </div>
-                                </div>
-                                <div className="row footer" >
-                                    <div className="col-12 tiny-text">
-                                        <div className="row">
-                                            <div className="col-12">
-                                                <span class="text-uppercase font-weight-bold">OFFERS<br /></span>
+                                            <div className="row" >
+                                                <div className="col-sm-2"><img class="icon-image" src="../../images/placeholder.svg" alt="" /></div>
+                                                <div className="col-sm-10 col-padding-left-0"><span class="text-uppercase font-weight-bold">Address</span><br />{this.state.address}</div>
+                                            </div>
+                                            <div className="row separator" >
+                                                <div class="col col-sm-2"></div>
+                                                <div class="col col-sm-10 col-padding-left-0"></div>
+                                            </div>
+
+                                            <div className="row" >
+                                                <div className="col-sm-2 "><img class="icon-image" src="../../images/calendar.svg" alt="" /></div>
+                                                <div className="col-sm-10 col-padding-left-0"><span class="text-uppercase font-weight-bold">Due date</span><br />{moment(this.state.due_date).format('d MMM YYYY')}</div>
                                             </div>
                                         </div>
-                                        {this.renderOffers(offers)}
-                                        <CreateCommentForm requestId={this.state.request_id} />
-                                        {this.renderComments(comments)}
+                                        <div className="col-12 col-xs-12 col-sm-4 col-xs-12 text-center">
+                                            <div className="payment-panel">
+                                                <div><button type="button" class="btn btn-success" onClick={this.modalvisibleOffers}>Offer to assist</button></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-12 content">
+                                            <span class="text-uppercase font-weight-bold">Details<br /></span>
+                                            {this.state.content}
+                                        </div>
+                                    </div>
+                                    <div className="row footer" >
+                                        <div className="col-12 tiny-text">
+                                            <div className="row">
+                                                <div className="col-12 separator"></div>
+                                                <div className="col-12">
+                                                    <span class="text-uppercase font-weight-bold">OFFERS <span  className={offers.length > 0 ? 'hide' : ' text-lowercase show-inline-block'}>"   No offers for this request"</span><br /></span>
+                                                </div>
+                                                <div className="col-12 separator"></div>
+                                            </div>
+                                            {this.renderOffers(offers)}
+                                            <CreateCommentForm fetchComments={this.props.fetchComments} requestId={this.state.request_id} />
+                                            <div className="row">
+                                                <div className="col-12 separator"></div></div>
+                                            {this.renderComments(comments)}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div className="map">
-                        <GoogleApiWrapper/>
-                        </div>
+
                     </div>
                 </div>
                 <Modal visible={this.state.modalvisibleOffers} onClickBackdrop={this.modalBackdropClicked} dialogClassName="modal-md">
@@ -348,7 +381,7 @@ class BrowseRequests extends Component {
                                 <div className="carousel-inner">
                                     <div className="carousel-item active">
 
-                                        <div><CreateOfferContainer fetchOffers={this.props.fetchOffers}  modalvisibleOffers={this.state.modalvisibleOffers} initialValues={this.props.initialValues}  requestId={this.state.request_id} location={location} history={history} /></div>
+                                        <div><CreateOfferContainer fetchOffers={this.props.fetchOffers} modalvisibleOffers={this.state.modalvisibleOffers} initialValues={this.props.initialValues} requestId={this.state.request_id} location={location} history={history} /></div>
                                     </div>
                                     <div className="carousel-item">
                                         <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</div>
@@ -371,7 +404,6 @@ class BrowseRequests extends Component {
         );
     }
 }
-
 
 export default BrowseRequests;
 
