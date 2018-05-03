@@ -484,6 +484,13 @@ form.request-form > div:first-of-type {
 /* Profile */
 .profile {
   @include width-ligh-blue-bg;
+  h2, .h2 {
+    font-size: 1.6rem;
+  }
+  .userName{
+    font-size: 1.3rem;
+    margin-left: 20px;
+  }
 }
 
 

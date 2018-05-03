@@ -55,7 +55,7 @@ class Layout extends React.Component {
     const containerStyle = {
       marginTop: "40px"
     };
-    console.log("THIS IS THE LAYOUT COMPONENT");
+
     return (
       <div>
         <Nav location={location} history={history} />

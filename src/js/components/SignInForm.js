@@ -5,8 +5,6 @@ import { reduxForm, Field, SubmissionError } from 'redux-form';
 import renderField from '../components/renderField';
 import { signInUser, signInUserSuccess, signInUserFailure, resetUserFields } from '../actions/users';
 
-
-
 //Client side validation
 function validate(values) {
   var errors = {};
@@ -41,8 +39,6 @@ const validateAndSignInUser = (values, dispatch) => {
     });
 };
 
-
-
 class SignInForm extends Component {
   static contextTypes = {
     router: PropTypes.object
@@ -51,7 +47,7 @@ class SignInForm extends Component {
   componentWillMount() {
     //Important! If your component is navigating based on some global state(from say componentWillReceiveProps)
     //always reset that global state back to null when you REMOUNT
-    //this.props.resetMe();
+    this.props.resetMe();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -72,53 +68,28 @@ class SignInForm extends Component {
     return (
 
       <div className="container">
-        <div class="row sign-in">
-          <div class="col sign-in-left-cont">
-            <div class="row sign-in-right">
-              <div class="col-md-8">
-                <h1 class="title-page title-page-margin">
-                  Existing customer?</h1>
-                <form onSubmit={handleSubmit(validateAndSignInUser)}>
-                  <Field
-                    name="username"
-                    type="text"
-                    component={renderField}
-                    label="Username*" />
-                  <Field
-                    name="password"
-                    type="password"
-                    component={renderField}
-                    label="Password*" />
-                  <div className="text-right">
-                    <button
-                      type="submit"
-                      className="btn btn-primary"
-                      disabled={submitting}>
-                      Submit
+        <div class="row">
+          <div class="col-md-12">
+            <form onSubmit={handleSubmit(validateAndSignInUser)}>
+              <Field
+                name="username"
+                type="text"
+                component={renderField}
+                label="Username*" />
+              <Field
+                name="password"
+                type="password"
+                component={renderField}
+                label="Password*" />
+              <div className="text-right">
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={submitting}>
+                  Submit
                 </button>
-                  </div>
-                </form>
               </div>
-            </div>
-            <div className="row sign-in-right">
-              <div className="col-md-8">
-                <div className="row sign-in-links">
-                  <div className="col-sm-12 user-find-username">Find my username </div>
-                  <div className="col-sm-12 ">
-                    <IndexLink class="nav-link user-reset-pwd" to="/forgotPwd" >Reset my password</IndexLink>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col sign-in-right-cont">
-            <div className="row">
-              <div className="col-md-8">
-                <h1 className="title-page title-page-margin">New customer?</h1>
-                <p> Set up a go via account to make travelling onQueensland toll roads easier.</p>
-                <button type="button" className="btn btn-primary">Open account</button>
-              </div>
-            </div>
+            </form>
           </div>
         </div>
       </div>

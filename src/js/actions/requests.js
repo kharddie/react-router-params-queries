@@ -30,16 +30,20 @@ export const DELETE_REQUEST_SUCCESS = 'DELETE_REQUEST_SUCCESS';
 export const DELETE_REQUEST_FAILURE = 'DELETE_REQUEST_FAILURE';
 export const RESET_DELETED_REQUEST = 'RESET_DELETED_REQUEST';
 
-
-
-
 const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost/react-router-params-queries-api/' : '/api';
 
-export function fetchRequests(token) {
+export function fetchRequests(token, userParamId) {
+  let url;
+  if (userParamId) {
+    url = `${ROOT_URL}/requests/read.php?uid=${userParamId}`;
+  } else {
+    url = `${ROOT_URL}/requests/read.php`
+  }
+
   const request = axios({
     method: 'get',
-    url: `${ROOT_URL}/requests/read.php`,
-    headers: {'Authorization': `Bearer ${token}`}
+    url: url,
+    headers: { 'Authorization': `Bearer ${token}` }
   });
 
 
@@ -62,6 +66,13 @@ export function fetchRequestsFailure(error) {
     payload: error
   };
 }
+
+export function resetRequest() {
+  return {
+    type: RESET_REQUESTS
+  }
+}
+;
 
 export function validateRequestFields(props) {
   //note: we cant have /requests/validateFields because it'll match /requests/:id path!

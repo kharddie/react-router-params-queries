@@ -21,6 +21,7 @@ function mapStateToProps(state, ownProps) {
       name: state.user.user && state.user.user.name,
       user_name: state.user.user && state.user.user.user_name,
       contact_number: state.user.user && state.user.user.contact_number,
+      address: state.user.user && state.user.user.address,
     }
   };
 }

@@ -3,13 +3,12 @@ import { Link } from 'react-router';
 import { reduxForm, Field, SubmissionError, reset } from 'redux-form';
 import renderField from './renderField';
 import renderTextArea from './renderTextArea';
-import RenderDatePickerField from './RenderDatePickerField';
-
 import { validateRequestFields, validateRequestFieldsSuccess, validateRequestFieldsFailure } from '../actions/requests';
 import { createRequest, createRequestSuccess, createRequestFailure, resetNewRequest } from '../actions/requests';
-
 import moment from 'moment'
 import Moment from 'react-moment';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 //Client side validation
 function validate(values) {
@@ -82,7 +81,8 @@ class CreateRequestForm extends Component {
 
   state = {
     divClass: "",
-    formWidthBg: ""
+    formWidthBg: "",
+    startDate: moment()
   }
 
   componentWillMount() {
@@ -102,6 +102,13 @@ class CreateRequestForm extends Component {
       this.props.history.push('/browseRequests');
       this.props.resetMe();
     }
+  }
+
+  handleChange = (momentDate) => {
+    //const date = momentDate ? momentDate.format('DD-MM-YYYY') : undefined;
+    this.setState({
+      startDate: momentDate
+    });
   }
 
   render() {
@@ -126,17 +133,25 @@ class CreateRequestForm extends Component {
                 type="text"
                 component={renderField}
                 label="Request title*" />
-
               <Field
                 name="address"
                 type="text"
                 component={renderField}
                 label="Address*" />
-              <Field
-                name="date"
-                showTime={false}
-                component={RenderDatePickerField}
-                label="Due Date*" />
+              <div className='form-group'>
+                <label className="control-label">Due date*</label>
+                <div>
+                  <DatePicker
+                    selected={this.state.startDate}
+                    onChange={this.handleChange}
+                    name="date"
+                    dateFormat="DD-MM-YYYY"
+                    required={true}
+                    id="date"
+                    className="form-control"
+                  />
+                </div>
+              </div>
               <Field
                 name="content"
                 component={renderTextArea}
@@ -161,11 +176,9 @@ class CreateRequestForm extends Component {
   }
 }
 
-
 export default reduxForm({
   form: 'CreateRequestForm', // a unique identifier for this form
   validate // <--- validation function given to redux-form
-
 })(CreateRequestForm)
 
 

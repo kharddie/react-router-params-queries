@@ -5,11 +5,9 @@ import { logoutUser } from '../../actions/users';
 import { toTitleCase } from '../../helper/index.js';
 import { resetUpdateProfileState } from '../../actions/updateProfile';
 
-
 import { resetUser } from '../../actions/users';
 
 import { resetAppInfoDisplay } from '../../actions/appInfoDisplay';
-
 
 function mapStateToProps(state) {
   return {
@@ -19,7 +17,7 @@ function mapStateToProps(state) {
     newRequest: state.requests.newRequest,
     updateProfile: state.updateProfile,
     appInfoDisplay: state.appInfoDisplay,
-    newOffer:state.offers.newOffer, 
+    newOffer: state.offers.newOffer,
   };
 }
 
@@ -41,7 +39,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     resetUser: () => {
       dispatch(resetUser());
     },
-    resetNewOffer: () =>{
+    resetNewOffer: () => {
       dispatch(resetNewOffer());
     }
   }
@@ -73,10 +71,10 @@ class Nav extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("---------this is from nav props --------------");
-    console.log(this.props);
-    console.log("---------this is from nav nextProps --------------");
-    console.log(nextProps);
+   // console.log("---------this is from nav props --------------");
+    //console.log(this.props);
+    //console.log("---------this is from nav nextProps --------------");
+    //console.log(nextProps);
 
     //sign in user
     if (this.props.user.user && !nextProps.user.user) { //If nextProps.user.user is true, return false. Otherwise return true.
@@ -124,10 +122,10 @@ class Nav extends React.Component {
     //create offers  
     if (nextProps.newOffer.offer) {
       this.setState({
-        renderInfoText:nextProps.newOffer.offer.message,
+        renderInfoText: nextProps.newOffer.offer.message,
         showInfoBox: "show"
       })
-     
+
     }
 
 
@@ -188,7 +186,7 @@ class Nav extends React.Component {
               {toTitleCase(authenticatedUser.name)}
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">
-              <Link class="dropdown-item" to="myRequests" onClick={this.toggleCollapse.bind(this)}>View my requests</Link>
+              <Link class="dropdown-item" to={"myRequests/" + this.props.user.user.id} onClick={this.toggleCollapse.bind(this)}>View my requests</Link>
               <Link class="dropdown-item" to="profile" onClick={this.toggleCollapse.bind(this)}>View my profile</Link>
             </div>
           </li>
@@ -231,9 +229,7 @@ class Nav extends React.Component {
           <li class={"nav-item " + createRequestClass} >
             <Link class="nav-link" to="createRequest" onClick={this.toggleCollapse.bind(this)}>Create a Request</Link>
           </li>
-          <li class={"nav-item " + myRequestsClass} >
-            <Link class="nav-link" to="myRequests" onClick={this.toggleCollapse.bind(this)}>View my requests</Link>
-          </li>
+
           <li class={"nav-item " + browseRequestsClass} >
             <Link class="nav-link" to="browseRequests" onClick={this.toggleCollapse.bind(this)}>Browse request</Link>
           </li>
@@ -265,9 +261,7 @@ class Nav extends React.Component {
         <li class={"nav-item " + createRequestClass} >
           <Link class="nav-link" to="createRequest" onClick={this.toggleCollapse.bind(this)}>Create a Request</Link>
         </li>
-        <li class={"nav-item " + myRequestsClass} >
-          <Link class="nav-link" to="myRequests" onClick={this.toggleCollapse.bind(this)}>View my requests</Link>
-        </li>
+
         <li class={"nav-item " + browseRequestsClass} >
           <Link class="nav-link" to="browseRequests" onClick={this.toggleCollapse.bind(this)}>Browse request</Link>
         </li>
@@ -289,7 +283,6 @@ class Nav extends React.Component {
 
   render() {
     const { authenticatedUser, newRequest } = this.props;
-
 
     //this.showHideUserLinks(authenticatedUser);
 
@@ -325,7 +318,6 @@ class Nav extends React.Component {
             </div>
           </nav>
         </div>
-
         <div class={"container alert-success infoBox " + this.state.showInfoBox}>
           <div className="row">
             <div className="col-12 text-center">
@@ -337,11 +329,8 @@ class Nav extends React.Component {
 
         </div>
       </div>
-
-
     );
   }
 }
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(Nav);

@@ -2,15 +2,11 @@ import { connect } from "react-redux";
 import { fetchCategories, fetchCategoriesSuccess, fetchCategoriesFailure } from '../actions/Categories';
 import Categories from '../components/Categories';
 
-
 const mapStateToProps = (state) => {
     return {
         categoriesList: state.categories.categoriesList
     };
 }
-
-
-
 
 const mapDispatchToProps = (dispatch) => {
     return {

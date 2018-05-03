@@ -1,12 +1,13 @@
 import { connect } from 'react-redux'
-import { fetchRequests, fetchRequestsSuccess, fetchRequestsFailure } from '../actions/requests';
+import { fetchRequests,resetRequest, fetchRequestsSuccess, fetchRequestsFailure } from '../actions/requests';
 import BrowseRequests from '../components/BrowseRequests';
 import { resetNewOffer, fetchOffers, fetchOffersSuccess, fetchOffersFailure, resetOffers } from '../actions/offers';
 import { fetchComments, fetchCommentsSuccess, fetchCommentsFailure, resetComments } from '../actions/comments';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
   return {
     requestsList: state.requests.requestsList,
+    resetRequestxx: state.requests.resetRequest,
     displayRequestsDetails: state.requests.displayRequestsDetails,
     newOffer: state.offers.newOffer,
     offersList: state.offers.offersList,
@@ -18,17 +19,21 @@ const mapStateToProps = (state) => {
       contact_number: state.user.user && state.user.user.contact_number,
     }
   };
-
-
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
   let jwtToken = sessionStorage.getItem('jwtToken');
+  let userParamId = !ownProps.params.id  ? null:ownProps.params.id;
+
   return {
     fetchRequests: () => {
-      dispatch(fetchRequests(jwtToken)).then((response) => {
+     // dispatch(resetRequest());
+      dispatch(fetchRequests(jwtToken,userParamId)).then((response) => {
         !response.error ? dispatch(fetchRequestsSuccess(response.payload.data)) : dispatch(fetchRequestsFailure(response.payload.data));
       });
+    },
+    resetRequest: () => {
+      dispatch(resetRequest());
     },
     resetOffers: () => {
       dispatch(resetOffers());

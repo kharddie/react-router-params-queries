@@ -19,11 +19,27 @@ Geocode.setApiKey("AIzaSyCSGUZtwqI8T3N-_qBhy8iJ6AEyrtuTqls");
 Geocode.enableDebug();
 
 class BrowseRequests extends Component {
+    constructor(props) {
+        super(props);
+        this.props.history.listen((location, action) => {
+            //this.props.resetRequest();
+            this.props.fetchRequests();
+        });
+    }
     componentWillMount() {
+        console.log("componentWillMount");
         this.props.fetchRequests();
     }
 
+    componentWillUnmount() {
+
+    }
+
     componentWillReceiveProps(nextProps) {
+
+        console.log(nextProps.requestsList.requests)
+        console.log(nextProps.resetRequestxx.message)
+
         if (nextProps.newOffer.offer) {
             this.setState({ modalvisibleOffers: false });
             this.props.resetNewOffer();
@@ -154,22 +170,25 @@ class BrowseRequests extends Component {
 
     renderRequests(requests) {
         global.points = [];
-        if (requests.hasOwnProperty("data")) {
-            return requests.data.map((data, index) => {
-                //get lat long from address
-                Geocode.fromAddress(data.address).then(
-                    response => {
-                        const { lat, lng } = response.results[0].geometry.location;
-                        console.log(lat, lng);
-                        global.points.push(
-                            { lat: lat, lng: lng, title: data.title, body: data.content, address: data.address }
-                        )
-                    },
-                    error => {
-                        //console.error(error);
-                    }
-                )
+        //  if (requests.hasOwnProperty("data")) {
+        if (requests.length > 0) {
+            return requests.map((data, index) => {
                 if (data.title != '' && data.address != '' && data.content != '' && data.status) {
+                    //get lat long from address
+                    /*
+                    Geocode.fromAddress(data.address).then(
+                        response => {
+                            const { lat, lng } = response.results[0].geometry.location;
+                            //console.log(lat, lng);
+                            global.points.push(
+                                { lat: lat, lng: lng, title: data.title, body: data.content, address: data.address }
+                            )
+                        },
+                        error => {
+                            //console.error(error);
+                        }
+                    )
+                    */
                     return (
                         <div className="row" key={index} onClick={() => this.displayRequestDetails(data)} >
                             <div className="col request-box">
@@ -227,11 +246,15 @@ class BrowseRequests extends Component {
     }
 
     render() {
-        const { requests, loading, error } = this.props.requestsList;
+        const { requests, loading, error, message } = this.props.requestsList;
         const { offers } = this.props.offersList;
         const { comments } = this.props.commentsList;
+        let noRequestsMessage = '';
         global.points = [];
 
+        if (requests.length == 0) {
+            noRequestsMessage = message;
+        }
 
         $(document).ready(function () {
             $('.carousel').carousel({
@@ -242,27 +265,39 @@ class BrowseRequests extends Component {
         if (loading) {
             $(".loader-spinner-container").removeClass("loader-hide")
             $(".loader-spinner-container").addClass("loader-show")
-            console.log("loading")
+            // console.log("loading")
         } else {
             $(".loader-spinner-container").removeClass("loader-show")
             $(".loader-spinner-container").addClass("loader-hide")
-            console.log("finished loading")
-        }
-
-        if (error) {
-            return <div className="alert alert-danger">Error: {error.message}</div>
+            // console.log("finished loading")
         }
 
         return (
             <div className="container requests">
                 {this.getRequestsTotal(requests)}
                 <div class="row">
+
+
+
+
                     <div className="col-md-4 scrollable-content requests-small">
                         <div className="loader-show loader-spinner-container">
                             <FontAwesomeIcon size="lg" className="fa-spin spinner" icon={faSpinner} />
                         </div>
                         {this.renderRequests(requests)}
+                        {noRequestsMessage}
                     </div>
+
+
+
+
+
+
+
+
+
+
+
                     <div class="col-md-8">
                         <div className="row" >
                             <div className="col-12 request-box request-box-details">
@@ -341,7 +376,7 @@ class BrowseRequests extends Component {
                                             <div className="row">
                                                 <div className="col-12 separator"></div>
                                                 <div className="col-12">
-                                                    <span class="text-uppercase font-weight-bold">OFFERS <span  className={offers.length > 0 ? 'hide' : ' text-lowercase show-inline-block'}>"   No offers for this request"</span><br /></span>
+                                                    <span class="text-uppercase font-weight-bold">OFFERS <span className={offers.length > 0 ? 'hide' : ' text-lowercase show-inline-block'}>"   No offers for this request"</span><br /></span>
                                                 </div>
                                                 <div className="col-12 separator"></div>
                                             </div>

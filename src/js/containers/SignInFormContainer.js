@@ -1,4 +1,4 @@
-import SignInForm from '../components/SignInForm.js';
+import SignInForm from '../components/SignInForm';
 import { connect } from 'react-redux';
 
 const mapDispatchToProps = (dispatch) => {

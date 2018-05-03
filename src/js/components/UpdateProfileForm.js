@@ -150,6 +150,13 @@ class UpdateProfileForm extends Component {
             type="email"
             component={renderField}
             label="Update Email*" />
+
+          <Field
+            name="address"
+            type="text"
+            component={renderField}
+            label="Update address*" />
+
           <div className="form-footer">
             <button
               type="submit"
