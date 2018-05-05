@@ -4,10 +4,9 @@ import { connect } from "react-redux";
 import { logoutUser } from '../../actions/users';
 import { toTitleCase } from '../../helper/index.js';
 import { resetUpdateProfileState } from '../../actions/updateProfile';
-
+import { resetShowInfoMessage } from '../../actions/infoMessage'
 import { resetUser } from '../../actions/users';
 
-import { resetAppInfoDisplay } from '../../actions/appInfoDisplay';
 
 function mapStateToProps(state) {
   return {
@@ -16,8 +15,8 @@ function mapStateToProps(state) {
     sems: "from nav class",
     newRequest: state.requests.newRequest,
     updateProfile: state.updateProfile,
-    appInfoDisplay: state.appInfoDisplay,
     newOffer: state.offers.newOffer,
+    infoMessage: state.infoMessage.infoMessage,
   };
 }
 
@@ -33,14 +32,15 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     resetUpdateProfileState: () => {
       dispatch(resetUpdateProfileState())
     },
-    resetAppInfoDisplay: () => {
-      dispatch(resetAppInfoDisplay());
-    },
+
     resetUser: () => {
       dispatch(resetUser());
     },
     resetNewOffer: () => {
       dispatch(resetNewOffer());
+    },
+    resetShowInfoMessage: () => {
+      dispatch(resetShowInfoMessage());
     }
   }
 }
@@ -71,7 +71,7 @@ class Nav extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-   // console.log("---------this is from nav props --------------");
+    // console.log("---------this is from nav props --------------");
     //console.log(this.props);
     //console.log("---------this is from nav nextProps --------------");
     //console.log(nextProps);
@@ -110,14 +110,16 @@ class Nav extends React.Component {
 
 
     //sign up user
-    if (this.props.appInfoDisplay.appInfoDisplay.data) {
+   console.log(nextProps.infoMessage)
+    if (nextProps.infoMessage.display && nextProps.user.status === 'signup') {
       this.setState({
-        renderInfoText: this.props.appInfoDisplay.appInfoDisplay.data,
+        renderInfoText: nextProps.infoMessage.message,
         showInfoBox: "show"
       })
-      this.props.resetAppInfoDisplay();
+      this.props.resetShowInfoMessage();
       this.props.history.push('/');
     }
+
 
     //create offers  
     if (nextProps.newOffer.offer) {

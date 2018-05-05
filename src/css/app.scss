@@ -73,7 +73,9 @@ body {
   }
 
   /* utilities*/
-
+  .separator{
+    margin: 7px 0;
+  }
 .star{
   width:20px;
   height:20px;
@@ -243,6 +245,10 @@ help-block {
   }
 
 
+/*sing up*/
+.sign-up{
+  @include width-ligh-blue-bg;
+}
 
 
 
@@ -396,9 +402,7 @@ help-block {
       .col-padding-right-0{
         @include col-padding-left-0;   
       }
-      .separator{
-        margin: 7px 0;
-      }
+
 
       .separator div:nth-last-child(1){
         border-top: 1px solid #e7eef1;
@@ -482,16 +486,35 @@ form.request-form > div:first-of-type {
 
 
 /* Profile */
-.profile {
-  @include width-ligh-blue-bg;
-  h2, .h2 {
-    font-size: 1.6rem;
-  }
-  .userName{
-    font-size: 1.3rem;
-    margin-left: 20px;
-  }
+.profile{
+    @include width-ligh-blue-bg;
+    .profile-card {
+      h2, .h2 {
+        font-size: 1.6rem;
+      }
+      .userName{
+        font-size: 1.3rem;
+        margin-left: 20px;
+      }
+
+      span.img {
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+        position: relative;
+        img{
+          position: absolute;
+          @include justify-content-center-center;
+        }
+      }
+      button {
+        background-color: transparent;
+        height: 27px;
+        border: none;
+    }
+ }
 }
+
 
 
 

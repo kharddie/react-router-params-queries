@@ -21,7 +21,12 @@ function validate(values) {
   }
 
   if (!values.contact_number || values.contact_number.trim() === '') {
-    errors.name = 'Enter contact number';
+    errors.contact_number = 'Enter contact number';
+    hasErrors = true;
+  }
+
+  if (!values.address || values.address.trim() === '') {
+    errors.address = 'Enter address';
     hasErrors = true;
   }
 
@@ -90,12 +95,13 @@ class UpdateProfileForm extends Component {
 
   componentDidMount() {
     // here add this line to initialize the form
-    if (!this.props.initialized)
-      this.props.initialize(this.props.initialValues);
+    //if (!this.props.initialized)
+    //  this.props.initialize(this.props.initialValues);
   }
 
   componentDidUpdate() {
-    this.props.initialize(this.props.initialValues);
+
+   // this.props.initialize(this.props.initialValues);
   }
 
   componentWillReceiveProps() {
@@ -174,5 +180,6 @@ class UpdateProfileForm extends Component {
 
 export default reduxForm({
   form: 'UpdateProfileForm',
-  validate
+  validate,
+  enableReinitialize: true
 })(UpdateProfileForm)

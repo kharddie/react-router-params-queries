@@ -6,8 +6,8 @@ import OffersReducer from "./offersReducer";
 import UserReducer from './userReducer';
 import CommentsReducer from './commentsReducer';
 import UpdateProfileReducer from './reducerUpdateProfile';
-import AppInfoDisplayReducer from './AppInfoDisplayReducer';
 import { reducer as formReducer } from 'redux-form';
+import InfoMessageReducer from './infoMessageReducer';
 
 const rootReducer = combineReducers({
   user: UserReducer,
@@ -16,9 +16,9 @@ const rootReducer = combineReducers({
   requests: RequestsReducer,
   offers: OffersReducer,
   comments: CommentsReducer,
-  appInfoDisplay: AppInfoDisplayReducer,
   form: formReducer, // <-- redux-form
-  updateProfile: UpdateProfileReducer
+  updateProfile: UpdateProfileReducer,
+  infoMessage: InfoMessageReducer
 });
 
 export default rootReducer;

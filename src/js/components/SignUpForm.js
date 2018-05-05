@@ -3,8 +3,9 @@ import { Link } from 'react-router';
 import { reduxForm, Field, SubmissionError } from 'redux-form';
 import renderField from '../components/renderField';
 import { validateUserFields, validateUserFieldsSuccess, validateUserFieldsFailure, resetValidateUserFields } from '../actions/validateUserFields';
-import { signUpUser, signUpUserSuccess, signUpUserFailure,resetToken, } from '../actions/users';
-import { appInfoDisplay, resetAppInfoDisplay } from '../actions/appInfoDisplay';
+import { signUpUser, signUpUserSuccess, signUpUserFailure, resetToken, } from '../actions/users';
+import { showInfoMessage, resetShowInfoMessage } from '../actions/infoMessage'
+
 
 //Client side validation
 function validate(values) {
@@ -78,15 +79,15 @@ const validateAndSignUpUser = (values, dispatch) => {
       // Note: Error's "data" is in result.payload.response.data (inside "response")
       // success's "data" is in result.payload.data
       if (result.payload.response && result.payload.response.status !== 200) {
-        dispatch(resetToken());      
-        dispatch(appInfoDisplay(result.payload.response.data));
+        dispatch(resetToken());
         dispatch(signUpUserFailure(result.payload.response.data));
         throw new SubmissionError(result.payload.response.data);
+        dispatch(showInfoMessage(result.payload.data));
       }
       sessionStorage.setItem('jwtToken', result.payload.data.token);
-      dispatch(resetToken());   
-      dispatch(appInfoDisplay(result.payload.data.message));
-      dispatch(signUpUserSuccess(result.payload.data)); 
+      dispatch(resetToken());
+      dispatch(signUpUserSuccess(result.payload.data));
+      dispatch(showInfoMessage(result.payload.data));
     });
 };
 
@@ -102,8 +103,8 @@ class SignUpForm extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.user.status === 'authenticated' && nextProps.user.user && !nextProps.user.error) {
-      this.props.history.push('/');
+    if (nextProps.user.status === 'signup'  && !nextProps.user.error && nextProps.user.success) {
+     // this.props.history.push('/');
     }
   }
 
@@ -112,46 +113,53 @@ class SignUpForm extends Component {
     const { asyncValidating, handleSubmit, submitting, asyncValidate, validate } = this.props;
     return (
       <div className='container'>
-        <form onSubmit={handleSubmit(validateAndSignUpUser)}>
-          <Field
-            name="name"
-            type="text"
-            component={renderField}
-            label="Full Name*" />
-          <Field
-            name="username"
-            type="text"
-            component={renderField}
-            label="@username*" />
-          <Field
-            name="email"
-            type="email"
-            component={renderField}
-            label="Email*" />
-          <Field
-            name="password"
-            type="password"
-            component={renderField}
-            label="Password*" />
-          <Field
-            name="confirmPassword"
-            type="password"
-            component={renderField}
-            label="Confirm Password*" />
-          <div>
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={submitting}>
-              Submit
+        <div class="row justify-content-md-center ">
+          <div class="col-sm-12 col-md-6">
+            <div><h2>Sign up</h2>
+            </div>
+            <form class="sign-up" onSubmit={handleSubmit(validateAndSignUpUser)}>
+              <Field
+                name="name"
+                type="text"
+                component={renderField}
+                label="Full Name*" />
+              <Field
+                name="username"
+                type="text"
+                component={renderField}
+                label="@username*" />
+              <Field
+                name="email"
+                type="email"
+                component={renderField}
+                label="Email*" />
+              <Field
+                name="password"
+                type="password"
+                component={renderField}
+                label="Password*" />
+              <Field
+                name="confirmPassword"
+                type="password"
+                component={renderField}
+                label="Confirm Password*" />
+              <div>
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={submitting}>
+                  Submit
             </button>
-            <Link
-              to="/"
-              className="btn btn-error"> Cancel
+                <Link
+                  to="/"
+                  className="btn btn-error"> Cancel
             </Link>
+              </div>
+            </form>
           </div>
-        </form>
+        </div>
       </div>
+
     )
   }
 }
