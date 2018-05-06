@@ -7,14 +7,14 @@ class ValidateEmailAlert extends Component {
   };
 
   componentDidMount() {
-    //automatically verify for token if autoValidateToken is set to true (e.g. in ValidateEmail *page*)
+
     if(this.props.autoValidateToken) {
       this.props.validateEmail(this.props.token);
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    //if user is authenticated, then reroute the user to PostsList as authenticated user
+ 
     if(nextProps.user && nextProps.user.status === 'authenticated' && nextProps.user.user && !nextProps.user.error) {
       this.context.router.push('/');
     }

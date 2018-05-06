@@ -59,6 +59,7 @@
     "mini-css-extract-plugin": "^0.4.0",
     "moment": "^2.22.1",
     "node-sass": "^4.8.3",
+    "react-bootstrap-intl-tel-input": "^1.0.1",
     "react-bootstrap-modal": "^4.0.0",
     "react-bootstrap4-modal": "^1.2.2",
     "react-collapsible": "^2.0.4",

@@ -110,7 +110,7 @@ class Nav extends React.Component {
 
 
     //sign up user
-   console.log(nextProps.infoMessage)
+    console.log(nextProps.infoMessage)
     if (nextProps.infoMessage.display && nextProps.user.status === 'signup') {
       this.setState({
         renderInfoText: nextProps.infoMessage.message,
@@ -119,7 +119,7 @@ class Nav extends React.Component {
       this.props.resetShowInfoMessage();
       this.props.history.push('/');
     }
-
+   
 
     //create offers  
     if (nextProps.newOffer.offer) {

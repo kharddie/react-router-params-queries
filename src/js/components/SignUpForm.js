@@ -84,7 +84,7 @@ const validateAndSignUpUser = (values, dispatch) => {
         throw new SubmissionError(result.payload.response.data);
         dispatch(showInfoMessage(result.payload.data));
       }
-      sessionStorage.setItem('jwtToken', result.payload.data.token);
+      //sessionStorage.setItem('jwtToken', result.payload.data.token);
       dispatch(resetToken());
       dispatch(signUpUserSuccess(result.payload.data));
       dispatch(showInfoMessage(result.payload.data));

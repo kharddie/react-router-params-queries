@@ -5,6 +5,7 @@ import { validateUserFields, validateUserFieldsSuccess, validateUserFieldsFailur
 import renderField from './renderField';
 import { reduxForm, Field, SubmissionError } from 'redux-form';
 import { updateUserProfile } from '../actions/users';
+import PhoneInput from './PhoneInput'
 
 //Client side validation
 function validate(values) {
@@ -101,7 +102,7 @@ class UpdateProfileForm extends Component {
 
   componentDidUpdate() {
 
-   // this.props.initialize(this.props.initialValues);
+    // this.props.initialize(this.props.initialValues);
   }
 
   componentWillReceiveProps() {
@@ -109,6 +110,10 @@ class UpdateProfileForm extends Component {
     if (profileUpdated) {
       $('.carousel').carousel(0);
     }
+
+  }
+
+  onChangeHandler(){
 
   }
 
@@ -151,6 +156,10 @@ class UpdateProfileForm extends Component {
             type="text"
             component={renderField}
             label="Update contact number*" />
+
+          <PhoneInput  />
+
+
           <Field
             name="email"
             type="email"

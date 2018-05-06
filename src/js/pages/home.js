@@ -9,9 +9,7 @@ import faTimes from '@fortawesome/fontawesome-free-solid/faTimes';
 const mapDispatchToProps = (dispatch) => {
     return {
         resetMe: () => {
-            //sign up is not reused, so we dont need to resetUserFields
-            //in our case, it will remove authenticated users
-            // dispatch(resetUserFields());
+
         }
     }
 }
@@ -23,6 +21,7 @@ function mapStateToProps(state, ownProps) {
 }
 
 class Home extends React.Component {
+  
     state = {
         modalvisibleHomePage: false
     }
@@ -32,8 +31,9 @@ class Home extends React.Component {
     }
 
     showModalCreateRequest = () => {
+        console.log(this.props);
         this.setState({ modalvisibleHomePage: true });
-        if (this.props.user.status = "authenticated") {
+        if (this.props.user.status === "authenticated") {
             $('.carousel').carousel(1);
         } else {
             $('.carousel').carousel(0);
@@ -101,7 +101,7 @@ class Home extends React.Component {
                         <div className="intro"><h1 className="text-h1-lg intro-2" >Get more done</h1>
                             <h4 className="intro-3">Over 1.6M trusted people ready to complete your task today Australia-wide</h4>
                             <div className="form-footer">
-                                <button className="btn btn-primary btn-lg" onClick={this.showModalCreateRequest}>Get started now</button>
+                                <button className="btn btn-primary btn-lg" onClick={this.showModalCreateRequest.bind(this)}>Get started now</button>
                                 <button className="btn btn-primary btn-lg" onClick={this.showModalCreateRequest}>More Info</button>
                             </div>
                         </div>

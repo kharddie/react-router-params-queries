@@ -28,7 +28,7 @@ const validateAndForgotPwd = (values, dispatch) => {
         return;
       }
 
-      let {data, status} = result.payload.response;
+      let { data, status } = result.payload.response;
       //if status is not 200 or any one of the fields exist, then there is a field error
       if (response.payload.status != 200) {
         //let other components know of error by updating the redux` state
@@ -59,26 +59,32 @@ class ForgotPwdForm extends Component {
 
     return (
       <div className="container">
-        <form onSubmit={ handleSubmit(validateAndForgotPwd) }>
-          <Field
-                 name="email"
-                 type="email"
-                 component={ renderField }
-                 label="Email*" />
-          <button
-                  type="submit"
-                  className="btn btn-primary"
-                  disabled={ submitting }>
-            Submit
+        <div class="row justify-content-md-center ">
+          <div class="col-sm-12 col-md-6">
+            <div><h2>Sign up</h2>
+            </div>
+            <form onSubmit={handleSubmit(validateAndForgotPwd)}>
+              <Field
+                name="email"
+                type="email"
+                component={renderField}
+                label="Email*" />
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={submitting}>
+                Submit
           </button>
-          <Link
+              <Link
                 to="/"
                 className="btn btn-error"> Cancel
           </Link>
-        </form>
+            </form>
+          </div>
+        </div>
       </div>
 
-      );
+    );
   }
 }
 
