@@ -5,7 +5,8 @@ import { validateUserFields, validateUserFieldsSuccess, validateUserFieldsFailur
 import renderField from './renderField';
 import { reduxForm, Field, SubmissionError } from 'redux-form';
 import { updateUserProfile } from '../actions/users';
-import PhoneInput from './PhoneInput'
+import RenderPhoneNumber from './RenderPhoneNumber';
+
 
 //Client side validation
 function validate(values) {
@@ -18,11 +19,6 @@ function validate(values) {
 
   if (!values.name || values.name.trim() === '') {
     errors.name = 'Enter Name';
-    hasErrors = true;
-  }
-
-  if (!values.contact_number || values.contact_number.trim() === '') {
-    errors.contact_number = 'Enter contact number';
     hasErrors = true;
   }
 
@@ -65,28 +61,34 @@ const asyncValidate = (values, dispatch) => {
 
 
 //For any field errors upon submission (i.e. not instant check)
-const validateAndUpdateProfile = (values, dispatch, props) => {
-  values.id = props.user.id;
-  return dispatch(updateProfile(values, sessionStorage.getItem('jwtToken')))
-    .then((result) => {
-      // Note: Error's "data" is in result.payload.response.data (inside "response")
-      // success's "data" is in result.payload.data
-      if (result.payload.response && result.payload.response.status !== 200) {
-        dispatch(updateProfileFailure(result.payload.response.data));
-        throw new SubmissionError(result.payload.response.data);
-      }
-      //let other components know that we got user and things are fine by updating the redux` state 
-      dispatch(updateProfileSuccess(result.payload.data));
-      dispatch(updateUserProfile(result.payload.data)); //update current user's Profile (in user's state)
-    });
+const validateAndUpdateProfile = (values, state, props, dispatch) => {
+  if (state.state.phoneValid) {
+    values.id = props.user.id;
+    values.contact_number = state.state.phoneNumber;
+    return dispatch(updateProfile(values, sessionStorage.getItem('jwtToken')))
+      .then((result) => {
+        // Note: Error's "data" is in result.payload.response.data (inside "response")
+        // success's "data" is in result.payload.data
+        if (result.payload.response && result.payload.response.status !== 200) {
+          dispatch(updateProfileFailure(result.payload.response.data));
+          throw new SubmissionError(result.payload.response.data);
+        }
+        //let other components know that we got user and things are fine by updating the redux` state 
+        dispatch(updateProfileSuccess(result.payload.data));
+        dispatch(updateUserProfile(result.payload.data)); //update current user's Profile (in user's state)
+      });
+  }
 };
 
 
 
 class UpdateProfileForm extends Component {
-  static contextTypes = {
-    router: PropTypes.object
-  };
+
+  state = {
+    phoneNumber: '+61 00 000 000',
+    phoneError: "",
+    phoneValid: false
+  }
 
   componentWillUnmount() {
     //Important: If you are reusing a component that might have some state (like error), you should reset it
@@ -105,17 +107,29 @@ class UpdateProfileForm extends Component {
     // this.props.initialize(this.props.initialValues);
   }
 
-  componentWillReceiveProps() {
+  componentWillReceiveProps(nextProps) {
     const { error, profileUpdated } = this.props.updateProfile;
     if (profileUpdated) {
       $('.carousel').carousel(0);
     }
 
+    if (nextProps.user) {
+      this.setState({
+        phoneNumber: nextProps.user.contact_number
+      })
+    }
+
   }
 
-  onChangeHandler(){
-
+  phoneOnChangeHandler = (data) => {
+    this.setState({
+      phoneNumber: data.intlPhoneNumber,
+      phoneError: data.friendlyMessage,
+      phoneValid: data.valid
+    })
   }
+
+
 
 
   getMessage() {
@@ -135,11 +149,18 @@ class UpdateProfileForm extends Component {
 
   render() {
     const { handleSubmit, submitting } = this.props;
+    const lookup = (callback) => {
+      loadJSONP('http://ipinfo.io', 'sendBack');
+      window.sendBack = (resp) => {
+        const countryCode = (resp && resp.country) ? resp.country : '';
+        callback(countryCode);
+      }
+    };
 
     return (
       <div>
         {/*this.getMessage()*/}
-        <form onSubmit={handleSubmit(validateAndUpdateProfile.bind(this))}>
+        <form onSubmit={handleSubmit((values, dispatch) => { validateAndUpdateProfile(values, this, this.props, dispatch); })}>
           <Field
             name="name"
             type="text"
@@ -151,13 +172,19 @@ class UpdateProfileForm extends Component {
             type="text"
             component={renderField}
             label="Update User name*" />
-          <Field
+
+
+          <RenderPhoneNumber
             name="contact_number"
             type="text"
-            component={renderField}
-            label="Update contact number*" />
+            phoneNumber={this.state.phoneNumber}
+            label="Update contact number*"
+            lookup={lookup}
+            phoneValid={this.state.phoneValid}
+            phoneError={this.state.phoneError}
+            phoneOnChangeHandler={this.phoneOnChangeHandler} />
 
-          <PhoneInput  />
+
 
 
           <Field

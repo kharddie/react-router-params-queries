@@ -52,7 +52,9 @@ body {
 
 //requestst
 .scrollable-content {
+  @media screen and (min-width:767px){
   overflow: auto;
+  }
 }
 
 
@@ -250,7 +252,18 @@ help-block {
   @include width-ligh-blue-bg;
 }
 
+/*phone validation*/
 
+.iti-flag {background-image: url("/src/images/flags/flags.png");}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2), 
+only screen and (min--moz-device-pixel-ratio: 2), 
+only screen and (-o-min-device-pixel-ratio: 2 / 1), 
+only screen and (min-device-pixel-ratio: 2), 
+only screen and (min-resolution: 192dpi), 
+only screen and (min-resolution: 2dppx) {
+  .iti-flag {background-image: url("/src/images/flags/flags@2x.png");}
+}
 
 
   /*footer*/
@@ -271,7 +284,10 @@ help-block {
  /* requests*/
  .requests{
    .requests-small{
-     height:500px;
+     @media screen and (min-height:767px){
+      height:500px;
+     }
+    
    }
   .request-box{
     border: 1px solid #dee8ec;
@@ -347,6 +363,16 @@ help-block {
 .map{
   width:100%;
   height:400px;
+
+  @media screen and (max-width:767px){
+  display: none;
+  }
+}
+
+.scrollableContentHeight-btn-holder{
+  @media screen and (min-width:767px){
+    display: none;
+    }
 }
   .request-box.request-box-details{
       border-left: 1px solid #dee8ec;

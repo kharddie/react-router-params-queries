@@ -12,6 +12,7 @@ import CreateOfferContainer from '../containers/CreateOfferContainer.js';
 import CreateCommentForm from '../containers/CreateCommentFormContainer.js';
 import GoogleApiWrapper from './MapContainer';
 import Geocode from "react-geocode";
+import { BrowserView, MobileView, isBrowser, isMobile } from "react-device-detect";
 // set Google Maps Geocoding API for purposes of quota management. Its optional but recommended.
 Geocode.setApiKey("AIzaSyCSGUZtwqI8T3N-_qBhy8iJ6AEyrtuTqls");
 
@@ -70,7 +71,22 @@ class BrowseRequests extends Component {
         this.setState({ modalvisibleOffers: true });
     }
 
+    scrollableContentHeight=() =>{
+        if (isMobile) {
+            $(".scrollable-content").show();
+            $(".request-box-details").hide();
+           $(".scrollableContentHeight-btn").hide();
+            
+        }
+    }
+
     displayRequestDetails = (data) => {
+        if (isMobile) {
+            $(".scrollable-content").hide();
+            $(".request-box-details").show();
+           $(".scrollableContentHeight-btn").show();
+            
+        }
         console.log(data);
         this.setState({
             title: data.title,
@@ -175,7 +191,7 @@ class BrowseRequests extends Component {
             return requests.map((data, index) => {
                 if (data.title != '' && data.address != '' && data.content != '' && data.status) {
                     //get lat long from address
-                    /*
+
                     Geocode.fromAddress(data.address).then(
                         response => {
                             const { lat, lng } = response.results[0].geometry.location;
@@ -188,7 +204,7 @@ class BrowseRequests extends Component {
                             //console.error(error);
                         }
                     )
-                    */
+
                     return (
                         <div className="row" key={index} onClick={() => this.displayRequestDetails(data)} >
                             <div className="col request-box">
@@ -287,17 +303,6 @@ class BrowseRequests extends Component {
                         {this.renderRequests(requests)}
                         {noRequestsMessage}
                     </div>
-
-
-
-
-
-
-
-
-
-
-
                     <div class="col-md-8">
                         <div className="row" >
                             <div className="col-12 request-box request-box-details">
@@ -435,6 +440,9 @@ class BrowseRequests extends Component {
                     </div>
                     <div className="modal-footer"></div>
                 </Modal>
+                <div className="scrollableContentHeight-btn-holder">
+                    <button onClick={this.scrollableContentHeight.bind(this)} className="scrollableContentHeight-btn btn btn-secondary btn-block">Back</button>
+                </div>
             </div>
         );
     }
