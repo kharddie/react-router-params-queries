@@ -7,7 +7,7 @@ const RenderPhoneNumber = (props) => {
             <label className="control-label">{props.label}</label>
             <div>
                 <IntlTelInput
-                    preferredCountries={['AU', 'GB']}
+                    preferredCountries={['AU']}
                     defaultCountry={'AU'}
                     defaultValue={props.phoneNumber}
                     placeholder="Search for a calling code by country"

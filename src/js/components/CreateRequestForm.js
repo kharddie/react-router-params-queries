@@ -26,6 +26,11 @@ function validate(values) {
   if (!values.content || values.content.trim() === '') {
     errors.content = 'Enter some content';
   }
+  if (values.hasOwnProperty("content")) {
+    if (values.content.length < 30) {
+      errors.content = 'Tell us a bit more.';
+    }
+  }
 
   return errors;
 }
@@ -163,10 +168,7 @@ class CreateRequestForm extends Component {
                   disabled={submitting}>
                   Submit
             </button>
-                <Link
-                  to="/"
-                  className="btn btn btn-secondary"> Cancel
-            </Link>
+
               </div>
             </form>
           </div>

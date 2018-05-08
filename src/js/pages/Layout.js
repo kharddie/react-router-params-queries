@@ -50,16 +50,28 @@ class Layout extends React.Component {
   componentWillMount() {
     this.props.loadUserFromToken();
   }
+
+  componentWillReceiveProps = (nextProps) => {
+    this.props.location.pathname == "/"
+  }
   render() {
     const { location, history } = this.props;
     const containerStyle = {
       marginTop: "40px"
     };
 
+    const isHomePage = () => {
+      if (location.pathname == "/") {
+        return "isHomePage";
+      } else {
+        return "notHomePage";
+      } isHomePage
+    }
+
     return (
-      <div>
+      <div className={isHomePage()}>
         <Nav location={location} history={history} />
-        <div className="container main-content" style={containerStyle}>
+        <div className="container main-content " style={containerStyle}>
           <div className="row">
             <div className="col col-12">
               {this.props.children}

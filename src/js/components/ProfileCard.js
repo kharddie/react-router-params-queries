@@ -26,9 +26,6 @@ export default class ProfileCard extends React.Component {
           <div className="col-sm-12">
             <div><h2 className="text-lowercase font-weight-bold">{user && user.name}<span className="userName text-lowercase font-weight-normal">{user && user.user_name}</span></h2></div>
             <div className="row">
-              <div className="col-12 separator"></div>
-            </div>
-            <div className="row">
               <div className="col-sm-12 col-lg-4"> Contact number:</div>
               <div className="col-sm-12 col-lg-6 text-left font-weight-normal">{user && user.contact_number}</div>
             </div>

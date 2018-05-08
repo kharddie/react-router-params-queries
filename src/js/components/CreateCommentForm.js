@@ -17,12 +17,17 @@ function validate(values) {
   if (!values.content || values.content.trim() === '') {
     errors.content = 'Enter some content';
   }
+  if (values.hasOwnProperty("content")) {
+    if (values.content.length < 30) {
+      errors.content = 'Tell us a bit more.';
+    }
+  }
 
   return errors;
 }
 
 //For any field errors upon submission (i.e. not instant check)
-const validateAndCreateComment= (values, dispatch, props) => {
+const validateAndCreateComment = (values, dispatch, props) => {
   values.request_id = props.requestId;
   values.user_id = props.user.id;
   values.created = moment(moment(), "YYY,MM,DD").toISOString();
@@ -59,7 +64,7 @@ class CreateCommentForm extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    
+
   }
 
   render() {
@@ -68,21 +73,26 @@ class CreateCommentForm extends Component {
       <div className='container'>
         <div className="row justify-content-md-center">
           <div className="col-sm-12">
-            <form className="comment-form" onSubmit={handleSubmit(validateAndCreateComment)}>
-              <Field
-                name="content"
-                component={renderTextArea}
-                label="Describe your comment in more detail*" />
-              <div className="form-footer">
-                <button
-                  type="submit"
-                  className="btn btn btn-secondary"
-                  disabled={submitting}>
-                  Submit
-            </button>
-              
-              </div>
-            </form>
+            <div class="form-container-width-btn-inside">
+              <form className="comment-form" onSubmit={handleSubmit(validateAndCreateComment)}>
+                <Field
+                  name="content"
+                  component={renderTextArea}
+                  label="" />
+                <div class="row text-right">
+                  <div class="col-sm-12 col-md-4"></div>
+                  <div class="col-sm-12 col-md-4"></div>
+                  <div class="col-sm-12 col-md-4">
+                    <div class="row ">
+                      <div class="col">
+                        <button type="submit" className="btn btn btn-outline-secondary" disabled={submitting}>Submit</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+
+            </div>
           </div>
         </div>
       </div>

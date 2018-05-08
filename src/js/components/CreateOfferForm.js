@@ -5,7 +5,7 @@ import renderField from './renderField';
 import renderTextArea from './renderTextArea';
 import { validateOfferFields, validateOfferFieldsSuccess, validateOfferFieldsFailure } from '../actions/offers';
 import { createOffer, fetchOffers, createOfferSuccess, createOfferFailure, resetNewOffer } from '../actions/offers';
-
+import { showInfoMessage, resetShowInfoMessage } from '../actions/infoMessage'
 import moment from 'moment'
 import Moment from 'react-moment';
 
@@ -35,6 +35,7 @@ const validateAndCreateOffer = (values, dispatch, props) => {
             //let other components know that everything is fine by updating the redux` state
             dispatch(createOfferSuccess(result.payload.data)); //ps: this is same as dispatching RESET_USER_FIELDS
             dispatch(reset('CreateOfferForm'));
+            dispatch(showInfoMessage(result.payload.data));
             props.fetchOffers(props.requestId);
         });
 
@@ -105,8 +106,8 @@ class CreateOfferForm extends Component {
 
 export default reduxForm({
     form: 'CreateOfferForm', // a unique identifier for this form
-    validate // <--- validation function given to redux-form
-
+    validate, // <--- validation function given to redux-form
+    enableReinitialize: true
 })(CreateOfferForm)
 
 

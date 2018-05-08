@@ -47,27 +47,33 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
 class Nav extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.props.history.listen((location, action) => {
+      console.log("navigation detect=" + global.retainInfoMsg)
+      if (!global.retainInfoMsg) {
+        this.hideInfoBox();
+      } else {
+        this.showInfoBox();
+        global.retainInfoMsg = false;
+      }
+    });
+  }
+
   state = {
     collapsed: true,
     hideLinks: false,
     renderInfoText: "",
-    showInfoBox: "hide"
+    showInfoBox: "hide",
+    isAthenticatedUser: false
   }
 
   hideInfoBox = () => {
-    $(".infoBox").hide(() => {
-      this.setState({
-        renderError: ""
-      })
-    });
+    $(".infoBox").hide();
   }
 
-  showInfoBox = (text) => {
-    $(".infoBox").show("slow", () => {
-      this.setState({
-        renderError: text
-      })
-    });
+  showInfoBox = () => {
+    $(".infoBox").show();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -75,6 +81,14 @@ class Nav extends React.Component {
     //console.log(this.props);
     //console.log("---------this is from nav nextProps --------------");
     //console.log(nextProps);
+
+    if (nextProps.infoMessage.message) {
+      this.setState({
+        renderInfoText: nextProps.infoMessage.message,
+        showInfoBox: "show"
+      })
+    }
+
 
     //sign in user
     if (this.props.user.user && !nextProps.user.user) { //If nextProps.user.user is true, return false. Otherwise return true.
@@ -94,11 +108,12 @@ class Nav extends React.Component {
       })
       this.props.resetUser();
     }
+
+
     //this hides the info bar after successfule login
     if (nextProps.user.status === 'authenticated' && !nextProps.user.error) {
       this.setState({
-        renderInfoText: '',
-        showInfoBox: "hide"
+        isAthenticatedUser: true
       })
     }
 
@@ -110,68 +125,50 @@ class Nav extends React.Component {
 
 
     //sign up user
-    console.log(nextProps.infoMessage)
+    //console.log(nextProps.infoMessage)
     if (nextProps.infoMessage.display && nextProps.user.status === 'signup') {
       this.setState({
         renderInfoText: nextProps.infoMessage.message,
         showInfoBox: "show"
       })
       this.props.resetShowInfoMessage();
+      global.retainInfoMsg = true;
       this.props.history.push('/');
     }
-   
+
 
     //create offers  
     if (nextProps.newOffer.offer) {
+      this.showInfoBox();
       this.setState({
         renderInfoText: nextProps.newOffer.offer.message,
         showInfoBox: "show"
       })
 
     }
-
-
-    /*reate
-    if (nextProps.newRequest.request && !nextProps.newRequest.error) {
-      //this.showInfoBox(nextProps.newRequest.request.message)
+    if (nextProps.infoMessage.message) {
+      this.setState({
+        // renderInfoText: nextProps.infoMessage.message,
+        // showInfoBox: "show"
+      })
     }
-
-    //show user messages
-    if (nextProps.user.error) {
-      //this.showInfoBox(nextProps.user.error)
-    }
-    //show update profile messages
-    const { error, profileUpdated, message } = this.props.updateProfile;
-    if (profileUpdated) {
-      this.props.resetUpdateProfileState();
-      this.showInfoBox(message);
-    }
-
-    //hide the info panel
-    if (this.props.location.pathname !== nextProps.location.pathname) {
-      this.hideInfoBox();
-    }
-    this.props.history.listen((location, action) => {
-      //console.log(`The current URL is ${this.props.location.pathname}${this.props.location.search}${this.props.location.hash}`)
-      //console.log(`The last navigation action was ${this.props.action}`)
-    })
-    */
   }
 
   componentWillUnmount() {
+    console.log("*** componentWillUnmount");
     //Important! If your component is navigating based on some global state(from say componentWillReceiveProps)
     //always reset that global state back to null when you REMOUNT
-    this.setState({
-      renderInfoText: "",
-      showInfoBox: "hide"
-    })
+
   }
 
+  componentDidMount() {
+    console.log("*** componentDidMount");
+
+  }
+
+
   componentWillMount() {
-    this.setState({
-      renderInfoText: "",
-      showInfoBox: "hide"
-    })
+    console.log("*** componentWillMount");
   }
 
   toggleCollapse = () => {
@@ -179,7 +176,7 @@ class Nav extends React.Component {
     this.setState({ collapsed });
   }
 
-  renderSignInLinks(authenticatedUser) {
+  renderSignInLinks(authenticatedUser, signInClass, signUpClass) {
     if (authenticatedUser) {
       return (
         <ul className="nav  nav-pills navbar-right">
@@ -202,14 +199,14 @@ class Nav extends React.Component {
     }
 
     return (
-      <ul className="nav  nav-pills navbar-right">
-        <li role="presentation" class="nav-item">
-          <Link class="dropdown-item" role="presentation" to="/signup">
+      <ul className="nav  nav-pills navbar-right only-big-screen">
+        <li role="presentation" class={"nav-item " + signUpClass}>
+          <Link class="dropdown-item" role="presentation" to="/signUp">
             Sign up
             </Link>
         </li>
-        <li role="presentation" class="nav-item">
-          <Link class="dropdown-item" to="/signin">
+        <li role="presentation" class={"nav-item " + signInClass}>
+          <Link class="dropdown-item" to="/signIn">
             Sign in
             </Link>
         </li>
@@ -217,11 +214,11 @@ class Nav extends React.Component {
     );
   }
 
-  renderLinks(authenticatedUser, signInClass, aboutUsClass, settingsClass, dashboardClass, signUpClass, createRequestClass, myRequestsClass, browseRequestsClass, profileClass) {
+  renderLinks(authenticatedUser, showLogin, homeClass, signInClass, aboutUsClass, settingsClass, dashboardClass, signUpClass, createRequestClass, myRequestsClass, browseRequestsClass, profileClass) {
     if (authenticatedUser) {
       return (
         <ul class="navbar-nav mr-auto">
-          <li class={"nav-item " + signInClass}>
+          <li class={"nav-item " + homeClass}>
             <IndexLink class="nav-link" to="/" onClick={this.toggleCollapse.bind(this)}>Home</IndexLink>
           </li>
 
@@ -236,12 +233,30 @@ class Nav extends React.Component {
             <Link class="nav-link" to="browseRequests" onClick={this.toggleCollapse.bind(this)}>Browse request</Link>
           </li>
 
-          <li class={"nav-item " + settingsClass}>
+          <li class={"nav-item hide" + settingsClass}>
             <Link class="nav-link" to="settings" onClick={this.toggleCollapse.bind(this)}>Settings</Link>
           </li>
 
           <li class={"nav-item " + dashboardClass}>
-            <Link class="nav-link" to="dashboard" onClick={this.toggleCollapse.bind(this)}>Dashboard</Link>
+            <Link class="nav-link hide" to="dashboard" onClick={this.toggleCollapse.bind(this)}>Dashboard</Link>
+          </li>
+
+          <li class="dropdown nav-item only-small-screen">
+            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{toTitleCase(authenticatedUser.name)} <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li className="nav-item" >
+                <Link class="dropdown-item" to={"myRequests/" + this.props.user.user.id} onClick={this.toggleCollapse.bind(this)}>View my requests
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link class="dropdown-item" to="profile" onClick={this.toggleCollapse.bind(this)}>View my profile
+                </Link></li>
+              <li className="nav-item">
+                <a class="dropdown-item" onClick={this.props.logout} href="javascript:void(0)">
+                  Log out
+              </a>
+              </li>
+            </ul>
           </li>
         </ul>
       );
@@ -249,7 +264,7 @@ class Nav extends React.Component {
 
     return (
       <ul class="navbar-nav mr-auto">
-        <li class={"nav-item " + signInClass}>
+        <li class={"nav-item " + homeClass}>
           <IndexLink class="nav-link" to="/" onClick={this.toggleCollapse.bind(this)}>Home</IndexLink>
         </li>
 
@@ -257,9 +272,6 @@ class Nav extends React.Component {
           <Link class="nav-link" to="aboutUs" onClick={this.toggleCollapse.bind(this)}>AboutUs</Link>
         </li>
 
-        <li class={"nav-item " + signInClass} >
-          <IndexLink class="nav-link" to="/signin" onClick={this.toggleCollapse.bind(this)}>Login</IndexLink>
-        </li>
         <li class={"nav-item " + createRequestClass} >
           <Link class="nav-link" to="createRequest" onClick={this.toggleCollapse.bind(this)}>Create a Request</Link>
         </li>
@@ -267,17 +279,18 @@ class Nav extends React.Component {
         <li class={"nav-item " + browseRequestsClass} >
           <Link class="nav-link" to="browseRequests" onClick={this.toggleCollapse.bind(this)}>Browse request</Link>
         </li>
-
-
         <li class={"nav-item " + settingsClass}>
-          <Link class="nav-link" to="settings" onClick={this.toggleCollapse.bind(this)}>Settings</Link>
+          <Link class="nav-link hide" to="settings" onClick={this.toggleCollapse.bind(this)}>Settings</Link>
         </li>
 
         <li class={"nav-item " + dashboardClass}>
-          <Link class="nav-link" to="dashboard" onClick={this.toggleCollapse.bind(this)}>Dashboard</Link>
+          <Link class="nav-link hide" to="dashboard" onClick={this.toggleCollapse.bind(this)}>Dashboard</Link>
         </li>
-        <li class={"nav-item " + signUpClass} >
-          <Link class="nav-link" to="signup" onClick={this.toggleCollapse.bind(this)}>Signup</Link>
+        <li class={"nav-item only-mobile " + showLogin()} >
+          <Link class="nav-link" to="signIn" onClick={this.toggleCollapse.bind(this)}>{!authenticatedUser}Sign In</Link>
+        </li>
+        <li class={"nav-item only-mobile " + showLogin()} >
+          <Link class="nav-link" to="signUp" onClick={this.toggleCollapse.bind(this)}>Sign Up</Link>
         </li>
       </ul>
     );
@@ -285,17 +298,22 @@ class Nav extends React.Component {
 
   render() {
     const { authenticatedUser, newRequest } = this.props;
-
-    //this.showHideUserLinks(authenticatedUser);
-
+    const showLogin = () => {
+      if (!authenticatedUser) {
+        return "show"
+      } else {
+        return "hide"
+      }
+    }
     const { location } = this.props;
     const { collapsed } = this.state;
-    const signInClass = location.pathname === "/" ? "active" : "";
+    const homeClass = location.pathname === "/" ? "active" : "";
+    const signInClass = location.pathname.match(/^\/signIn/) ? "active" : "";
     const aboutUsClass = location.pathname.match(/^\/aboutUs/) ? "active" : "";
     const settingsClass = location.pathname.match(/^\/settings/) ? "active" : "";
     const createRequestClass = location.pathname.match(/^\/createRequest/) ? "active" : "";
     const myRequestsClass = location.pathname.match(/^\/myRequests/) ? "active" : "";
-    const browseRequestsClass = location.pathname.match(/^\/browsRequests/) ? "active" : "";
+    const browseRequestsClass = location.pathname.match(/^\/browseRequests/) ? "active" : "";
     const dashboardClass = location.pathname.match(/^\/dashboard/) ? "active" : "";
     const signUpClass = location.pathname.match(/^\/signUp/) ? "active" : "";
     const profileClass = location.pathname.match(/^\/profile/) ? "active" : "";
@@ -313,9 +331,9 @@ class Nav extends React.Component {
               <span class="navbar-toggler-icon"></span>
             </button>
             <div class={"collapse navbar-collapse " + navClass} id="navbarSupportedContent">
-              {this.renderLinks(authenticatedUser, signInClass, aboutUsClass, settingsClass, dashboardClass, signUpClass, myRequestsClass, browseRequestsClass)}
+              {this.renderLinks(authenticatedUser, showLogin, homeClass, signInClass, aboutUsClass, settingsClass, dashboardClass, signUpClass, createRequestClass, myRequestsClass, browseRequestsClass, profileClass)}
               <span className="navbar-text">
-                {this.renderSignInLinks(authenticatedUser)}
+                {this.renderSignInLinks(authenticatedUser, signInClass, signUpClass)}
               </span>
             </div>
           </nav>

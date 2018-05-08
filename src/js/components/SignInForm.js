@@ -21,7 +21,7 @@ function validate(values) {
 }
 
 //For any field errors upon submission (i.e. not instant check)
-const validateAndSignInUser = (values, dispatch) => {
+const validateAndSignInUser = (values, state, props, dispatch) => {
   return dispatch(signInUser(values))
     .then((result) => {
       if (result.payload.status !== 200) {
@@ -30,6 +30,9 @@ const validateAndSignInUser = (values, dispatch) => {
       if (!result.payload.data.error) { //success
         sessionStorage.setItem('jwtToken', result.payload.data.token);
         dispatch(signInUserSuccess(result.payload.data));
+        if(props.showModalCreateRequest){
+          props.showModalCreateRequest();
+        }
       }
       if (result.payload.data.error) { //failed
         dispatch(signInUserFailure(result.payload.data));
@@ -70,7 +73,7 @@ class SignInForm extends Component {
       <div className="container">
         <div class="row">
           <div class="col-md-12">
-            <form onSubmit={handleSubmit(validateAndSignInUser)}>
+            <form onSubmit={handleSubmit((values, dispatch) => { validateAndSignInUser(values, this, this.props, dispatch); })}>
               <Field
                 name="username"
                 type="text"

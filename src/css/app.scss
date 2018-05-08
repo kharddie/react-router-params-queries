@@ -54,9 +54,52 @@ body {
 .scrollable-content {
   @media screen and (min-width:767px){
   overflow: auto;
+  height: 461px;
   }
 }
 
+
+.isHomePage{
+  background: url("../images/home-page.jpg") center center no-repeat;
+  background-repeat:no-repeat;
+  //background-size:contain;
+  background-position:center;
+}
+
+
+.intro {
+  margin-top: 100px;
+}
+//comments
+
+.form-container-width-btn-inside{
+  .btn-outline-secondary{
+    border: 1px solid #ced4da;
+  }
+  
+  display: block;
+  width: 100%;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  margin: 15px 0;
+  label {
+    display: none;
+  }
+  .form-control {
+    border: none;
+  }
+  .form-control:focus {
+    border-color: none;
+    outline: 0;
+    box-shadow: none;
+  }
+  
+.btn {
+  margin: 0.375rem 0.75rem;
+}
+}
 
 
 body {
@@ -160,18 +203,74 @@ help-block {
 /*Header*/
 .header {
   background-color: #9fc104;
-    .navbar-light .navbar-nav .nav-link {
+    .navbar-light .navbar-nav .nav-link,
+    .navbar-light .nav-item a {
       color:white;
   }
+  .nav-item .only-small-screen .dropdown-menu{
+    padding:0;
+    margin:0;
+  }
+  .navbar-light  .navbar-right .dropdown  a{
+    color:#3a3d3e;
+  }
+
+
 }
 
 .navbar{
 
-  li{
-    a{
+  //padding:0;
+  .nav-item.active{
+    background-color: #85a00a;
+    border: 1px solid #a9c81e;
+  }
 
+  .dropdown-item.active, 
+  .dropdown-item:focus,
+  .dropdown-item:hover {
+
+}
+
+
+.dropdown-item:active,
+.dropdown-item:hover,
+ .dropdown-item:focus
+{
+  background-color: transparent;
+  color:white!important;
+}
+
+  .nav-link {
+    padding: 0.7rem 1rem;
+}
+
+  .only-mobile{
+    @media screen and (min-width:991px){
+      display:none;
     }
   }
+  .navbar-right{
+    @media screen and (max-width:991px){
+      display:none;
+    }
+  }
+  .only-big-screen{
+    .dropdown-item:hover, .dropdown-item:focus {
+      color: #16181b;
+  }
+  }
+
+.only-small-screen{
+  @media screen and (min-width:991px){
+    display:none;
+  }
+    .dropdown-menu {
+      background-color: transparent;
+      border: none;
+      color:white;
+    }
+ }
 }
 
 
@@ -289,6 +388,10 @@ only screen and (min-resolution: 2dppx) {
      }
     
    }
+
+   .request-box.card {
+    cursor: pointer;
+   }
   .request-box{
     border: 1px solid #dee8ec;
     margin-bottom: 10px;
@@ -299,7 +402,6 @@ only screen and (min-resolution: 2dppx) {
     background-color: white;
     color:#839094;  
     font-size: 13px;
-    cursor: pointer;
     .btn.more-details{
       margin-top: 5px;
       display: inline-block;
@@ -336,9 +438,16 @@ only screen and (min-resolution: 2dppx) {
     }
 
     .footer{
-      border-top: 1px solid #e7eef1;
       padding-top: 3px;
       margin-top: 10px;
+      .heading{
+        font-size:14px;
+      }
+      .renderCommnts,.joinConvo,.offers-top{
+            border-top: 1px solid #e7eef1;
+            padding:20px 0;
+            width: 100%;
+      }
     }
     .user-image{
       @include justify-content-center-center;
@@ -370,9 +479,7 @@ only screen and (min-resolution: 2dppx) {
 }
 
 .scrollableContentHeight-btn-holder{
-  @media screen and (min-width:767px){
     display: none;
-    }
 }
   .request-box.request-box-details{
       border-left: 1px solid #dee8ec;
@@ -517,6 +624,8 @@ form.request-form > div:first-of-type {
     .profile-card {
       h2, .h2 {
         font-size: 1.6rem;
+        border-bottom: 1px dotted #89a1ab;
+        padding-bottom: 10px;
       }
       .userName{
         font-size: 1.3rem;

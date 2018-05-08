@@ -15,6 +15,7 @@ import Geocode from "react-geocode";
 import { BrowserView, MobileView, isBrowser, isMobile } from "react-device-detect";
 // set Google Maps Geocoding API for purposes of quota management. Its optional but recommended.
 Geocode.setApiKey("AIzaSyCSGUZtwqI8T3N-_qBhy8iJ6AEyrtuTqls");
+import {toTitleCase} from '../helper/index.js'
 
 // Enable or disable logs. Its optional.
 Geocode.enableDebug();
@@ -38,8 +39,8 @@ class BrowseRequests extends Component {
 
     componentWillReceiveProps(nextProps) {
 
-        console.log(nextProps.requestsList.requests)
-        console.log(nextProps.resetRequestxx.message)
+        // console.log(nextProps.requestsList.requests)
+        // console.log(nextProps.resetRequestxx.message)
 
         if (nextProps.newOffer.offer) {
             this.setState({ modalvisibleOffers: false });
@@ -58,6 +59,7 @@ class BrowseRequests extends Component {
         request_id: '',
         modified: '',
         name: '',
+        user_id: '',
         status: '',
         showGoogleMap: "show",
         showRequestDetails: "hide",
@@ -71,12 +73,13 @@ class BrowseRequests extends Component {
         this.setState({ modalvisibleOffers: true });
     }
 
-    scrollableContentHeight=() =>{
+    scrollableContentHeight = () => {
         if (isMobile) {
             $(".scrollable-content").show();
             $(".request-box-details").hide();
-           $(".scrollableContentHeight-btn").hide();
+            $(".scrollableContentHeight-btn").hide();
             
+
         }
     }
 
@@ -84,8 +87,19 @@ class BrowseRequests extends Component {
         if (isMobile) {
             $(".scrollable-content").hide();
             $(".request-box-details").show();
-           $(".scrollableContentHeight-btn").show();
-            
+            $(".scrollableContentHeight-btn").show();
+            $(".scrollableContentHeight-btn-holder").show();
+        }
+
+        // disabled if its the user that created the request
+        if (!this.props.user) {
+            $(".offer-to-assist").attr("disabled", "disabled");
+        } else if (this.props.user && this.props.user.id === data.user_id) {
+            $(".offer-to-assist").attr("disabled", "disabled");
+        } else if (this.props.user && this.props.user.id !== data.user_id) {
+            $(".offer-to-assist").prop("disabled", false)
+        } else {
+            $(".offer-to-assist").prop("disabled", false)
         }
         console.log(data);
         this.setState({
@@ -97,6 +111,7 @@ class BrowseRequests extends Component {
             request_id: data.id,
             modified: data.modified,
             name: data.name,
+            user_id: data.user_id,
             status: data.status,
             showGoogleMap: "hide",
             showRequestDetails: "show",
@@ -124,7 +139,8 @@ class BrowseRequests extends Component {
         }
     }
 
-    toggleImg() {
+    toggleImg(event) {
+        event.stopPropagation();
         let img1 = "../../../images/down-arrow.svg",
             img2 = "../../../images/down-arrow.svg";
         $('#arrow').toggleClass("arrow-down", "arrow-up");
@@ -142,12 +158,13 @@ class BrowseRequests extends Component {
             return offers.map((data, index) => {
                 return (
                     <div className="row" key={index}>
-                        <div className="col-12">
+                        <div className="col-12 col-xs-12">
                             <div className="row" >
                                 <div className="col-sm-2 "><img class="user-image" src="../../images/user.svg" alt="" /></div>
-                                <div className="col-sm-3 col-padding-left-0"><span class="text-uppercase font-weight-bold">{data.user_name}</span></div>
-                                <div className="col-sm-4 col-padding-left-0"><span class="text-uppercase font-weight-bold"><span class="star"><img class="" src="../../images/star.svg" alt="" /></span></span></div>
-                                <div className="col-sm-3 col-padding-left-0"><span class="text-uppercase font-weight-normal">{this.timeSpan(data.created, moment)}</span></div>
+                                <div className="col-sm-3 "><span class="text-uppercase font-weight-bold">{data.user_name}</span></div>
+                                <div className="col-sm-2 "><span class="text-uppercase font-weight-bold"><span class="star"><img class="" src="../../images/star.svg" alt="" /></span></span></div>
+                                <div className="col-sm-3 "><span class="text-uppercase font-weight-normal">{this.timeSpan(data.created, moment)}</span></div>
+                                <div className="col-sm-2 "><span class="text-uppercase font-weight-normal">Accept Offer</span></div>
                             </div>
                         </div>
                         <div className="col-12 separator"></div>
@@ -158,23 +175,27 @@ class BrowseRequests extends Component {
         }
     }
 
+    goToSingInPage = () => {
+        this.props.history.push('/signin');
+    }
+
     renderComments = (comments) => {
         //this.props.resetComments(); 
         if (comments.length > 0) {
             return comments.map((data, index) => {
                 return (
                     <div className="row" key={index}>
-                        <div className="col-12">
+                        <div className="col-12 col-xs-12 col-sm-8">
                             <div className="row" >
                                 <div className="col-sm-2 "><img class="user-image" src="../../images/user.svg" alt="" /></div>
-                                <div className="col-sm-10 col-padding-left-0">
+                                <div className="col-sm-10 ">
                                     <span class="text-uppercase font-weight-bold">{data.user_name}</span>
                                     <div>{data.content}</div>
                                 </div>
                             </div>
                             <div className="row" >
                                 <div className="col-sm-2"></div>
-                                <div className="col-sm-10 col-padding-left-0"><span class="text-uppercase font-weight-normal">{this.timeSpan(data.created, moment)}</span></div>
+                                <div className="col-sm-10 "><span class="text-uppercase font-weight-normal">{this.timeSpan(data.created, moment)}</span></div>
                             </div>
                         </div>
                         <div className="col-12 separator"></div>
@@ -191,23 +212,23 @@ class BrowseRequests extends Component {
             return requests.map((data, index) => {
                 if (data.title != '' && data.address != '' && data.content != '' && data.status) {
                     //get lat long from address
-
-                    Geocode.fromAddress(data.address).then(
-                        response => {
-                            const { lat, lng } = response.results[0].geometry.location;
-                            //console.log(lat, lng);
-                            global.points.push(
-                                { lat: lat, lng: lng, title: data.title, body: data.content, address: data.address }
-                            )
-                        },
-                        error => {
-                            //console.error(error);
-                        }
-                    )
-
+                    /*
+                                        Geocode.fromAddress(data.address).then(
+                                            response => {
+                                                const { lat, lng } = response.results[0].geometry.location;
+                                                //console.log(lat, lng);
+                                                global.points.push(
+                                                    { lat: lat, lng: lng, title: data.title, body: data.content, address: data.address }
+                                                )
+                                            },
+                                            error => {
+                                                //console.error(error);
+                                            }
+                                        )
+                    */
                     return (
                         <div className="row" key={index} onClick={() => this.displayRequestDetails(data)} >
-                            <div className="col request-box">
+                            <div className="col request-box card">
                                 <div className="row" >
                                     <div className="col-12 text-right">
                                         <ul class="dropdown-menu">
@@ -218,14 +239,14 @@ class BrowseRequests extends Component {
                                     </div>
                                 </div>
                                 <div className="row" >
-                                    <div className="col-12 title">{data.title}</div>
+                                    <div className="col-12 title ">{toTitleCase(data.title)}</div>
                                 </div>
                                 <div className="row">
                                     <div className="col-9">
                                         <div><FontAwesomeIcon className="fa-right" size="sm" icon={faMapMarker} />{data.address}</div>
                                         <div><FontAwesomeIcon className="fa-right" size="sm" icon={faCalendar} />{moment(data.due_date).format('d MMM YYYY')}</div>
                                         <div className="more-info-btn">
-                                            <a class="btn  more-details arrow-down" onclick={() => this.toggleImg()} data-toggle="collapse" data-target={"#mf-" + index}>
+                                            <a class="btn  more-details arrow-down" onclick={(event) => this.toggleImg.bind(this)} data-toggle="collapse" data-target={"#mf-" + index}>
                                                 <img src="../../../images/down-arrow.svg" id="arrow" />
                                             </a>
                                         </div>
@@ -271,6 +292,8 @@ class BrowseRequests extends Component {
         if (requests.length == 0) {
             noRequestsMessage = message;
         }
+
+        const isLoggedIn = this.props.user;
 
         $(document).ready(function () {
             $('.carousel').carousel({
@@ -334,39 +357,40 @@ class BrowseRequests extends Component {
                                                 </div>
                                             </div>
                                             <div className="row" >
-                                                <div className="col col-12 title">{this.state.title}</div>
+                                                <div className="col col-12 title ">{toTitleCase(this.state.title)}</div>
                                             </div>
 
                                             <div className="row" >
                                                 <div className="col col-sm-2">
                                                     <img class="user-image" src="../../images/user.svg" alt="" />
                                                 </div>
-                                                <div className="col col-sm-6 col-padding-left-0 text-uppercase font-weight-bold">Posted by: <br /><span class="text-capitalize"><span class="font-weight-normal">{this.state.name}</span></span></div>
+                                                <div className="col col-sm-6  text-uppercase font-weight-bold">Posted by: <br /><span class="text-capitalize"><span class="font-weight-normal">{this.state.name}</span></span></div>
                                                 <div className="col col-sm-4 text-right"><br /><span class="text-capitalize font-weight-normal">{this.timeSpan(this.state.created, moment)}.</span></div>
                                             </div>
 
                                             <div className="row separator" >
-                                                <div class="col col-sm-2"></div>
+                                                <div class="col col-sm-2 d-none d-sm-block"></div>
                                                 <div class="col col-sm-10 col-padding-left-0"></div>
                                             </div>
 
                                             <div className="row" >
                                                 <div className="col-sm-2"><img class="icon-image" src="../../images/placeholder.svg" alt="" /></div>
-                                                <div className="col-sm-10 col-padding-left-0"><span class="text-uppercase font-weight-bold">Address</span><br />{this.state.address}</div>
+                                                <div className="col-sm-10 "><span class="text-uppercase font-weight-bold">Address</span><br />{this.state.address}</div>
                                             </div>
                                             <div className="row separator" >
-                                                <div class="col col-sm-2"></div>
+                                                <div class="col col-sm-2 d-none d-sm-block"></div>
                                                 <div class="col col-sm-10 col-padding-left-0"></div>
                                             </div>
 
                                             <div className="row" >
                                                 <div className="col-sm-2 "><img class="icon-image" src="../../images/calendar.svg" alt="" /></div>
-                                                <div className="col-sm-10 col-padding-left-0"><span class="text-uppercase font-weight-bold">Due date</span><br />{moment(this.state.due_date).format('d MMM YYYY')}</div>
+                                                <div className="col-sm-10 "><span class="text-uppercase font-weight-bold">Due date</span><br />{moment(this.state.due_date).format('d MMM YYYY')}</div>
                                             </div>
                                         </div>
                                         <div className="col-12 col-xs-12 col-sm-4 col-xs-12 text-center">
+                                        <div className="col-12 separator d-sm-none"></div>
                                             <div className="payment-panel">
-                                                <div><button type="button" class="btn btn-success" onClick={this.modalvisibleOffers}>Offer to assist</button></div>
+                                                <div><button type="button" class="btn btn-success offer-to-assist" onClick={this.modalvisibleOffers}>Offer to assist</button></div>
                                             </div>
                                         </div>
                                     </div>
@@ -377,19 +401,49 @@ class BrowseRequests extends Component {
                                         </div>
                                     </div>
                                     <div className="row footer" >
-                                        <div className="col-12 tiny-text">
-                                            <div className="row">
-                                                <div className="col-12 separator"></div>
-                                                <div className="col-12">
-                                                    <span class="text-uppercase font-weight-bold">OFFERS <span className={offers.length > 0 ? 'hide' : ' text-lowercase show-inline-block'}>"   No offers for this request"</span><br /></span>
+                                        <div className="offers-top">
+                                            <div className="col-12 tiny-text">
+                                                <div className="row">
+                                                    <div className="col-12 separator "></div>
+                                                    <div className="col-12">
+                                                        <span class="text-uppercase font-weight-bold heading">OFFERS <span className={offers.length > 0 ? 'hide ' : ' text-lowercase show-inline-block'}>"No offers for this request"</span><br /></span>
+                                                    </div>
+                                                    <div className="col-12 separator"></div>
                                                 </div>
-                                                <div className="col-12 separator"></div>
                                             </div>
+                                        </div>
+
+                                        <div className="col-12">
                                             {this.renderOffers(offers)}
-                                            <CreateCommentForm fetchComments={this.props.fetchComments} requestId={this.state.request_id} />
-                                            <div className="row">
-                                                <div className="col-12 separator"></div></div>
-                                            {this.renderComments(comments)}
+                                        </div>
+
+                                        <div className="joinConvo">
+                                            <div className="col-12">
+
+                                                {isLoggedIn ? (
+                                                    <CreateCommentForm fetchComments={this.props.fetchComments} requestId={this.state.request_id} />
+                                                ) : (
+
+                                                        <div className="row">
+                                                            <div className="col-12 col-xs-12 col-sm-8">
+                                                                <div className="row">
+                                                                    <div className="col-12 text-left">
+                                                                        <span class="text-uppercase font-weight-bold">Join the conversation</span>
+                                                                    </div>
+                                                                    <div className="col-12 col-sm-5">
+                                                                        <button onClick={this.goToSingInPage.bind(this)} className="btn btn-secondary btn-sm">log in</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    )}
+
+                                            </div>
+                                        </div>
+                                        <div className="renderCommnts">
+                                            <div className="col-12">
+                                                {this.renderComments(comments)}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -443,7 +497,7 @@ class BrowseRequests extends Component {
                 <div className="scrollableContentHeight-btn-holder">
                     <button onClick={this.scrollableContentHeight.bind(this)} className="scrollableContentHeight-btn btn btn-secondary btn-block">Back</button>
                 </div>
-            </div>
+            </div >
         );
     }
 }

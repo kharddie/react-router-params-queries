@@ -21,13 +21,17 @@ function mapStateToProps(state, ownProps) {
 }
 
 class Home extends React.Component {
-  
+
     state = {
         modalvisibleHomePage: false
     }
 
     modalBackdropClicked = () => {
         this.setState({ modalvisibleHomePage: false });
+    }
+
+    goTOaboutUsPage = () => {
+        this.props.history.push("/aboutUs")
     }
 
     showModalCreateRequest = () => {
@@ -50,7 +54,6 @@ class Home extends React.Component {
         const { history } = this.props;
 
         return (
-
             <div>
                 <div className="row justify-content-md-center">
                     <div className="col-sm-5">
@@ -74,11 +77,10 @@ class Home extends React.Component {
                                         </ol>
                                         <div className="carousel-inner">
                                             <div className="carousel-item active">
-                                                <div><SignInFormContainer location={location} history={history} /></div>
+                                                <div><SignInFormContainer location={location} history={history} showModalCreateRequest={this.showModalCreateRequest} /></div>
                                             </div>
                                             <div className="carousel-item">
-                                                <div><CreateRequestContainer location={location} history={history} /></div>
-
+                                                <div><CreateRequestContainer location={location} history={history} modalBackdropClicked={this.modalBackdropClicked} /></div>
                                             </div>
                                         </div>
                                         <a className="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
@@ -92,21 +94,23 @@ class Home extends React.Component {
                                     </div>
                                 </div>
                             </div>
-                            <div className="modal-footer"></div>
+                          
                         </Modal>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-sm-7">
-                        <div className="intro"><h1 className="text-h1-lg intro-2" >Get more done</h1>
-                            <h4 className="intro-3">Over 1.6M trusted people ready to complete your task today Australia-wide</h4>
+                        <div className="intro"><h1 className="text-h1-lg intro-2" >Get more done for FREE!</h1>
+                            <h4 className="intro-3">
+                                Find out trusted people in your local community ready to give up their time and complete your task today.
+                            </h4>
                             <div className="form-footer">
                                 <button className="btn btn-primary btn-lg" onClick={this.showModalCreateRequest.bind(this)}>Get started now</button>
-                                <button className="btn btn-primary btn-lg" onClick={this.showModalCreateRequest}>More Info</button>
+                                <button className="btn btn-primary btn-lg" onClick={this.goTOaboutUsPage}>More Info</button>
                             </div>
                         </div>
                     </div>
-                    <div className="col-sm-5">XXX</div>
+                    <div className="col-sm-5"></div>
                 </div>
             </div>
         );

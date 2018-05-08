@@ -12,6 +12,7 @@ const mapStateToProps = (state, ownProps) => {
     newOffer: state.offers.newOffer,
     offersList: state.offers.offersList,
     commentsList: state.comments.commentsList,
+    user:state.user.user,
     initialValues: {
       email: state.user.user && state.user.user.email,
       name: state.user.user && state.user.user.name,
