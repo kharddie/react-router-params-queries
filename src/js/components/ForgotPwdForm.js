@@ -61,9 +61,9 @@ class ForgotPwdForm extends Component {
       <div className="container">
         <div class="row justify-content-md-center ">
           <div class="col-sm-12 col-md-6">
-            <div><h2>Sign up</h2>
+            <div><h2>Recover password</h2>
             </div>
-            <form onSubmit={handleSubmit(validateAndForgotPwd)}>
+            <form className="forgot-pwd" onSubmit={handleSubmit(validateAndForgotPwd)}>
               <Field
                 name="email"
                 type="email"

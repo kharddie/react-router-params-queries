@@ -13,9 +13,10 @@ import CreateCommentForm from '../containers/CreateCommentFormContainer.js';
 import GoogleApiWrapper from './MapContainer';
 import Geocode from "react-geocode";
 import { BrowserView, MobileView, isBrowser, isMobile } from "react-device-detect";
+import SignInFormContainer from '../containers/SignInFormContainer.js';
 // set Google Maps Geocoding API for purposes of quota management. Its optional but recommended.
 Geocode.setApiKey("AIzaSyCSGUZtwqI8T3N-_qBhy8iJ6AEyrtuTqls");
-import {toTitleCase} from '../helper/index.js'
+import { toTitleCase } from '../helper/index.js'
 
 // Enable or disable logs. Its optional.
 Geocode.enableDebug();
@@ -51,6 +52,7 @@ class BrowseRequests extends Component {
     state = {
         modalvisibleProducts: false,
         modalvisibleOffers: false,
+        modalvisibleSignIn: false,
         title: '',
         address: '',
         content: '',
@@ -67,10 +69,14 @@ class BrowseRequests extends Component {
 
     modalBackdropClicked = () => {
         this.setState({ modalvisibleOffers: false });
+        this.setState({ modalvisibleSignIn: false });
     }
 
     modalvisibleOffers = () => {
         this.setState({ modalvisibleOffers: true });
+    }
+    modalvisibleSignIn = () => {
+        this.setState({ modalvisibleSignIn: true });
     }
 
     scrollableContentHeight = () => {
@@ -78,7 +84,7 @@ class BrowseRequests extends Component {
             $(".scrollable-content").show();
             $(".request-box-details").hide();
             $(".scrollableContentHeight-btn").hide();
-            
+
 
         }
     }
@@ -286,6 +292,9 @@ class BrowseRequests extends Component {
         const { requests, loading, error, message } = this.props.requestsList;
         const { offers } = this.props.offersList;
         const { comments } = this.props.commentsList;
+        const { history } = this.props;
+        const origin = "browseRequest";
+
         let noRequestsMessage = '';
         global.points = [];
 
@@ -388,7 +397,7 @@ class BrowseRequests extends Component {
                                             </div>
                                         </div>
                                         <div className="col-12 col-xs-12 col-sm-4 col-xs-12 text-center">
-                                        <div className="col-12 separator d-sm-none"></div>
+                                            <div className="col-12 separator d-sm-none"></div>
                                             <div className="payment-panel">
                                                 <div><button type="button" class="btn btn-success offer-to-assist" onClick={this.modalvisibleOffers}>Offer to assist</button></div>
                                             </div>
@@ -431,7 +440,7 @@ class BrowseRequests extends Component {
                                                                         <span class="text-uppercase font-weight-bold">Join the conversation</span>
                                                                     </div>
                                                                     <div className="col-12 col-sm-5">
-                                                                        <button onClick={this.goToSingInPage.bind(this)} className="btn btn-secondary btn-sm">log in</button>
+                                                                        <button onClick={this.modalvisibleSignIn.bind(this)} className="btn btn-secondary btn-sm">log in</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -494,6 +503,29 @@ class BrowseRequests extends Component {
                     </div>
                     <div className="modal-footer"></div>
                 </Modal>
+
+
+                <Modal visible={this.state.modalvisibleSignIn} onClickBackdrop={this.modalBackdropClicked} dialogClassName="modal-md">
+                    <div className="modal-header">
+                        <div className="container">
+                            <div className="row">
+                                <div className="col col-sm-8 text-left"> <h5 className="modal-title">Sign in to join conversation</h5></div>
+                                <div className="col text-right">
+                                    <button type="button" class="close" onClick={this.modalBackdropClicked} data-dismiss="alert">&times;</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="modal-body">
+                        <div className="container">
+                            <div><SignInFormContainer location={location} history={history} heading="Sign in to join conversation" origin={origin} modalBackdropClicked={this.modalBackdropClicked}/></div>
+                        </div>
+                    </div>
+
+                </Modal>
+
+
+
                 <div className="scrollableContentHeight-btn-holder">
                     <button onClick={this.scrollableContentHeight.bind(this)} className="scrollableContentHeight-btn btn btn-secondary btn-block">Back</button>
                 </div>

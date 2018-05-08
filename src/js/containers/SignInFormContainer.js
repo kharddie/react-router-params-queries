@@ -12,7 +12,7 @@ const mapDispatchToProps = (dispatch) => {
 function mapStateToProps(state, ownProps) {
   return { 
     user: state.user,
-    infoMessage:state.infoMessage
+    infoMessage:state.infoMessage,
   };
 }
 

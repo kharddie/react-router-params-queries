@@ -181,7 +181,7 @@ class Nav extends React.Component {
       return (
         <ul className="nav  nav-pills navbar-right">
           <li class="nav-item dropdown" role="presentation">
-            <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <a class="nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               {toTitleCase(authenticatedUser.name)}
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">

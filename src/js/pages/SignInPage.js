@@ -23,7 +23,7 @@ class SignInPage extends React.Component {
             <div class="row sign-in-right">
               <div class="col-md-8">
                 <h1 class="title-page title-page-margin">
-                  Existing customer??</h1>
+                  Existing customer?</h1>
                 <SignInFormContainer location={location} history={history} />
               </div>
             </div>

@@ -2,11 +2,22 @@
 
 
 $font-stack:    Helvetica, sans-serif;
-$primary-color: #333;
+$primary-color: #9fc104;
+$primary-color-darker: #90ab16;
+$blue-color-darker:#e3ebef;
 
 
-@mixin width-ligh-blue-bg {
-  background-color: #e3ebef;
+$secondary-color: #ff9e19;
+$secondary-color-dark: #f59717;
+$primary-btn-color: $secondary-color;
+$primary-btn-color-hover: $secondary-color-dark;
+
+
+
+
+
+@mixin width-dark-blue-bg {
+  background-color: $blue-color-darker;
   padding: 30px;
   border-radius: 0;
 }
@@ -49,6 +60,19 @@ html,
 body {
     height: 100%;
 }
+
+//buttons
+.btn-primary {
+  color: #fff;
+  background-color: $primary-btn-color;
+  border-color: $primary-btn-color;
+}
+.btn-primary:hover {
+  color: #fff;
+  background-color: $primary-btn-color-hover;
+  border-color: $primary-btn-color-hover;
+}
+
 
 //requestst
 .scrollable-content {
@@ -202,7 +226,10 @@ help-block {
 
 /*Header*/
 .header {
-  background-color: #9fc104;
+  background-color: $primary-color;
+  .navbar-light .nav-item{
+    border:1px solid transparent;
+  }
     .navbar-light .navbar-nav .nav-link,
     .navbar-light .nav-item a {
       color:white;
@@ -215,13 +242,30 @@ help-block {
     color:#3a3d3e;
   }
 
+  .nav-pills .show > .nav-link {
+    background-color: transparent;
+  }
+  .dropdown-menu {
+    top: 128%;
+    border-radius: 0;
+  }
+  .navbar-right{
+    .dropdown a:hover {
+      color: #3a3d3e!important;
+  }
+    .navbar .dropdown-item:hover, .navbar .dropdown-item:focus {
+      background-color: transparent;
+      color: #3a3d3e;
+    }
+  }
+
 
 }
 
 .navbar{
 
   //padding:0;
-  .nav-item.active{
+  .nav-item.active,.nav-item:hover{
     background-color: #85a00a;
     border: 1px solid #a9c81e;
   }
@@ -348,7 +392,7 @@ help-block {
 
 /*sing up*/
 .sign-up{
-  @include width-ligh-blue-bg;
+  @include width-dark-blue-bg;
 }
 
 /*phone validation*/
@@ -434,7 +478,7 @@ only screen and (min-resolution: 2dppx) {
     }
 
     .request-status{
-      color: #9fc104;
+      color: $primary-color;
     }
 
     .footer{
@@ -590,14 +634,17 @@ only screen and (min-resolution: 2dppx) {
 /* modal*/
 .modal{
   .modal-header {
-    background-color: #9fc104;
+    background-color: $primary-color;
     color: white;
   }
+  .modal-body {
+    padding-bottom: 2rem;
+   }
 }
 
 
 form.form-width-bg {
-  @include width-ligh-blue-bg;
+  @include width-dark-blue-bg;
 }
 form.request-form > div:first-of-type {
     display: none;
@@ -616,11 +663,15 @@ form.request-form > div:first-of-type {
   }
 }
 
+/*forgot password*/
+.forgot-pwd{
+  @include width-dark-blue-bg;
+}
 
 
 /* Profile */
 .profile{
-    @include width-ligh-blue-bg;
+    @include width-dark-blue-bg;
     .profile-card {
       h2, .h2 {
         font-size: 1.6rem;

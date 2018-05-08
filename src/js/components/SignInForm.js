@@ -55,7 +55,11 @@ class SignInForm extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.user.status === 'authenticated' && nextProps.user.user && !nextProps.user.error) {
-      this.props.history.push('/');
+      if(!nextProps.origin){
+        this.props.history.push('/');
+      }else{
+        this.props.modalBackdropClicked()
+      }
     }
 
     //error
@@ -87,7 +91,7 @@ class SignInForm extends Component {
               <div className="text-right">
                 <button
                   type="submit"
-                  className="btn btn-primary"
+                  className="btn btn-primary btn-block"
                   disabled={submitting}>
                   Submit
                 </button>
