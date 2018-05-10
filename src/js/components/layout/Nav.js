@@ -16,6 +16,7 @@ function mapStateToProps(state) {
     newRequest: state.requests.newRequest,
     updateProfile: state.updateProfile,
     newOffer: state.offers.newOffer,
+    acceptOffer: state.offers.acceptOffer,
     infoMessage: state.infoMessage.infoMessage,
   };
 }
@@ -137,6 +138,17 @@ class Nav extends React.Component {
     }
 
 
+    //accept offer
+    if (nextProps.infoMessage.display && nextProps.acceptOffer.acceptOffer) {
+      this.setState({
+        renderInfoText: nextProps.acceptOffer.acceptOffer.message,
+        showInfoBox: "show"
+      })
+      this.props.resetShowInfoMessage();
+    }
+
+
+
     //create offers  
     if (nextProps.newOffer.offer) {
       this.showInfoBox();
@@ -180,8 +192,9 @@ class Nav extends React.Component {
     if (authenticatedUser) {
       return (
         <ul className="nav  nav-pills navbar-right">
-          <li class="nav-item dropdown" role="presentation">
+          <li class="nav-item dropdown user-profile" role="presentation">
             <a class="nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span className="nav-image-icon"><img class="user-image" src="../../images/user-profile.svg" alt="" /></span>
               {toTitleCase(authenticatedUser.name)}
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">
@@ -201,12 +214,12 @@ class Nav extends React.Component {
     return (
       <ul className="nav  nav-pills navbar-right only-big-screen">
         <li role="presentation" class={"nav-item " + signUpClass}>
-          <Link class="dropdown-item" role="presentation" to="/signUp">
+          <Link class="dropdown-item nav-link" role="presentation" to="/signUp">
             Sign up
             </Link>
         </li>
         <li role="presentation" class={"nav-item " + signInClass}>
-          <Link class="dropdown-item" to="/signIn">
+          <Link class="dropdown-item nav-link" to="/signIn">
             Sign in
             </Link>
         </li>
@@ -219,7 +232,10 @@ class Nav extends React.Component {
       return (
         <ul class="navbar-nav mr-auto">
           <li class={"nav-item " + homeClass}>
-            <IndexLink class="nav-link" to="/" onClick={this.toggleCollapse.bind(this)}>Home</IndexLink>
+            <IndexLink class="nav-link" to="/" onClick={this.toggleCollapse.bind(this)}>
+              <span className="nav-image-icon"><img class="user-image" src="../../images/home.svg" alt="" /></span>
+              <span>Home</span>
+            </IndexLink>
           </li>
 
           <li class={"nav-item " + aboutUsClass}>
@@ -325,7 +341,7 @@ class Nav extends React.Component {
       <div>
         <div className="header">
           <nav class="navbar navbar-expand-lg navbar-light" role="navigation">
-            <a class="navbar-brand" href="#">Logo</a>
+            <a class="navbar-brand " href="#"><span className="logo-span"><img class="user-image" src="../../images/logo.svg" alt="" /></span></a>
 
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>

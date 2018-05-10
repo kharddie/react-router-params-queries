@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {ROOT_URL} from '../helper/config';
 
 //Resend validation email
 export const RESEND_VALIDATION_EMAIL = 'RESEND_VALIDATION_EMAIL';
@@ -7,7 +8,7 @@ export const RESEND_VALIDATION_EMAIL_FAILURE = 'RESEND_VALIDATION_EMAIL_FAILURE'
 export const RESET_RESEND_EMAIL_STATE = 'RESET_RESEND_EMAIL_STATE';
 
 
-const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost:3000/api' : '/api';
+
 
 export function resendValidationEmail(tokenFromStorage) {
   const request = axios({

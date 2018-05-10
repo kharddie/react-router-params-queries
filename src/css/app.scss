@@ -13,7 +13,10 @@ $primary-btn-color: $secondary-color;
 $primary-btn-color-hover: $secondary-color-dark;
 
 
-
+@mixin icon-md{
+  width:19px;
+  height:19px;
+}
 
 
 @mixin width-dark-blue-bg {
@@ -142,6 +145,16 @@ body {
   }
 
   /* utilities*/
+img.accepted-offer-tick{
+@include icon-md;
+}
+  .btn-img{
+    padding-top: 0;
+    position: relative;
+    img{
+      @include icon-md;
+    }
+  } 
   .separator{
     margin: 7px 0;
   }
@@ -227,6 +240,37 @@ help-block {
 /*Header*/
 .header {
   background-color: $primary-color;
+  @media screen and (min-width:767px){
+
+   }
+  .navbar {
+      @media screen and (min-width:767px){
+        padding: 0 1rem;
+      }
+      .navbar .nav-link {
+          padding: 1.6rem 1rem;
+          @media screen and (min-width:767px){
+            padding: 0 1rem;
+          }
+      }   
+      .navbar-text {
+          @media screen and (min-width:767px){
+            padding-top: 0;
+            padding-bottom: 0;
+        }   
+      }
+      .nav-link {
+        @media screen and (min-width:767px){
+          padding: 1.2rem 1rem;
+        }
+    }
+    .navbar-collapse {     
+      @media screen and (min-width:767px){
+        align-items: stretch;
+      }
+    }
+  }
+
   .navbar-light .nav-item{
     border:1px solid transparent;
   }
@@ -259,6 +303,43 @@ help-block {
     }
   }
 
+  
+.logo-span {
+  display: inline-block;
+  width: 45px;
+  height: 45px;
+  border: 1px solid #85a00a;
+  border-radius: 30px;
+  position: relative;
+  background-color: #ecfaac;
+  position: relative;
+  img{
+    @include  justify-content-center-center;
+    width: 31px;
+    height: 31px;    
+  }
+}
+
+  .nav-image-icon {
+    height: 12px;
+    width: 18px;
+    display: inline-block;
+    position: relative;
+    margin-right: 4px;
+    img{
+      @include  justify-content-center-center;
+      width: 18px;
+    }
+  .navbar-right{
+
+    li.user-profile{
+      background-color: #ff9e19;
+      border: 1px solid #a9c81e;
+    }
+
+
+  }
+  }
 
 }
 
@@ -267,7 +348,7 @@ help-block {
   //padding:0;
   .nav-item.active,.nav-item:hover{
     background-color: #85a00a;
-    border: 1px solid #a9c81e;
+    border: 1px solid #85a00a;
   }
 
   .dropdown-item.active, 
@@ -538,6 +619,7 @@ only screen and (min-resolution: 2dppx) {
         .header {
           font-size: 17px;
           background-color: transparent;
+          
         }
       }
 

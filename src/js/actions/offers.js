@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { ROOT_URL } from '../helper/config';
 
 //Offer list
 export const FETCH_OFFERS = 'FETCH_OFFERS';
@@ -30,13 +31,18 @@ export const DELETE_OFFER_SUCCESS = 'DELETE_OFFER_SUCCESS';
 export const DELETE_OFFER_FAILURE = 'DELETE_OFFER_FAILURE';
 export const RESET_DELETED_OFFER = 'RESET_DELETED_OFFER';
 
-const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost/react-router-params-queries-api/' : '/api';
+//accepted offer
+export const ACCEPT_OFFER = 'ACCEPT_OFFER';
+export const ACCEPT_OFFER_SUCCESS = 'ACCEPT_OFFER_SUCCESS';
+export const ACCEPT_FAILURE = 'ACCEPT_FAILURE';
+export const RESET_ACCEPTED_OFFER = 'RESET_ACCEPTED_OFFER';
 
-export function fetchOffers(token,requestId) {
+
+export function fetchOffers(token, requestId) {
   const offers = axios({
     method: 'get',
     url: `${ROOT_URL}/offers/read.php?rid=${requestId}`,
-    headers: {'Authorization': `Bearer ${token}`}
+    headers: { 'Authorization': `Bearer ${token}` }
   });
 
   return {
@@ -196,6 +202,49 @@ export function deleteOfferFailure(response) {
   return {
     type: DELETE_OFFER_FAILURE,
     payload: response
+  };
+}
+
+
+export function acceptOffer(offerId, requestId, requestUserId, userId, jwtToken, date) {
+  const offer = axios({
+    method: 'post',
+    data: {
+      user_id: userId,
+      request_id: requestId,
+      offer_id: offerId,
+      request_user_Id: requestUserId,
+      created: date,
+    },
+    url: `${ROOT_URL}/offers/accept_offer.php`,
+    headers: {
+      'Authorization': `Bearer ${jwtToken}`
+    }
+  });
+
+  return {
+    type: ACCEPT_OFFER,
+    payload: offer
+  };
+}
+
+export function acceptOfferSuccess(acceptOffer) {
+  return {
+    type: ACCEPT_OFFER_SUCCESS,
+    payload: acceptOffer
+  };
+}
+
+export function acceptOfferFailure(response) {
+  return {
+    type: ACCEPT_OFFER_FAILURE,
+    payload: response
+  };
+}
+
+export function resetAcceptedOffer() {
+  return {
+    type: RESET_ACCEPTED_OFFER_FAILURE
   };
 }
 

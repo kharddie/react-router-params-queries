@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {ROOT_URL} from '../helper/config';
 
 //Get current user(me) from token in localStorage
 export const ME_FROM_TOKEN = 'ME_FROM_TOKEN';
@@ -28,7 +29,7 @@ export const UPDATE_USER_PROFILE = 'UPDATE_USER_PROFILE';
 //log out user
 export const LOGOUT_USER = 'LOGOUT_USER';
 
-const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost/react-router-params-queries-api' : '/api';
+
 
 export function validateEmail(validateEmailToken) {
   //check if token from welcome email is valid, if so, update email as verified and login the user from response

@@ -68,8 +68,11 @@ export default function (state = INITIAL_STATE, action) {
         case DELETE_PRODUCT_SUCCESS:
             //delete the product from product list
             const newStateDPS = Object.assign({}, state);
-            const indexOfProductToDelete = newStateDPS.productList.products.findIndex(data => {
-                return data.id == action.payload.data
+            newStateDPS.offersList.offers.map(data => {
+                if (parserInt(data.offer_id) === parseInt(action.payload.data.offer_id)) {
+                     data.isOfferAccepted = true;
+                }
+
             })
             newStateDPS.productList.products.splice(indexOfProductToDelete, 1); // remove the deleted product at this position "indexOfProductToDelete"
             return { ...newStateDPS, deletedProduct: { deletedProduct: {}, error: null, loading: false } }

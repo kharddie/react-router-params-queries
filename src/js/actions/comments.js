@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {ROOT_URL} from '../helper/config';
 
 //Comment list
 export const FETCH_COMMENTS = 'FETCH_COMMENTS';
@@ -30,7 +31,6 @@ export const DELETE_COMMENT_SUCCESS = 'DELETE_COMMENT_SUCCESS';
 export const DELETE_COMMENT_FAILURE = 'DELETEREATE_COMMENT_FAILURE';
 export const RESET_DELETED_COMMENT = 'RESET_DELETED_COMMENT';
 
-const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost/react-router-params-queries-api/' : '/api';
 
 export function fetchComments(token,requestId) {
   const request = axios({

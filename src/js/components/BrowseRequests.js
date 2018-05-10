@@ -16,7 +16,8 @@ import { BrowserView, MobileView, isBrowser, isMobile } from "react-device-detec
 import SignInFormContainer from '../containers/SignInFormContainer.js';
 // set Google Maps Geocoding API for purposes of quota management. Its optional but recommended.
 Geocode.setApiKey("AIzaSyCSGUZtwqI8T3N-_qBhy8iJ6AEyrtuTqls");
-import { toTitleCase } from '../helper/index.js'
+import { toTitleCase } from '../helper/index.js';
+
 
 // Enable or disable logs. Its optional.
 Geocode.enableDebug();
@@ -47,6 +48,17 @@ class BrowseRequests extends Component {
             this.setState({ modalvisibleOffers: false });
             this.props.resetNewOffer();
         }
+
+        //accept offer
+        if (!nextProps.acceptedOffer.loading) {
+            this.setState({
+                showOffersAScceptBtn: true
+            })
+        } else if (nextProps.acceptedOffer.loading) {
+            this.setState({
+                showOffersAScceptBtn: false
+            })
+        }
     }
 
     state = {
@@ -65,6 +77,7 @@ class BrowseRequests extends Component {
         status: '',
         showGoogleMap: "show",
         showRequestDetails: "hide",
+        showOffersAScceptBtn: true,
     }
 
     modalBackdropClicked = () => {
@@ -126,6 +139,7 @@ class BrowseRequests extends Component {
         //Querry the database for this request offers  made and comments
         this.props.fetchOffers(data.id);
         this.props.fetchComments(data.id);
+       // this.props.acceptOfferList()
     }
 
     getRequestsTotal(requests) {
@@ -158,10 +172,35 @@ class BrowseRequests extends Component {
         return a.from(b);
     }
 
-    renderOffers = (offers) => {
-        // this.props.resetOffers(); 
+    renderOffers = (offers, acceptedOffer, user) => {
+        let showAcceptedOffer = false;
+        let showAcceptedOfferView = false;
         if (offers.length > 0) {
             return offers.map((data, index) => {
+                showAcceptedOffer = false;
+                showAcceptedOfferView = false;
+                if (user) {
+                    // hide the accept view if this logged in user did not create this request so they cant accept offers
+                    if (this.state.user_id !== user.id) {
+                        showAcceptedOfferView = false;
+                    } else {
+                        showAcceptedOfferView = true;
+                    }
+
+                    if (data.isOfferAccepted) {
+                        showAcceptedOffer = true;
+                    } else {
+                        showAcceptedOffer = false;
+                    }
+
+                    /* if (data.whos_accepted_this === user.id) {
+                         showAcceptedOffer = true;
+                     } else {
+                         showAcceptedOffer = false;
+                     }
+                     */
+                }
+
                 return (
                     <div className="row" key={index}>
                         <div className="col-12 col-xs-12">
@@ -170,7 +209,20 @@ class BrowseRequests extends Component {
                                 <div className="col-sm-3 "><span class="text-uppercase font-weight-bold">{data.user_name}</span></div>
                                 <div className="col-sm-2 "><span class="text-uppercase font-weight-bold"><span class="star"><img class="" src="../../images/star.svg" alt="" /></span></span></div>
                                 <div className="col-sm-3 "><span class="text-uppercase font-weight-normal">{this.timeSpan(data.created, moment)}</span></div>
-                                <div className="col-sm-2 "><span class="text-uppercase font-weight-normal">Accept Offer</span></div>
+                                <div className="col-sm-2 ">
+                                    <span class={showAcceptedOfferView ? "show text-uppercase font-weight-normal" : "hide text-uppercase font-weight-normal"}>
+
+
+                                        <button className={!showAcceptedOffer ? "show btn btn-link btn-sm btn-img" : "hide btn btn-link btn-sm"} onClick={() => { this.props.acceptOffer(data.offer_id, this.state.request_id, this.state.user_id, this.props.user.id) }}>
+                                            Accept offer
+                                        </button>
+                                        <span className={showAcceptedOffer ? "show" : "hide"}><img className="accepted-offer-tick" src="../../images/checked.svg" alt="" /></span>
+
+
+
+
+                                    </span>
+                                </div>
                             </div>
                         </div>
                         <div className="col-12 separator"></div>
@@ -288,12 +340,18 @@ class BrowseRequests extends Component {
         }
     }
 
+
+
     render() {
         const { requests, loading, error, message } = this.props.requestsList;
         const { offers } = this.props.offersList;
         const { comments } = this.props.commentsList;
-        const { history } = this.props;
+        const { history, acceptedOffer, user } = this.props;
         const origin = "browseRequest";
+        const isLoggedIn = this.props.user;
+
+
+
 
         let noRequestsMessage = '';
         global.points = [];
@@ -302,7 +360,6 @@ class BrowseRequests extends Component {
             noRequestsMessage = message;
         }
 
-        const isLoggedIn = this.props.user;
 
         $(document).ready(function () {
             $('.carousel').carousel({
@@ -423,7 +480,7 @@ class BrowseRequests extends Component {
                                         </div>
 
                                         <div className="col-12">
-                                            {this.renderOffers(offers)}
+                                            {this.renderOffers(offers, acceptedOffer, user)}
                                         </div>
 
                                         <div className="joinConvo">
@@ -518,7 +575,7 @@ class BrowseRequests extends Component {
                     </div>
                     <div className="modal-body">
                         <div className="container">
-                            <div><SignInFormContainer location={location} history={history} heading="Sign in to join conversation" origin={origin} modalBackdropClicked={this.modalBackdropClicked}/></div>
+                            <div><SignInFormContainer location={location} history={history} heading="Sign in to join conversation" origin={origin} modalBackdropClicked={this.modalBackdropClicked} /></div>
                         </div>
                     </div>
 

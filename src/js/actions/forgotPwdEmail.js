@@ -1,15 +1,10 @@
 import axios from 'axios';
-
+import {ROOT_URL} from '../helper/config';
 //Resend validation email
 export const FORGOT_PWD_EMAIL = 'FORGOT_PWD_EMAIL';
 export const FORGOT_PWD_EMAIL_SUCCESS = 'FORGOT_PWD_EMAIL_SUCCESS';
 export const FORGOT_PWD_EMAIL_FAILURE = 'FORGOT_PWD_EMAIL_FAILURE';
 export const RESET_RESEND_EMAIL_STATE = 'RESET_FORGOT_PWD_EMAIL_STATE';
-
-
-const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost/react-router-params-queries-api/' : '/api';
-
-
 
 
 export function forgotPwdEmail(props, tokenFromStorage) {

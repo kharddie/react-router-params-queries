@@ -62,7 +62,7 @@ const asyncValidate = (values, dispatch) => {
 
 //For any field errors upon submission (i.e. not instant check)
 const validateAndUpdateProfile = (values, state, props, dispatch) => {
-  if (state.state.phoneValid) {
+ // if (state.state.phoneValid) {
     values.id = props.user.id;
     values.contact_number = state.state.phoneNumber;
     return dispatch(updateProfile(values, sessionStorage.getItem('jwtToken')))
@@ -77,7 +77,7 @@ const validateAndUpdateProfile = (values, state, props, dispatch) => {
         dispatch(updateProfileSuccess(result.payload.data));
         dispatch(updateUserProfile(result.payload.data)); //update current user's Profile (in user's state)
       });
-  }
+  //}
 };
 
 
@@ -173,7 +173,7 @@ class UpdateProfileForm extends Component {
             component={renderField}
             label="Update User name*" />
 
-
+{/*
           <RenderPhoneNumber
             name="contact_number"
             type="text"
@@ -183,8 +183,11 @@ class UpdateProfileForm extends Component {
             phoneValid={this.state.phoneValid}
             phoneError={this.state.phoneError}
             phoneOnChangeHandler={this.phoneOnChangeHandler} />
-
-
+*/}
+            <Field
+                                name="contact_number"
+                                component={renderField}
+                                label="Please provide phone number" />
 
 
           <Field

@@ -1,13 +1,11 @@
 import axios from 'axios';
-
+import {ROOT_URL} from '../helper/config';
 
 //update  profile
 export const UPDATE_PROFILE = 'UPDATE_PROFILE';
 export const UPDATE_PROFILE_SUCCESS = 'UPDATE_PROFILE_SUCCESS';
 export const UPDATE_PROFILE_FAILURE = 'UPDATE_PROFILE_FAILURE';
 export const RESET_UPDATE_PROFILE_STATE = 'RESET_UPDATE_PROFILE_STATE';
-
-const ROOT_URL = location.href.indexOf('localhost') > 0 ? 'http://localhost/react-router-params-queries-api/' : '/api';
 
 export function updateProfile(profile, tokenFromStorage) {
   const request = axios({
