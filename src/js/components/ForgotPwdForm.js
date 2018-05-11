@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
-import { forgotPwdEmail, forgotPwdEmailSuccess, forgotPwdEmailFailure, resetUserFields } from '../actions/forgotPwdEmail';
+import { forgotPwdEmail, forgotPwdEmailSuccess, forgotPwdEmailFailure, resetForgotPwdState } from '../actions/forgotPwdEmail';
 import { reduxForm, Field, SubmissionError } from 'redux-form';
 import { connect } from 'react-redux';
 import renderField from './renderField';
@@ -63,7 +63,7 @@ class ForgotPwdForm extends Component {
           <div class="col-sm-12 col-md-6">
             <div><h2>Recover password</h2>
             </div>
-            <form className="forgot-pwd" onSubmit={handleSubmit(validateAndForgotPwd)}>
+            <form className="forgot-pwd"   onSubmit={handleSubmit(validateAndForgotPwd)}>
               <Field
                 name="email"
                 type="email"

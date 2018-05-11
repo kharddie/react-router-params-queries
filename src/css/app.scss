@@ -90,6 +90,10 @@ html,body,#app,.app-bg-image ,.notHomePage {
   background-position:center;
 }
 
+.app-bg-image-height-auto{
+  height: auto !important;
+}
+
 .content-container {
   min-height: 100%;
   height: auto !important;
@@ -154,6 +158,9 @@ html,body,#app,.app-bg-image ,.notHomePage {
 
 .joinConvo{
   width:100%;
+  .join-convo-image-wrapper {
+    margin: 10px 0 30px;
+  }
 }
 .form-container-width-btn-inside{
   .btn-outline-secondary{
@@ -196,7 +203,9 @@ html,body,#app,.app-bg-image ,.notHomePage {
   }
 
   /* utilities*/
-
+.btn {
+    position: relative;
+}
   .tiny-text {
     font-size: 80%;
 }
@@ -252,6 +261,10 @@ h2, .h2 {
 
 .btn {
   border-radius: 0;
+}
+
+.btn-with-spinner {
+  min-height: 31px;
 }
 
 .form-control {
@@ -310,6 +323,9 @@ help-block {
   background-color: $primary-color;
   @media screen and (min-width:767px){
 
+   }
+   .navbar-brand {
+    padding-top: 0.7125rem;
    }
   .navbar {
       @media screen and (min-width:767px){
@@ -806,7 +822,7 @@ form.request-form > div:first-of-type {
 }
 
 /*forgot password*/
-.forgot-pwd{
+.forgot-pwd,.reset-pwd{
   @include width-dark-blue-bg;
 }
 

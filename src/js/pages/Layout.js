@@ -64,16 +64,33 @@ class Layout extends React.Component {
     const pageFitScreen = () => {
       if (location.pathname == "/") {
         return "app-bg-image page-fit-screen-fit ";
-      } 
-     /* 
-      else if (location.pathname == "/browseRequests") {
+      }
+
+      else if (location.pathname == "/forgotPwd" || location.pathname == "/resetPwd" ) {
         if (isMobile) {
           return "notHomePage";
         } else {
           return "app-bg-image page-fit-screen-fit ";
         }
-      } 
-      */
+      }
+
+      else if ( location.pathname == "/signUp") {
+        if (isMobile) {
+          return "notHomePage";
+        } else {
+          return "app-bg-image app-bg-image-height-auto";
+        }
+      }
+
+      /* 
+       else if (location.pathname == "/browseRequests") {
+         if (isMobile) {
+           return "notHomePage";
+         } else {
+           return "app-bg-image page-fit-screen-fit ";
+         }
+       } 
+       */
       else {
         return "notHomePage";
       }
@@ -82,7 +99,15 @@ class Layout extends React.Component {
     const pageFitScreen2 = () => {
       if (location.pathname == "/") {
         return "content-container-fit-screen";
-      } 
+      }
+
+      else if (location.pathname == "/forgotPwd" || location.pathname == "/resetPwd") {
+        if (isMobile) {
+          return "notHomePage";
+        } else {
+          return "content-container-fit-screen";
+        }
+      }
       /*else if (location.pathname == "/browseRequests") {
         if (isMobile) {
           return "notHomePage";

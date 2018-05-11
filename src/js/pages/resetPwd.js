@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import ForgotPwdFormContainer from '../containers/ResetPwdContainer.js';
+import ResetPwdFormContainer from '../containers/ResetPwdContainer.js';
 
-class ForgotPwd extends Component {
+class ResetPwd extends Component {
   render() {
     return (
       <div>
-        <ForgotPwdFormContainer />
+        <ResetPwdFormContainer />
       </div>
     );
   }
 }
 
 
-export default ForgotPwd;
+export default ResetPwd;

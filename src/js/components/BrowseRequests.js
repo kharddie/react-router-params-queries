@@ -525,14 +525,14 @@ class BrowseRequests extends Component {
                                                     <CreateCommentForm fetchComments={this.props.fetchComments} requestId={this.state.request_id} />
                                                 ) : (
 
-                                                        <div className="row">
-                                                            <div className="col-12 col-xs-12 col-sm-8">
+                                                        <div >
+                                                            <div className="col-12 col-xs-12 ">
                                                                 <div className="row">
                                                                     <div className="col-12 text-left">
                                                                         <span class="text-uppercase font-weight-bold">Join the conversation</span>
                                                                     </div>
-                                                                    <div className="col-12 col-sm-5">
-                                                                        <button onClick={this.modalvisibleSignIn.bind(this)} className="btn btn-secondary btn-sm">log in</button>
+                                                                    <div className="col-12 col-sm-5 join-convo-image-wrapper">
+                                                                        <button onClick={this.modalvisibleSignIn.bind(this)} className="btn btn-primary btn-sm">log in</button>
                                                                     </div>
                                                                 </div>
                                                             </div>

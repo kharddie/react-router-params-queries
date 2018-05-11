@@ -4,7 +4,9 @@ import { IndexLink, Link } from 'react-router';
 import { reduxForm, Field, SubmissionError } from 'redux-form';
 import renderField from '../components/renderField';
 import { signInUser, signInUserSuccess, signInUserFailure, resetUserFields } from '../actions/users';
-import { showInfoMessage, resetShowInfoMessage } from '../actions/infoMessage'
+import { showInfoMessage, resetShowInfoMessage } from '../actions/infoMessage';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner';
 //Client side validation
 function validate(values) {
   var errors = {};
@@ -30,7 +32,7 @@ const validateAndSignInUser = (values, state, props, dispatch) => {
       if (!result.payload.data.error) { //success
         sessionStorage.setItem('jwtToken', result.payload.data.token);
         dispatch(signInUserSuccess(result.payload.data));
-        if(props.showModalCreateRequest){
+        if (props.showModalCreateRequest) {
           props.showModalCreateRequest();
         }
       }
@@ -55,9 +57,9 @@ class SignInForm extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.user.status === 'authenticated' && nextProps.user.user && !nextProps.user.error) {
-      if(!nextProps.origin){
+      if (!nextProps.origin) {
         this.props.history.push('/');
-      }else{
+      } else {
         this.props.modalBackdropClicked()
       }
     }
@@ -91,9 +93,10 @@ class SignInForm extends Component {
               <div className="text-right">
                 <button
                   type="submit"
-                  className="btn btn-primary btn-block"
+                  className="btn btn-primary btn-with-spinner btn-block"
                   disabled={submitting}>
-                  Submit
+                  <span className={!this.props.user.loading ? "show" : "hide"} > Sign in</span>
+                  <span className={this.props.user.loading ? "show" : "hide"}  ><FontAwesomeIcon size="lg" className="fa-spin spinner" icon={faSpinner} /></span>
                 </button>
               </div>
             </form>

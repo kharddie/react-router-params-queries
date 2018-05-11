@@ -1,4 +1,4 @@
-import ForgotPwdForm from '../components/resetPwd.js';
+import ResetPwdForm from '../components/resetPwdForm.js';
 import { connect } from 'react-redux';
 
 const mapDispatchToProps = (dispatch) => {
@@ -15,4 +15,4 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ForgotPwdForm);
+export default connect(mapStateToProps, mapDispatchToProps)(ResetPwdForm);
