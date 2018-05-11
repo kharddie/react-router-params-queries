@@ -5,6 +5,7 @@ import Nav from "../components/layout/Nav";
 import { meFromToken, meFromTokenSuccess, meFromTokenFailure, resetToken } from '../actions/users';
 import { connect } from "react-redux"
 //import { connect } from "http2";
+import { BrowserView, MobileView, isBrowser, isMobile } from "react-device-detect";
 
 
 const mapDispatchToProps = (dispatch) => {
@@ -60,21 +61,49 @@ class Layout extends React.Component {
       marginTop: "40px"
     };
 
-    const isHomePage = () => {
+    const pageFitScreen = () => {
       if (location.pathname == "/") {
-        return "isHomePage";
-      } else {
+        return "app-bg-image page-fit-screen-fit ";
+      } 
+     /* 
+      else if (location.pathname == "/browseRequests") {
+        if (isMobile) {
+          return "notHomePage";
+        } else {
+          return "app-bg-image page-fit-screen-fit ";
+        }
+      } 
+      */
+      else {
         return "notHomePage";
-      } isHomePage
+      }
+    }
+
+    const pageFitScreen2 = () => {
+      if (location.pathname == "/") {
+        return "content-container-fit-screen";
+      } 
+      /*else if (location.pathname == "/browseRequests") {
+        if (isMobile) {
+          return "notHomePage";
+        } else {
+          return "content-container-fit-screen";
+        }
+      } 
+      */else {
+        return "notHomePage";
+      }
     }
 
     return (
-      <div className={isHomePage()}>
-        <Nav location={location} history={history} />
-        <div className="container main-content " style={containerStyle}>
-          <div className="row">
-            <div className="col col-12">
-              {this.props.children}
+      <div className={pageFitScreen()}>
+        <div class={"content-container " + pageFitScreen2()}>
+          <Nav location={location} history={history} />
+          <div className="container main-content " style={containerStyle}>
+            <div className="row">
+              <div className="col col-12">
+                {this.props.children}
+              </div>
             </div>
           </div>
         </div>

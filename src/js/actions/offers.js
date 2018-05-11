@@ -38,6 +38,12 @@ export const ACCEPT_FAILURE = 'ACCEPT_FAILURE';
 export const RESET_ACCEPTED_OFFER = 'RESET_ACCEPTED_OFFER';
 
 
+//accepted offer list
+export const FETCH_ACCEPTED_OFFER_LIST = 'FETCH_ACCEPTED_OFFER_LIST';
+export const FETCH_ACCEPTED_OFFER_LIST_SUCCESS = 'FETCH_ACCEPTED_OFFER_LIST_SUCCESS';
+export const FETCH_ACCEPTED_OFFER_LIST_FAILURE = 'FETCH_ACCEPTED_OFFER_LIST_FAILURE';
+export const RESET_FETCH_ACCEPTED_OFFER_LIST = 'RESET_FETCH_ACCEPTED_OFFER_LIST';
+
 export function fetchOffers(token, requestId) {
   const offers = axios({
     method: 'get',
@@ -244,10 +250,43 @@ export function acceptOfferFailure(response) {
 
 export function resetAcceptedOffer() {
   return {
-    type: RESET_ACCEPTED_OFFER_FAILURE
+    type: RESET_ACCEPTED_OFFER
   };
 }
 
 
+export function fetchAcceptedOfferList(jwtToken) {
+  const offer = axios({
+    method: 'post',
+    data: {},
+    url: `${ROOT_URL}/offers/accepted_offer_list.php`,
+    headers: {
+      'Authorization': `Bearer ${jwtToken}`
+    }
+  });
 
+  return {
+    type: FETCH_ACCEPTED_OFFER_LIST,
+    payload: offer
+  };
+}
 
+export function fetchAcceptedOfferListSuccess(acceptOffer) {
+  return {
+    type: FETCH_ACCEPTED_OFFER_LIST_SUCCESS,
+    payload: acceptOffer
+  };
+}
+
+export function fetchAcceptedOfferListFailure(response) {
+  return {
+    type: FETCH_ACCEPTED_OFFER_LIST_FAILURE,
+    payload: response
+  };
+}
+
+export function resetAcceptedOfferList() {
+  return {
+    type: RESET_FETCH_ACCEPTED_OFFER_LIST
+  };
+}

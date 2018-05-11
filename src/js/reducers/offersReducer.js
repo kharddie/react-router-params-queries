@@ -6,6 +6,8 @@ import {
 
   ACCEPT_OFFER, ACCEPT_OFFER_SUCCESS, ACCEPT_OFFER_FAILURE, RESET_ACCEPTED_OFFER,
 
+  FETCH_ACCEPTED_OFFER_LIST, FETCH_ACCEPTED_OFFER_LIST_SUCCESS, FETCH_ACCEPTED_OFFER_LIST_FAILURE, RESET_FETCH_ACCEPTED_OFFER_LIST,
+
   VALIDATE_OFFER_FIELDS, VALIDATE_OFFER_FIELDS_SUCCESS, VALIDATE_OFFER_FIELDS_FAILURE, RESET_OFFER_FIELDS
 } from '../actions/offers';
 
@@ -14,6 +16,7 @@ const INITIAL_STATE = {
   offersList: { offers: [], error: null, loading: false },
   newOffer: { offer: null, error: null, loading: false },
   activeOffer: { offer: null, error: null, loading: false },
+  acceptedOfferList: { acceptedOfferList: [], error: null, loading: false, success: false },
   deletedOffer: { offer: null, error: null, loading: false },
   acceptOffer: { acceptOffer: null, error: null, loading: false, success: false }
 
@@ -55,6 +58,18 @@ export default function (state = INITIAL_STATE, action) {
       return { ...state, newOffer: { offer: null, error: null, loading: false } }
 
 
+
+    case FETCH_ACCEPTED_OFFER_LIST:
+      return { ...state, acceptedOfferList: { acceptedOfferList:[], loading: true, success: false } }
+    case FETCH_ACCEPTED_OFFER_LIST_SUCCESS:
+      return { ...state, acceptedOfferList: { acceptedOfferList: action.payload, error: null, loading: false, success: true } }
+    case FETCH_ACCEPTED_OFFER_LIST_FAILURE:
+      return { ...state, acceptedOfferList: { acceptedOfferList: null, error: error, loading: false, success: false } }
+    case RESET_FETCH_ACCEPTED_OFFER_LIST:
+      return { ...state, acceptedOfferList: { acceptedOfferList: null, error: null, loading: false, success: false } }
+
+
+
     case DELETE_OFFER:
       return { ...state, deletedOffer: { ...state.deletedOffer, loading: true } }
     case DELETE_OFFER_SUCCESS:
@@ -64,6 +79,9 @@ export default function (state = INITIAL_STATE, action) {
       return { ...state, deletedOffer: { offer: null, error: error, loading: false } }
     case RESET_DELETED_OFFER:
       return { ...state, deletedOffer: { offer: null, error: null, loading: false } }
+
+
+
 
     case VALIDATE_OFFER_FIELDS:
       return { ...state, newOffer: { ...state.newOffer, error: null, loading: true } }
@@ -82,7 +100,7 @@ export default function (state = INITIAL_STATE, action) {
 
 
     case ACCEPT_OFFER:
-      return { ...state, acceptOffer: { acceptOffer: [], error: null, loading: true, success: false } }
+      return { ...state, acceptOffer: { acceptOffer: null, error: null, loading: true, success: false } }
     case ACCEPT_OFFER_SUCCESS:
       let success = false
       if (action.payload.data.id !== '' && action.payload.error !== "true") {
@@ -93,9 +111,9 @@ export default function (state = INITIAL_STATE, action) {
 
       const newState = Object.assign({}, state);
       newState.offersList.offers.map(data => {
-          if (parseInt(data.offer_id) === parseInt(action.payload.data.offer_id)) {
-               data.isOfferAccepted = true;
-          }
+        if (parseInt(data.offer_id) === parseInt(action.payload.data.offer_id)) {
+          data.isOfferAccepted = true;
+        }
 
       })
 

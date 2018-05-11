@@ -17,6 +17,7 @@ import SignInFormContainer from '../containers/SignInFormContainer.js';
 // set Google Maps Geocoding API for purposes of quota management. Its optional but recommended.
 Geocode.setApiKey("AIzaSyCSGUZtwqI8T3N-_qBhy8iJ6AEyrtuTqls");
 import { toTitleCase } from '../helper/index.js';
+import renderHTML from 'react-render-html';
 
 
 // Enable or disable logs. Its optional.
@@ -40,6 +41,13 @@ class BrowseRequests extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        //update request status to assigned 
+        if (nextProps.requestToBeUpdated) {
+            this.setState({
+                status: nextProps.requestToBeUpdated.status
+            })
+            this.props.resetAcceptedOffer();
+        }
 
         // console.log(nextProps.requestsList.requests)
         // console.log(nextProps.resetRequestxx.message)
@@ -78,6 +86,7 @@ class BrowseRequests extends Component {
         showGoogleMap: "show",
         showRequestDetails: "hide",
         showOffersAScceptBtn: true,
+        showOfferModal: true
     }
 
     modalBackdropClicked = () => {
@@ -86,7 +95,9 @@ class BrowseRequests extends Component {
     }
 
     modalvisibleOffers = () => {
-        this.setState({ modalvisibleOffers: true });
+        if (this.state.status !== "Assigned" || this.state.status !== "Completed" && this.state.showOfferModal) {
+            this.setState({ modalvisibleOffers: true });
+        }
     }
     modalvisibleSignIn = () => {
         this.setState({ modalvisibleSignIn: true });
@@ -113,12 +124,16 @@ class BrowseRequests extends Component {
         // disabled if its the user that created the request
         if (!this.props.user) {
             $(".offer-to-assist").attr("disabled", "disabled");
+            this.setState({ showOfferModal: false })
         } else if (this.props.user && this.props.user.id === data.user_id) {
             $(".offer-to-assist").attr("disabled", "disabled");
+            this.setState({ showOfferModal: false })
         } else if (this.props.user && this.props.user.id !== data.user_id) {
             $(".offer-to-assist").prop("disabled", false)
+            this.setState({ showOfferModal: true })
         } else {
             $(".offer-to-assist").prop("disabled", false)
+            this.setState({ showOfferModal: true })
         }
         console.log(data);
         this.setState({
@@ -139,7 +154,7 @@ class BrowseRequests extends Component {
         //Querry the database for this request offers  made and comments
         this.props.fetchOffers(data.id);
         this.props.fetchComments(data.id);
-       // this.props.acceptOfferList()
+        this.props.acceptedOfferList()
     }
 
     getRequestsTotal(requests) {
@@ -205,7 +220,7 @@ class BrowseRequests extends Component {
                     <div className="row" key={index}>
                         <div className="col-12 col-xs-12">
                             <div className="row" >
-                                <div className="col-sm-2 "><img class="user-image" src="../../images/user.svg" alt="" /></div>
+                                <div className="col-sm-2 col-max-width-fifty"><img class="user-image" src="../../images/user.svg" alt="" /></div>
                                 <div className="col-sm-3 "><span class="text-uppercase font-weight-bold">{data.user_name}</span></div>
                                 <div className="col-sm-2 "><span class="text-uppercase font-weight-bold"><span class="star"><img class="" src="../../images/star.svg" alt="" /></span></span></div>
                                 <div className="col-sm-3 "><span class="text-uppercase font-weight-normal">{this.timeSpan(data.created, moment)}</span></div>
@@ -243,17 +258,19 @@ class BrowseRequests extends Component {
             return comments.map((data, index) => {
                 return (
                     <div className="row" key={index}>
-                        <div className="col-12 col-xs-12 col-sm-8">
+                        <div className="col-12 col-xs-12">
                             <div className="row" >
-                                <div className="col-sm-2 "><img class="user-image" src="../../images/user.svg" alt="" /></div>
-                                <div className="col-sm-10 ">
+                                <div className="col-sm-1 "><img class="user-image" src="../../images/user.svg" alt="" /></div>
+                                <div className="col-sm-11 ">
                                     <span class="text-uppercase font-weight-bold">{data.user_name}</span>
-                                    <div>{data.content}</div>
+                                    <div>{renderHTML(data.content)}</div>
                                 </div>
                             </div>
                             <div className="row" >
-                                <div className="col-sm-2"></div>
-                                <div className="col-sm-10 "><span class="text-uppercase font-weight-normal">{this.timeSpan(data.created, moment)}</span></div>
+                                <div className="col-sm-1"></div>
+                                <div className="col-sm-11 ">
+                                    <span className="comments-span-top"></span>
+                                    <span class="text-uppercase font-weight-normal font-italic tiny-text">{this.timeSpan(data.created, moment)}</span></div>
                             </div>
                         </div>
                         <div className="col-12 separator"></div>
@@ -320,7 +337,7 @@ class BrowseRequests extends Component {
                                             <div className="row">
                                                 <div className="col-12">
                                                     <span class="text-uppercase font-weight-bold">Details<br /></span>
-                                                    {data.content}
+                                                    {renderHTML(data.content)}
                                                 </div>
                                             </div>
                                         </div>
@@ -346,12 +363,32 @@ class BrowseRequests extends Component {
         const { requests, loading, error, message } = this.props.requestsList;
         const { offers } = this.props.offersList;
         const { comments } = this.props.commentsList;
-        const { history, acceptedOffer, user } = this.props;
+        const { history, acceptedOffer, user, acceptOfferListALL } = this.props;
         const origin = "browseRequest";
         const isLoggedIn = this.props.user;
+        let loadingAcceptOfferListALL = true;
+        /*
+                if(acceptOfferListALL.acceptedOfferList.hasOwnProperty("data")  && !acceptOfferListALL.error){
+                    loadingAcceptOfferListALL = false;
+                }else if(!acceptOfferListALL.acceptedOfferList.hasOwnProperty("data") && acceptOfferListALL.error){
+                    loadingAcceptOfferListALL = true;
+                }
+        */
+        if (acceptOfferListALL.loading) {
+            loadingAcceptOfferListALL = false;
+        } else if (!acceptOfferListALL.loading) {
+            loadingAcceptOfferListALL = true;
+        }
 
+        //check if the current logged in user has offerd to assist on this request
+        let newArray = []
+        if (acceptOfferListALL.acceptedOfferList.hasOwnProperty("data")) {
+            newArray = acceptOfferListALL.acceptedOfferList.data.filter((el) => {
+                // return parseInt(el.id) === parseInt(this.props.user.id);
+            });
+        }
 
-
+        newArray;
 
         let noRequestsMessage = '';
         global.points = [];
@@ -381,10 +418,6 @@ class BrowseRequests extends Component {
             <div className="container requests">
                 {this.getRequestsTotal(requests)}
                 <div class="row">
-
-
-
-
                     <div className="col-md-4 scrollable-content requests-small">
                         <div className="loader-show loader-spinner-container">
                             <FontAwesomeIcon size="lg" className="fa-spin spinner" icon={faSpinner} />
@@ -410,15 +443,14 @@ class BrowseRequests extends Component {
                                             </ul>
                                         </div>
                                     </div>
-
                                     <div className="row">
                                         <div className="col-12 col-xs-12 col-sm-8">
                                             <div className="row" >
-                                                <div className="col-12 col-xs-12 col-sm-7">
+                                                <div className="col-12 col-xs-12 col-sm-12 col-md-7">
                                                     <div className="row tiny-text" >
-                                                        <div className="col "><span className="request-status request-status-open">Open</span></div>
-                                                        <div className="col "><span className="request-status request-status-assigned">Assigned</span></div>
-                                                        <div className="col "><span className="request-status request-status-completed">Completed</span></div>
+                                                        <div className="col "><span className="request-status request-status-bg-color request-status-open">Open</span></div>
+                                                        <div className="col "><span className={this.state.status === "Assigned" ? "request-status request-status-bg-color request-status-assigned" : "request-status  request-status-assigned"}>Assigned</span></div>
+                                                        <div className="col "><span className={this.state.status === "Complete" ? "request-status request-status-bg-color request-status-completed" : "request-status  request-status-completed"}>Completed</span></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -427,43 +459,46 @@ class BrowseRequests extends Component {
                                             </div>
 
                                             <div className="row" >
-                                                <div className="col col-sm-2">
+                                                <div className="col-sm-2 col-max-width-fifty">
                                                     <img class="user-image" src="../../images/user.svg" alt="" />
                                                 </div>
-                                                <div className="col col-sm-6  text-uppercase font-weight-bold">Posted by: <br /><span class="text-capitalize"><span class="font-weight-normal">{this.state.name}</span></span></div>
+                                                <div className="col col-sm-6   text-uppercase font-weight-bold">Posted by: <br /><span class="text-capitalize"><span class="font-weight-normal">{this.state.name}</span></span></div>
                                                 <div className="col col-sm-4 text-right"><br /><span class="text-capitalize font-weight-normal">{this.timeSpan(this.state.created, moment)}.</span></div>
                                             </div>
 
                                             <div className="row separator" >
-                                                <div class="col col-sm-2 d-none d-sm-block"></div>
+                                                <div class="col col-sm-2 col-max-width-fifty d-none d-sm-block"></div>
                                                 <div class="col col-sm-10 col-padding-left-0"></div>
                                             </div>
 
                                             <div className="row" >
-                                                <div className="col-sm-2"><img class="icon-image" src="../../images/placeholder.svg" alt="" /></div>
+                                                <div className="col-sm-2 col-max-width-fifty"><img class="icon-image" src="../../images/placeholder.svg" alt="" /></div>
                                                 <div className="col-sm-10 "><span class="text-uppercase font-weight-bold">Address</span><br />{this.state.address}</div>
                                             </div>
                                             <div className="row separator" >
-                                                <div class="col col-sm-2 d-none d-sm-block"></div>
+                                                <div class="col col-sm-2 col-max-width-fifty d-none d-sm-block"></div>
                                                 <div class="col col-sm-10 col-padding-left-0"></div>
                                             </div>
 
                                             <div className="row" >
-                                                <div className="col-sm-2 "><img class="icon-image" src="../../images/calendar.svg" alt="" /></div>
+                                                <div className="col-sm-2 col-max-width-fifty"><img class="icon-image" src="../../images/calendar.svg" alt="" /></div>
                                                 <div className="col-sm-10 "><span class="text-uppercase font-weight-bold">Due date</span><br />{moment(this.state.due_date).format('d MMM YYYY')}</div>
                                             </div>
                                         </div>
                                         <div className="col-12 col-xs-12 col-sm-4 col-xs-12 text-center">
                                             <div className="col-12 separator d-sm-none"></div>
                                             <div className="payment-panel">
-                                                <div><button type="button" class="btn btn-success offer-to-assist" onClick={this.modalvisibleOffers}>Offer to assist</button></div>
+                                                <div><button type="button" class="btn btn-success offer-to-assist" onClick={this.modalvisibleOffers}>
+                                                    <span className={loadingAcceptOfferListALL ? "text-in-btn show" : "text-in-btn hide"} > Offer to assist</span>
+                                                    <span className={!loadingAcceptOfferListALL ? "spinner-in-btn show" : "text-in-btn hide"}  ><FontAwesomeIcon size="lg" className="fa-spin spinner" icon={faSpinner} /></span>
+                                                </button></div>
                                             </div>
                                         </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-12 content">
                                             <span class="text-uppercase font-weight-bold">Details<br /></span>
-                                            {this.state.content}
+                                            {renderHTML(this.state.content)}
                                         </div>
                                     </div>
                                     <div className="row footer" >
@@ -517,7 +552,6 @@ class BrowseRequests extends Component {
                         </div>
                     </div>
                     <div class="col-md-4">
-
                     </div>
                 </div>
                 <Modal visible={this.state.modalvisibleOffers} onClickBackdrop={this.modalBackdropClicked} dialogClassName="modal-md">
@@ -561,7 +595,6 @@ class BrowseRequests extends Component {
                     <div className="modal-footer"></div>
                 </Modal>
 
-
                 <Modal visible={this.state.modalvisibleSignIn} onClickBackdrop={this.modalBackdropClicked} dialogClassName="modal-md">
                     <div className="modal-header">
                         <div className="container">
@@ -580,8 +613,6 @@ class BrowseRequests extends Component {
                     </div>
 
                 </Modal>
-
-
 
                 <div className="scrollableContentHeight-btn-holder">
                     <button onClick={this.scrollableContentHeight.bind(this)} className="scrollableContentHeight-btn btn btn-secondary btn-block">Back</button>

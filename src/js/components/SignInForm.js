@@ -4,7 +4,7 @@ import { IndexLink, Link } from 'react-router';
 import { reduxForm, Field, SubmissionError } from 'redux-form';
 import renderField from '../components/renderField';
 import { signInUser, signInUserSuccess, signInUserFailure, resetUserFields } from '../actions/users';
-
+import { showInfoMessage, resetShowInfoMessage } from '../actions/infoMessage'
 //Client side validation
 function validate(values) {
   var errors = {};
@@ -36,7 +36,7 @@ const validateAndSignInUser = (values, state, props, dispatch) => {
       }
       if (result.payload.data.error) { //failed
         dispatch(signInUserFailure(result.payload.data));
-        throw new SubmissionError(result.payload.data);
+        dispatch(showInfoMessage(result.payload.data));
       }
 
     });
