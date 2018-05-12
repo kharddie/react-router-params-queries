@@ -3,7 +3,7 @@ console.log("This is the Webpack 4 'mode':" + process.env.NODE_ENV);
 const webpack = require('webpack');
 const path = require('path');
 const CleanWebpackPlugin = require("clean-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const PATHS = {
   app: path.join(__dirname, "src"),
@@ -31,8 +31,8 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
-        exclude: /(node_modules|bower_components)/,
+        test: /\.js$/,
+        exclude: /node_modules/,
         loader: 'babel-loader',
         query: {
           presets: ['react', 'es2015', 'stage-0'],
@@ -49,21 +49,34 @@ module.exports = {
           }
         }]
       },
+      
       {
         test: /\.scss$/,
         loader: 'style-loader!css-loader!sass-loader'
       },
 
+
+
       {
         test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, "css-loader"],  //******* use[] instead of loaders[]
+        use: [MiniCssExtractPlugin.loader, "css-loader","postcss-loader"],  //******* use[] instead of loaders[]
       },
+
+
+
+
+
       { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=10000&mimetype=application/font-woff" },
       { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader" },
+
+
       {
         test: /\.(png|jpg|svg)$/,
         loader: "url-loader",
       },
+
+
+
     ]
   },
 
@@ -81,8 +94,15 @@ module.exports = {
       // Options similar to the same options in webpackOptions.output
       // both options are optional
       filename: "[name].css",
-      chunkFilename: "[id].css"
-    })
+      chunkFilename: "[id].css",
+      options: {
+        plugins: () => [require("autoprefixer")()],
+    }
+    }),
+    new webpack.NamedModulesPlugin(),
+    new CopyWebpackPlugin([
+      { from: PATHS.app + '/images', to: 'images' }
+    ]),
 
   ],
 };

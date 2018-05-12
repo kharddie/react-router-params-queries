@@ -1,11 +1,12 @@
 import axios from 'axios';
 import {ROOT_URL} from '../helper/config';
+
 //Resend validation email
 export const FORGOT_PWD_EMAIL = 'FORGOT_PWD_EMAIL';
 export const FORGOT_PWD_EMAIL_SUCCESS = 'FORGOT_PWD_EMAIL_SUCCESS';
 export const FORGOT_PWD_EMAIL_FAILURE = 'FORGOT_PWD_EMAIL_FAILURE';
-export const RESET_RESEND_EMAIL_STATE = 'RESET_FORGOT_PWD_EMAIL_STATE';
-
+export const RESET_FORGOT_PWD_EMAIL = 'RESET_FORGOT_PWD_EMAIL';
+//reset pwd
 export const FORGOT_PWD_RESET = 'FORGOT_PWD_RESET';
 export const FORGOT_PWD_RESET_SUCCESS = 'FORGOT_PWD_RESET_SUCCESS';
 export const FORGOT_PWD_RESET_FAILURE = 'FORGOT_PWD_RESET_FAILURE';
@@ -40,9 +41,9 @@ export function forgotPwdEmailFailure(error) {
   };
 }
 
-export function resetForgotPwdState() {
+export function resetForgotPwdEmail() {
   return {
-    type: RESET_FORGOT_PWD_EMAIL_STATE
+    type: RESET_FORGOT_PWD_EMAIL
   };
 }
 

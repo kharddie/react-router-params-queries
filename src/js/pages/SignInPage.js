@@ -4,6 +4,7 @@ import { IndexLink, Link } from 'react-router';
 import renderField from '../components/renderField';
 import SignInFormContainer from '../containers/SignInFormContainer.js';
 
+
 class SignInPage extends React.Component {
 
   componentWillMount() {
@@ -42,8 +43,8 @@ class SignInPage extends React.Component {
             <div className="row">
               <div className="col-md-8">
                 <h1 className="title-page title-page-margin">New customer?</h1>
-                <p> Set up a go via account to make travelling onQueensland toll roads easier.</p>
-                <button type="button" className="btn btn-primary">Open account</button>
+                <p> Set up aan account to get free quotes and offer to assist with your skills.</p>
+                <Link class="btn btn-primary btn-block" to="signUp">Sign Up</Link>
               </div>
             </div>
           </div>

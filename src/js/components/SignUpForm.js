@@ -146,14 +146,11 @@ class SignUpForm extends Component {
               <div>
                 <button
                   type="submit"
-                  className="btn btn-primary"
+                  className="btn btn-primary btn-block"
                   disabled={submitting}>
                   Submit
             </button>
-                <Link
-                  to="/"
-                  className="btn btn-error"> Cancel
-            </Link>
+
               </div>
             </form>
           </div>

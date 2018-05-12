@@ -287,7 +287,7 @@ class BrowseRequests extends Component {
             return requests.map((data, index) => {
                 if (data.title != '' && data.address != '' && data.content != '' && data.status) {
                     //get lat long from address
-                    /*
+                   
                                         Geocode.fromAddress(data.address).then(
                                             response => {
                                                 const { lat, lng } = response.results[0].geometry.location;
@@ -297,10 +297,10 @@ class BrowseRequests extends Component {
                                                 )
                                             },
                                             error => {
-                                                //console.error(error);
+                                                console.error(error);
                                             }
                                         )
-                    */
+                  
                     return (
                         <div className="row" key={index} onClick={() => this.displayRequestDetails(data)} >
                             <div className="col request-box card">

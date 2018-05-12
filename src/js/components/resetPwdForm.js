@@ -30,26 +30,38 @@ function validate(values) {
 
 
 
-//For any field errors upon submission (i.e. not instant check)
+
 const validateAndResetPwd = (values, dispatch) => {
-  values.token = getParameterByName("token")
-  return dispatch(forgotPwdReset(values))
-    .then((result) => {
 
-      // Note: Error's "data" is in result.payload.response.data (inside "response")
-      // success's "data" is in result.payload.data
-      if (result.payload.response && result.payload.response.status !== 200) {
-        dispatch(forgotPwdResetFailure(result.payload.response.data));
-        throw new SubmissionError(result.payload.response.data);
-      }
-
-      //Store JWT Token to browser session storage 
-      //If you use localStorage instead of sessionStorage, then this w/ persisted across tabs and new windows.
-      //sessionStorage = persisted only in current tab
-      sessionStorage.setItem('jwtToken', result.payload.data.token);
-      //let other components know that everything is fine by updating the redux` state
-      dispatch(forgotPwdResetSuccess(result.payload.data)); //ps: this is same as dispatching RESET_USER_FIELDS
-    });
+  let token = getParameterByName("token");
+  if (token === '' || !token) {
+    let error = {
+      message: "No token provided.Contact admin",
+      data: {},
+      error: error
+    }
+    dispatch(forgotPwdResetFailure(error));
+  } else {
+    values.token = getParameterByName("token");
+    return dispatch(forgotPwdReset(values))
+      .then((result) => {
+        //Note: Error's "data" is in result.payload.response.data
+        // success's "data" is in result.payload.data
+        if (!result.payload) { //1st onblur
+          return;
+        }
+        let { data, status } = result.payload;
+        if (status != 200) {
+          dispatch(showInfoMessage(result.payload.error));
+        } else {
+          if (data.error) {
+            dispatch(forgotPwdResetFailure(data.error));
+          } else {
+            dispatch(forgotPwdResetSuccess(data));
+          }
+        }
+      });
+  }
 };
 
 
@@ -93,14 +105,11 @@ class SignUpForm extends Component {
               <div>
                 <button
                   type="submit"
-                  className="btn btn-primary"
+                  className="btn btn-primary btn-block"
                   disabled={submitting}>
                   Submit
             </button>
-                <Link
-                  to="/"
-                  className="btn btn-error"> Cancel
-            </Link>
+               
               </div>
             </form>
           </div>

@@ -6,6 +6,8 @@ import { toTitleCase } from '../../helper/index.js';
 import { resetUpdateProfileState } from '../../actions/updateProfile';
 import { resetShowInfoMessage } from '../../actions/infoMessage'
 import { resetUser } from '../../actions/users';
+import { resetForgotPwdEmail, resetForgotPwdReset } from '../../actions/forgotPwdEmail';
+
 
 
 function mapStateToProps(state) {
@@ -18,6 +20,7 @@ function mapStateToProps(state) {
     newOffer: state.offers.newOffer,
     acceptOffer: state.offers.acceptOffer,
     infoMessage: state.infoMessage.infoMessage,
+    forgotPwd: state.forgotPwd
   };
 }
 
@@ -42,7 +45,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     resetShowInfoMessage: () => {
       dispatch(resetShowInfoMessage());
-    }
+    },
+    resetForgotPwdEmail: () => {
+      dispatch(resetForgotPwdEmail());
+    },
+    resetForgotPwdReset: () => {
+      dispatch(resetForgotPwdReset());
+    },
   }
 }
 
@@ -70,11 +79,11 @@ class Nav extends React.Component {
   }
 
   hideInfoBox = () => {
-    $(".infoBox").hide();
+    //$(".infoBox").hide();
   }
 
   showInfoBox = () => {
-    $(".infoBox").show();
+   // $(".infoBox").show();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -82,18 +91,30 @@ class Nav extends React.Component {
     //console.log(this.props);
     //console.log("---------this is from nav nextProps --------------");
     //console.log(nextProps);
-
+/*
     if (nextProps.infoMessage.message) {
       this.setState({
         renderInfoText: nextProps.infoMessage.message,
         showInfoBox: "show"
       })
     }
+*/
+    //forgot password email message
+    if (nextProps.forgotPwd.forgotPwdEmail.message) {
+      this.setState({
+        renderInfoText: nextProps.forgotPwd.forgotPwdEmail.message,
+        showInfoBox: "show"
+      })
+      this.props.resetForgotPwdEmail();
+    }
 
-
-    //sign in user
-    if (this.props.user.user && !nextProps.user.user) { //If nextProps.user.user is true, return false. Otherwise return true.
-      //this.props.history.push('/');
+    //reset password
+    if (nextProps.forgotPwd.resetEmail.message) {
+      this.setState({
+        renderInfoText: nextProps.forgotPwd.resetEmail.message,
+        showInfoBox: "show"
+      })
+      this.props.resetForgotPwdReset();
     }
 
     if (this.props.user.user && nextProps.user.user == null) {
@@ -101,15 +122,10 @@ class Nav extends React.Component {
       //is.props.history.push('/signin');
     }
 
-
-    if (nextProps.user.status === 'signin' && nextProps.user.message) {
-      this.setState({
-        renderInfoText: nextProps.user.message,
-        showInfoBox: "show"
-      })
-      this.props.resetUser();
+    //sign in user
+    if (this.props.user.user && !nextProps.user.user) { //If nextProps.user.user is true, return false. Otherwise return true.
+      //this.props.history.push('/');
     }
-
 
     if (this.props.user.status == 'signin' && nextProps.user.error == 'error') {
       this.setState({
@@ -118,9 +134,6 @@ class Nav extends React.Component {
       })
       this.props.resetUser();
     }
-
-    
-
 
     //this hides the info bar after successfule login
     if (nextProps.user.status === 'authenticated' && !nextProps.user.error) {
@@ -135,7 +148,6 @@ class Nav extends React.Component {
       this.props.resetUser();
     }
 
-
     //sign up user
     //console.log(nextProps.infoMessage)
     if (nextProps.infoMessage.display && nextProps.user.status === 'signup') {
@@ -148,7 +160,6 @@ class Nav extends React.Component {
       this.props.history.push('/');
     }
 
-
     //accept offer
     if (nextProps.infoMessage.display && nextProps.acceptOffer.acceptOffer) {
       this.setState({
@@ -157,8 +168,6 @@ class Nav extends React.Component {
       })
       this.props.resetShowInfoMessage();
     }
-
-
 
     //create offers  
     if (nextProps.newOffer.offer) {
@@ -169,12 +178,7 @@ class Nav extends React.Component {
       })
 
     }
-    if (nextProps.infoMessage.message) {
-      this.setState({
-        // renderInfoText: nextProps.infoMessage.message,
-        // showInfoBox: "show"
-      })
-    }
+
   }
 
   componentWillUnmount() {
@@ -251,19 +255,19 @@ class Nav extends React.Component {
 
           <li class={"nav-item " + aboutUsClass}>
             <Link class="nav-link" to="aboutUs" onClick={this.toggleCollapse.bind(this)}>
-            <span className="nav-image-icon nav-image-icon-mobile"><img class="user-image" src="../../images/logo.svg" alt="" /></span>
-           AboutUs</Link>
+              <span className="nav-image-icon nav-image-icon-mobile"><img class="user-image" src="../../images/logo.svg" alt="" /></span>
+              AboutUs</Link>
           </li>
           <li class={"nav-item " + createRequestClass} >
             <Link class="nav-link" to="createRequest" onClick={this.toggleCollapse.bind(this)}>
-            <span className="nav-image-icon nav-image-icon-mobile"><img class="user-image" src="../../images/plus.svg" alt="" /></span>          
-          Create a Request</Link>
+              <span className="nav-image-icon nav-image-icon-mobile"><img class="user-image" src="../../images/plus.svg" alt="" /></span>
+              Create a Request</Link>
           </li>
 
           <li class={"nav-item " + browseRequestsClass} >
             <Link class="nav-link" to="browseRequests" onClick={this.toggleCollapse.bind(this)}>
-            <span className="nav-image-icon nav-image-icon-mobile"><img class="user-image" src="../../images/search.svg" alt="" /></span>
-           Browse request</Link>
+              <span className="nav-image-icon nav-image-icon-mobile"><img class="user-image" src="../../images/search.svg" alt="" /></span>
+              Browse request</Link>
           </li>
 
           <li class={"nav-item hide" + settingsClass}>
@@ -276,8 +280,8 @@ class Nav extends React.Component {
 
           <li class="dropdown nav-item only-small-screen">
             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-            <span className="nav-image-icon"><img class="user-image" src="../../images/user-profile.svg" alt="" /></span>
-             {toTitleCase(authenticatedUser.name)} <span class="caret"></span></a>
+              <span className="nav-image-icon"><img class="user-image" src="../../images/user-profile.svg" alt="" /></span>
+              {toTitleCase(authenticatedUser.name)} <span class="caret"></span></a>
             <ul class="dropdown-menu">
               <li className="nav-item" >
                 <Link class="dropdown-item" to={"myRequests/" + this.props.user.user.id} onClick={this.toggleCollapse.bind(this)}>View my requests
@@ -308,20 +312,20 @@ class Nav extends React.Component {
 
         <li class={"nav-item " + aboutUsClass}>
           <Link class="nav-link" to="aboutUs" onClick={this.toggleCollapse.bind(this)}>
-          <span className="nav-image-icon nav-image-icon-mobile"><img class="user-image" src="../../images/logo.svg" alt="" /></span>
-           AboutUs</Link>
+            <span className="nav-image-icon nav-image-icon-mobile"><img class="user-image" src="../../images/logo.svg" alt="" /></span>
+            AboutUs</Link>
         </li>
 
         <li class={"nav-item " + createRequestClass} >
           <Link class="nav-link" to="createRequest" onClick={this.toggleCollapse.bind(this)}>
-          <span className="nav-image-icon nav-image-icon-mobile"><img class="user-image" src="../../images/plus.svg" alt="" /></span>
-           Create a Request</Link>
+            <span className="nav-image-icon nav-image-icon-mobile"><img class="user-image" src="../../images/plus.svg" alt="" /></span>
+            Create a Request</Link>
         </li>
 
         <li class={"nav-item " + browseRequestsClass} >
           <Link class="nav-link" to="browseRequests" onClick={this.toggleCollapse.bind(this)}>
-          <span className="nav-image-icon nav-image-icon-mobile"><img class="user-image" src="../../images/search.svg" alt="" /></span>
-           Browse request</Link>
+            <span className="nav-image-icon nav-image-icon-mobile"><img class="user-image" src="../../images/search.svg" alt="" /></span>
+            Browse request</Link>
         </li>
         <li class={"nav-item " + settingsClass}>
           <Link class="nav-link hide" to="settings" onClick={this.toggleCollapse.bind(this)}>Settings</Link>

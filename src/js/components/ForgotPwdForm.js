@@ -1,9 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
-import { forgotPwdEmail, forgotPwdEmailSuccess, forgotPwdEmailFailure, resetForgotPwdState } from '../actions/forgotPwdEmail';
+import { forgotPwdEmail, forgotPwdEmailSuccess, forgotPwdEmailFailure, resetForgotPwdEmail } from '../actions/forgotPwdEmail';
 import { reduxForm, Field, SubmissionError } from 'redux-form';
 import { connect } from 'react-redux';
 import renderField from './renderField';
+import { showInfoMessage } from "../actions/infoMessage.js";
 
 
 //Client side validation
@@ -24,19 +25,18 @@ const validateAndForgotPwd = (values, dispatch) => {
     .then((result) => {
       //Note: Error's "data" is in result.payload.response.data
       // success's "data" is in result.payload.data
-      if (!result.payload.response) { //1st onblur
+      if (!result.payload) { //1st onblur
         return;
       }
-
-      let { data, status } = result.payload.response;
-      //if status is not 200 or any one of the fields exist, then there is a field error
-      if (response.payload.status != 200) {
-        //let other components know of error by updating the redux` state
-        dispatch(forgotPwdFailure(data));
-        throw data; //throw error
+      let { data, status } = result.payload;
+      if (status != 200) {
+        dispatch(showInfoMessage(result.payload.error));
       } else {
-        //let other components know that everything is fine by updating the redux` state
-        dispatch(forgotPwdSuccess(data)); //ps: this is same as dispatching RESET_USER_FIELDS
+        if (data.error) {
+          dispatch(forgotPwdEmailFailure(data.error));
+        } else {
+          dispatch(forgotPwdEmailSuccess(data));
+        }
       }
     });
 
@@ -63,7 +63,7 @@ class ForgotPwdForm extends Component {
           <div class="col-sm-12 col-md-6">
             <div><h2>Recover password</h2>
             </div>
-            <form className="forgot-pwd"   onSubmit={handleSubmit(validateAndForgotPwd)}>
+            <form className="forgot-pwd" onSubmit={handleSubmit(validateAndForgotPwd)}>
               <Field
                 name="email"
                 type="email"
@@ -71,14 +71,11 @@ class ForgotPwdForm extends Component {
                 label="Email*" />
               <button
                 type="submit"
-                className="btn btn-primary"
+                className="btn btn-primary btn-block"
                 disabled={submitting}>
                 Submit
           </button>
-              <Link
-                to="/"
-                className="btn btn-error"> Cancel
-          </Link>
+
             </form>
           </div>
         </div>

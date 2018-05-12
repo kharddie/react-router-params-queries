@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Map, InfoWindow, Marker, GoogleApiWrapper } from 'google-maps-react';
+import { toTitleCase } from '../helper/index.js';
+import renderHTML from 'react-render-html';
 
 
 export class MapContainer extends Component {
@@ -75,10 +77,10 @@ export class MapContainer extends Component {
           marker={this.state.activeMarker}
           visible={this.state.showingInfoWindow}>
           <div>
-            <h3>{this.state.selectedPlace.title}</h3>
+            <h3>{this.state.selectedPlace.title ? toTitleCase(this.state.selectedPlace.title) : this.state.selectedPlace.title}</h3>
             <body>
               <b>{this.state.selectedPlace.address}</b><br /><br />
-              {this.state.selectedPlace.body}
+              {this.state.selectedPlace.body? renderHTML(this.state.selectedPlace.body) :this.state.selectedPlace.body }
             </body>
           </div>
         </InfoWindow>
