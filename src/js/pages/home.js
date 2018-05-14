@@ -100,7 +100,7 @@ class Home extends React.Component {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-sm-7">
+                    <div className="col-sm-12 col-lg-7">
                         <div className="intro"><h1 className="text-h1-lg intro-2" >Get more done for FREE!</h1>
                             <h4 className="intro-3">
                                 Find out trusted people in your local community ready to give up their time and complete your task today.
@@ -111,7 +111,7 @@ class Home extends React.Component {
                             </div>
                         </div>
                     </div>
-                    <div className="col-sm-5"></div>
+                    <div className="col-sm-12 col-lg-5"></div>
                 </div>
             </div>
         );

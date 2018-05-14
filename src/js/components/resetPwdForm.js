@@ -87,7 +87,7 @@ class SignUpForm extends Component {
     return (
       <div className='container'>
         <div class="row justify-content-md-center ">
-          <div class="col-sm-12 col-md-6">
+          <div class="col-sm-12 col-md-7">
             <div><h2>Reset password</h2>
             </div>
             <form className="reset-pwd" onSubmit={handleSubmit(validateAndResetPwd)}>
@@ -98,7 +98,7 @@ class SignUpForm extends Component {
                 component={renderField}
                 label="Password*" />
               <Field
-                name="confirmPassword"
+                name="ConfirmPassword"
                 type="password"
                 component={renderField}
                 label="Confirm Password*" />

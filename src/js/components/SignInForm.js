@@ -78,7 +78,7 @@ class SignInForm extends Component {
     const { asyncValidating, handleSubmit, submitting } = this.props;
     return (
 
-      <div className="container">
+      <div>
         <div class="row">
           <div class="col-md-12">
             <form onSubmit={handleSubmit((values, dispatch) => { validateAndSignInUser(values, this, this.props, dispatch); })}>

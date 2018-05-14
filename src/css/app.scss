@@ -129,7 +129,7 @@ html,body,#app,.app-bg-image ,.notHomePage {
     }
 
       .container{
-        padding: 1.2rem 0 1.5rem;
+
         p {
           margin:0;
         }
@@ -271,6 +271,7 @@ html,body,#app,.app-bg-image ,.notHomePage {
 .btn {
     position: relative;
     padding: 0.555rem 0.75rem;
+    font-weight: 500;
 }
   .tiny-text {
     font-size: 80%;
@@ -357,6 +358,7 @@ h1.title-page {
   max-width: 100%;
   margin:0;
   padding:0;
+  width: 100%;
 }
 
 .alert {
@@ -999,14 +1001,20 @@ form.request-form > div:first-of-type {
 .sign-in{
 
   .sign-in-links {
-    margin-top: 37px;
+    margin-top: 29px;
     border-top: 1px dotted #ced4da;
-    padding-top: 15px;
+    padding-top: 6px;
     a {
       padding: 0;
     }
   }
 
+  .sign-in-links-b {
+    @media screen and (max-width: 767px) {
+    margin-top: 10px;
+    border-top: 1px dotted #ced4da;
+    }
+  }
 
   .user-find-username,.user-reset-pwd{
     @media screen and (min-width:400px){
@@ -1016,23 +1024,40 @@ form.request-form > div:first-of-type {
   }
 
   @media screen and (min-width: 411px) {
-    .sign-in-right{
+
+  }
+  @media screen and (min-width: 767px) {
+    .sign-in-left{
       display: flex; 
-      justify-content: flex-end
+      justify-content: flex-end;
+      border-right: 1px solid #ced4da;
+      padding-right: 30px;
     }
-  }
-  @media screen and (min-width: 572px) {
-    .sign-in-left-cont {
-      margin-right: 30px;
-
-    }
-    .sign-in-right-cont {
-      margin-left: 30px;
-      border-left: 1px solid #ced4da;
-      padding-left: 52px;
+    .sign-in-right {
+      padding-left: 30px;
     }
 
   }
+
+  @media screen and (max-width: 767px) {
+    .sign-in-right{
+      margin-top:30px;
+    }
+    .sign-in-links-b {
+      margin-top: 10px;
+      border-top: 1px dotted #ced4da;
+    }
+  }
+
+  .nav-link {
+      display: block;
+      padding: 0.5rem 0;
+  }
+
+  element.style {
+    margin-top: 10px;
+  }
+
 }
 
   /*carousel*/

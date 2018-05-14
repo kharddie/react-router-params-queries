@@ -57,7 +57,7 @@ class CreateOfferForm extends Component {
         this.props.resetMe();
         if (this.props.location.href.indexOf("createOffer") > -1) {
             this.setState({
-                divClass: " col-md-6",
+                divClass: " col-md-7",
                 formWidthBg: "form-width-bg"
             })
         }

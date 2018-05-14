@@ -66,7 +66,7 @@ class Layout extends React.Component {
         return "app-bg-image page-fit-screen-fit ";
       }
 
-      else if (location.pathname == "/forgotPwd" || location.pathname == "/resetPwd" ) {
+      else if (location.pathname == "/forgotPwd" || location.pathname == "/resetPwd" || location.pathname == "/forgotPwd") {
         if (isMobile) {
           return "notHomePage";
         } else {
@@ -74,7 +74,7 @@ class Layout extends React.Component {
         }
       }
 
-      else if ( location.pathname == "/signUp") {
+      else if (location.pathname == "/signUp") {
         if (isMobile) {
           return "notHomePage";
         } else {
@@ -101,7 +101,7 @@ class Layout extends React.Component {
         return "content-container-fit-screen";
       }
 
-      else if (location.pathname == "/forgotPwd" || location.pathname == "/resetPwd" ) {
+      else if (location.pathname == "/forgotPwd" || location.pathname == "/resetPwd" || location.pathname == "/forgotPwd") {
         if (isMobile) {
           return "notHomePage";
         } else {
@@ -124,7 +124,7 @@ class Layout extends React.Component {
       <div className={pageFitScreen()}>
         <div class={"content-container " + pageFitScreen2()}>
           <Nav location={location} history={history} />
-          <div className="container main-content " style={containerStyle}>
+          <div className=" main-content container " style={containerStyle}>
             <div className="row">
               <div className="col col-12">
                 {this.props.children}

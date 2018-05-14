@@ -112,9 +112,9 @@ class SignUpForm extends Component {
     //debugger;
     const { asyncValidating, handleSubmit, submitting, asyncValidate, validate } = this.props;
     return (
-      <div className='container'>
+
         <div class="row justify-content-md-center ">
-          <div class="col-sm-12 col-md-6">
+          <div class="col-sm-12 col-md-7">
             <div><h2>Sign up</h2>
             </div>
             <form class="sign-up" onSubmit={handleSubmit(validateAndSignUpUser)}>
@@ -127,7 +127,7 @@ class SignUpForm extends Component {
                 name="username"
                 type="text"
                 component={renderField}
-                label="@username*" />
+                label="Username*" />
               <Field
                 name="email"
                 type="email"
@@ -155,7 +155,7 @@ class SignUpForm extends Component {
             </form>
           </div>
         </div>
-      </div>
+
 
     )
   }

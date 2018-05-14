@@ -397,11 +397,6 @@ class Nav extends React.Component {
             </div>
           </div>
         </div>
-        <div className="row">
-            <div className="col-12 text-center">
-              {/*"isMobile=" + isMobile*/ }
-            </div>
-          </div>
       </div>
     );
   }

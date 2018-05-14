@@ -60,7 +60,7 @@ class ForgotPwdForm extends Component {
     return (
       <div className="container">
         <div class="row justify-content-md-center ">
-          <div class="col-sm-12 col-md-6">
+          <div class="col-sm-12 col-md-7">
             <div><h2>Recover password</h2>
             </div>
             <form className="forgot-pwd" onSubmit={handleSubmit(validateAndForgotPwd)}>
