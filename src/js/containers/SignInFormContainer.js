@@ -13,6 +13,7 @@ function mapStateToProps(state, ownProps) {
   return { 
     user: state.user,
     infoMessage:state.infoMessage,
+    forSignInForm:"forSignInForm",
   };
 }
 

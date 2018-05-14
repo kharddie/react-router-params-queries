@@ -63,14 +63,15 @@ class Nav extends React.Component {
     this.props.history.listen((location, action) => {
       console.log("navigation detect=" + global.retainInfoMsg)
       if (!global.retainInfoMsg) {
-        //this.hideInfoBox();
+        /*this.hideInfoBox();
         this.setState({
           renderInfoText: '',
           showInfoBox: "hide"
-        })
+        })*/
       } else {
-        //this.showInfoBox();
+        /*this.showInfoBox();
         global.retainInfoMsg = false;
+        */
       }
     });
   }

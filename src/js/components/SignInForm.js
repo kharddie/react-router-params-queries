@@ -57,10 +57,12 @@ class SignInForm extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.user.status === 'authenticated' && nextProps.user.user && !nextProps.user.error) {
-      if (!nextProps.origin) {
+      if (!nextProps.origin && this.props.origin === "forSignInForm") {
         this.props.history.push('/');
-      } else {
+      } else if (nextProps.origin === "signInModalClose") {
         this.props.modalBackdropClicked()
+      } else if (nextProps.origin === "signInModalDontClose") {
+        nextProps.showModalWhichPos();
       }
     }
 

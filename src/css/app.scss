@@ -700,7 +700,14 @@ only screen and (min-resolution: 2dppx) {
 
    .request-box.card {
     cursor: pointer;
+    box-shadow: 3px 5px 8px rgba(202,215,220,.6);
    }
+
+   .request-box.card:hover {
+    box-shadow: 3px 5px 8px rgba(202,215,220,.7);
+   }
+
+
   .request-box{
     border: 1px solid #dee8ec;
     margin-bottom: 10px;
@@ -730,11 +737,12 @@ only screen and (min-resolution: 2dppx) {
   .title{
       font-size: 17px;
       line-height: 17px;
-      color: #3a3d3e;
-      font-weight: 300;
+
       margin-bottom: 10px;
     }
-
+    .separator.cardx{
+      border-top: 1px solid #dee8ec;
+    }
 
 .more-info{
   .heading {
@@ -793,15 +801,19 @@ only screen and (min-resolution: 2dppx) {
           
         }
       }
+      .titles{
+        font-size:86%;
+      }
 
       .title {
         height: auto;
         font-weight: 300;
         overflow: hidden;
         text-overflow: ellipsis;
-        color: #3a3d3e; 
+
         margin-bottom: 0;
         font-size: 23px;
+        font-weight: 400;
         margin: 23px 0 35px;
         line-height: 35px;
       }
