@@ -22,17 +22,13 @@ export default function (state = INITIAL_STATE, action) {
   switch (action.type) {
 
     case FETCH_REQUESTS:// start fetching requests and set loading = true
-    console.log("run fetch")
       return { ...state, requestsList: { requests: [], error: null, loading: true, message: null } };
     case FETCH_REQUESTS_SUCCESS:// return list of requests and make loading = false
-    console.log("run fetch success")
       return { ...state, requestsList: { requests: action.payload.data, error: action.payload.error, loading: false, message: action.payload.message } };
     case FETCH_REQUESTS_FAILURE:// return error and make loading = false
       error = action.payload || { message: action.payload.message };//2nd one is network or server down errors
-      return { ...state, requestsList: { requests: [], error: error, loading: false, message: null } };
-      
+      return { ...state, requestsList: { requests: [], error: error, loading: false, message: null } };      
     case RESET_REQUESTS:// reset requestList to initial state
-    console.log("run resetRequest")
       return { ...state, resetRequest: { requests: [], error: null, loading: false, message: "reset" } };
 
     case FETCH_REQUEST:

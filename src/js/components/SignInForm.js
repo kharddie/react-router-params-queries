@@ -95,7 +95,7 @@ class SignInForm extends Component {
                   type="submit"
                   className="btn btn-primary btn-with-spinner btn-block"
                   disabled={submitting}>
-                  <span className={!this.props.user.loading ? "show" : "hide"} > Sign in</span>
+                  <span className={!this.props.user.loading ? "show" : "hide"} > Sign In</span>
                   <span className={this.props.user.loading ? "show" : "hide"}  ><FontAwesomeIcon size="lg" className="fa-spin spinner" icon={faSpinner} /></span>
                 </button>
               </div>

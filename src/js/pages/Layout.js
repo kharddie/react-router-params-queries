@@ -62,7 +62,7 @@ class Layout extends React.Component {
     };
 
     const pageFitScreen = () => {
-      if (location.pathname == "/") {
+      if (location.pathname == "/" || location.pathname == "/browseRequests") {
         return "app-bg-image page-fit-screen-fit ";
       }
 
@@ -97,11 +97,11 @@ class Layout extends React.Component {
     }
 
     const pageFitScreen2 = () => {
-      if (location.pathname == "/") {
+      if (location.pathname == "/" || location.pathname == "/browseRequests") {
         return "content-container-fit-screen";
       }
 
-      else if (location.pathname == "/forgotPwd" || location.pathname == "/resetPwd") {
+      else if (location.pathname == "/forgotPwd" || location.pathname == "/resetPwd" ) {
         if (isMobile) {
           return "notHomePage";
         } else {

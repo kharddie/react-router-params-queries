@@ -7,6 +7,7 @@ import { resetUpdateProfileState } from '../../actions/updateProfile';
 import { resetShowInfoMessage } from '../../actions/infoMessage'
 import { resetUser } from '../../actions/users';
 import { resetForgotPwdEmail, resetForgotPwdReset } from '../../actions/forgotPwdEmail';
+import { BrowserView, MobileView, isBrowser, isMobile } from "react-device-detect";
 
 
 
@@ -62,9 +63,13 @@ class Nav extends React.Component {
     this.props.history.listen((location, action) => {
       console.log("navigation detect=" + global.retainInfoMsg)
       if (!global.retainInfoMsg) {
-        this.hideInfoBox();
+        //this.hideInfoBox();
+        this.setState({
+          renderInfoText: '',
+          showInfoBox: "hide"
+        })
       } else {
-        this.showInfoBox();
+        //this.showInfoBox();
         global.retainInfoMsg = false;
       }
     });
@@ -83,7 +88,7 @@ class Nav extends React.Component {
   }
 
   showInfoBox = () => {
-   // $(".infoBox").show();
+    // $(".infoBox").show();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -91,14 +96,14 @@ class Nav extends React.Component {
     //console.log(this.props);
     //console.log("---------this is from nav nextProps --------------");
     //console.log(nextProps);
-/*
-    if (nextProps.infoMessage.message) {
-      this.setState({
-        renderInfoText: nextProps.infoMessage.message,
-        showInfoBox: "show"
-      })
-    }
-*/
+    /*
+        if (nextProps.infoMessage.message) {
+          this.setState({
+            renderInfoText: nextProps.infoMessage.message,
+            showInfoBox: "show"
+          })
+        }
+    */
     //forgot password email message
     if (nextProps.forgotPwd.forgotPwdEmail.message) {
       this.setState({
@@ -316,11 +321,7 @@ class Nav extends React.Component {
             AboutUs</Link>
         </li>
 
-        <li class={"nav-item " + createRequestClass} >
-          <Link class="nav-link" to="createRequest" onClick={this.toggleCollapse.bind(this)}>
-            <span className="nav-image-icon nav-image-icon-mobile"><img class="user-image" src="../../images/plus.svg" alt="" /></span>
-            Create a Request</Link>
-        </li>
+
 
         <li class={"nav-item " + browseRequestsClass} >
           <Link class="nav-link" to="browseRequests" onClick={this.toggleCollapse.bind(this)}>
@@ -394,8 +395,12 @@ class Nav extends React.Component {
               </div>
             </div>
           </div>
-
         </div>
+        <div className="row">
+            <div className="col-12 text-center">
+              {/*"isMobile=" + isMobile*/ }
+            </div>
+          </div>
       </div>
     );
   }

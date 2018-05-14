@@ -7,6 +7,9 @@ $primary-color-darker: #90ab16;
 $blue-color-darker:#e3ebef;
 
 $nav-bar-dark:#789008;
+$nav-bar-darker:#5a6d04;
+
+
 
 
 $secondary-color: #ff9e19;
@@ -81,7 +84,7 @@ html,body,#app,.app-bg-image ,.notHomePage {
   overflow: hidden;
 }
 .content-container-fit-screen{
-  margin: 0 auto -75px; /* the bottom margin is the negative value of the footer's height */
+  margin: 0 auto -91px; /* the bottom margin is the negative value of the footer's height */
 
 }
 
@@ -112,7 +115,7 @@ html,body,#app,.app-bg-image ,.notHomePage {
     color: #808288;
 
     @media screen and (min-width:400px){
-      height: 90px;
+ 
     }
     padding-top: 3px;
 
@@ -154,14 +157,11 @@ html,body,#app,.app-bg-image ,.notHomePage {
 
 
 //requestst
-.scrollable-content {
-  @media screen and (min-width:767px){
+
+
+.scrollable-content,.request-box-details {
   overflow: auto;
-  height: 461px;
-  }
 }
-
-
 
 
 
@@ -173,13 +173,6 @@ html,body,#app,.app-bg-image ,.notHomePage {
     .form-footer{
       justify-content: center;
     }
-
-
-
-
-
-
-
 }
 
 .intro-3 {
@@ -237,8 +230,47 @@ html,body,#app,.app-bg-image ,.notHomePage {
   }
 
   /* utilities*/
+.scrollableContentHeight-btn-holder{
+  display: block;
+  position: fixed;
+  z-index: 123523;
+  right: 28px;
+  height: 40px;
+  height: 40px;
+  width: 40px;
+  background-color: $secondary-color;
+  border-radius: 40px;
+    .btn {
+      background-color: transparent;
+      border: none;
+      padding: 0;
+  }
+}
+
+
+
+
+
+
+
+  input{
+    /*background: url("../images/bg_input.jpg") repeat-x scroll 0 0 #fff;*/
+    height: 45px;
+  }
+
+  .arrow-down{
+    transform: rotate(0deg);
+    transition: transform .3s linear;
+  }
+  
+  .arrow-up{
+    transform: rotate(180deg);
+    transition: transform .3s linear;
+  }
+
 .btn {
     position: relative;
+    padding: 0.555rem 0.75rem;
 }
   .tiny-text {
     font-size: 80%;
@@ -359,7 +391,7 @@ help-block {
 
    }
    .navbar-light .navbar-toggler {
-    border-color: #5a6d04;
+    border-color: $nav-bar-darker;
    }
 
    .navbar .nav-link {
@@ -407,18 +439,22 @@ help-block {
       background-color: #a8cc08;
       border: 1px solid #99b904;
       margin: 2px 0;
-  }
-  .dropdown-menu{
-    li{
-      border: 1px solid transparent;
-    }
-  }
+      }
+      .dropdown-menu{
+        li{
+          border: 1px solid transparent;
+        }
+      }
 
   }
     .navbar-light .navbar-nav .nav-link,
     .navbar-light .nav-item a {
       color:white;
-  }
+      @media screen and (max-width:991px){
+        color:white;
+      }     
+    }
+
   .nav-item .only-small-screen .dropdown-menu{
     padding:0;
     margin:0;
@@ -503,16 +539,17 @@ help-block {
 .navbar{
 
   //padding:0;
-  .nav-item.active,.nav-item:hover{
+  .nav-item.active,
+  .nav-item:hover{
     background-color: $nav-bar-dark;
     border: 1px solid $nav-bar-dark;
+    a{
+    @media screen and (max-width:992px){
+      color: white;
+     }
+    }
   }
 
-  .dropdown-item.active, 
-  .dropdown-item:focus,
-  .dropdown-item:hover {
-
-}
 
 
 .dropdown-item:active,
@@ -655,8 +692,8 @@ only screen and (min-resolution: 2dppx) {
  /* requests*/
  .requests{
    .requests-small{
-     @media screen and (min-height:767px){
-      height:500px;
+     @media screen and (min-height:768px){
+      //height:500px;
      }
     
    }
@@ -681,12 +718,7 @@ only screen and (min-resolution: 2dppx) {
       height: 20px;
       padding: 0;  
     }
-    .arrow-down{
-        transform: rotate(0deg);
-    }
-    .arrow-up{
-      transform: rotate(180deg);
-  }
+
   .more-info-btn{
     @include justify-content-right;
   }  
@@ -704,16 +736,24 @@ only screen and (min-resolution: 2dppx) {
     }
 
 
-
+.more-info{
+  .heading {
+    font-size: 78%;
+}
+}
 
 
     .user-image{
       @include justify-content-center-center;
       height: 30px;
       width: 30px;
+      left: auto;
       border-radius: 30px;
       overflow: hidden;
-      left: 20px !important;
+      right: 15px !important;
+      margin: 0;
+      padding:0;
+      bottom:auto;
     }
   }
 .loader-spinner-container{
@@ -727,11 +767,9 @@ only screen and (min-resolution: 2dppx) {
 
 
 }
-.map{
+.map,.request-box-details{
   width:100%;
-  height:400px;
-
-  @media screen and (max-width:767px){
+  @media screen and (max-width:991px){
   display: none;
   }
 }

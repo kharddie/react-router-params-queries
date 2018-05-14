@@ -9,6 +9,7 @@ import moment from 'moment'
 import Moment from 'react-moment';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { isMobile } from "react-device-detect";
 
 //Client side validation
 function validate(values) {
@@ -35,35 +36,18 @@ function validate(values) {
   return errors;
 }
 
-//For instant async server validation
-const asyncValidate = (values, dispatch) => {
-  //check if user id exists
-  return dispatch(validateRequestFields(values))
-    .then((result) => {
-      //Note: Error's "data" is in result.payload.response.data
-      // success's "data" is in result.payload.data
-      if (!result.payload.response) { //1st onblur
-        return;
-      }
-
-      let { data, status } = result.payload.response;
-      //if status is not 200 or any one of the fields exist, then there is a field error
-      if (response.payload.status != 200 || data.title || data.categories || data.description) {
-        //let other components know of error by updating the redux` state
-        dispatch(validateRequestFieldsFailure(data));
-        throw data; //throw error
-      } else {
-        //let other components know that everything is fine by updating the redux` state
-        dispatch(validateRequestFieldsSuccess(data)); //ps: this is same as dispatching RESET_USER_FIELDS
-      }
-    });
-};
 
 //For any field errors upon submission (i.e. not instant check)
-const validateAndCreateRequest = (values, dispatch, props) => {
+const validateAndCreateRequest = (values, props, dispatch, isMobile) => {
   values.id = props.user.id;
-  values.due_date = moment(moment(values.date), "YYY,MM,DD").toISOString();
   values.created = moment(moment(), "YYY,MM,DD").toISOString();
+
+  if (isMobile) {
+    values.due_date = moment(moment(values.Due_dateM), "YYY,MM,DD").toISOString();
+  } else {
+    values.due_date = moment(moment(values.date), "YYY,MM,DD").toISOString();
+  }
+
   return dispatch(createRequest(values, sessionStorage.getItem('jwtToken')))
     .then(result => {
       // Note: Error's "data" is in result.payload.response.data (inside "response")
@@ -118,14 +102,15 @@ class CreateRequestForm extends Component {
 
   render() {
     const { handleSubmit, submitting, newRequest, user } = this.props;
+
     return (
       <div className='container'>
         <div class="row justify-content-md-center">
           <div class={"col-sm-12" + this.state.divClass}>
-            <div><h2>Create Request</h2>
+            <div>
             </div>
 
-            <form className={"request-form " + this.state.formWidthBg} onSubmit={handleSubmit(validateAndCreateRequest)}>
+            <form className={"request-form " + this.state.formWidthBg} onSubmit={handleSubmit((values, dispatch) => { validateAndCreateRequest(values, this.props, dispatch, isMobile); })}>
               <Field
                 name="id"
                 type="hidden"
@@ -143,9 +128,16 @@ class CreateRequestForm extends Component {
                 type="text"
                 component={renderField}
                 label="Address*" />
+              <div className={isMobile ? "show" : "hide"}>
+                <Field
+                  name="Due_dateM"
+                  type="date"
+                  component={renderField}
+                  label="Due dateM*" />
+              </div>
               <div className='form-group'>
                 <label className="control-label">Due date*</label>
-                <div>
+                <div className={!isMobile ? "show" : "hide"}>
                   <DatePicker
                     selected={this.state.startDate}
                     onChange={this.handleChange}
