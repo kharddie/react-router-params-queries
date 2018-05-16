@@ -54,13 +54,8 @@ class Layout extends Component {
   constructor(props) {
     super(props);
     $(window).resize(() => {
-      let getOrientation = window.innerWidth > window.innerHeight ? "Landscape" : "Portrait";
-      props.getOrientation(getOrientation);
+      this.props.getOrientation(this.getScreenDetails());
     });
-
-
-
-
   }
 
   state = {
@@ -72,182 +67,309 @@ class Layout extends Component {
     fitPageToScreenOverflowHidden: ""
   }
 
-  componentDidMount() {
+  getScreenDetails = () => {
+
+    let windowInnerWidth = window.innerWidth;
+    let windowInnerHeight = window.innerHeight;
+    let contentContainerHeight = $(".content-container").outerHeight(true);
+    let footerHeight = $(".footer").outerHeight(true);
+    let getOrientation = windowInnerWidth > windowInnerHeight ? "Landscape" : "Portrait";
+    let data = {
+      windowInnerWidth: windowInnerWidth,
+      windowInnerHeight: windowInnerHeight,
+      contentContainerHeight: contentContainerHeight,
+      footerHeight: footerHeight,
+      getOrientation: getOrientation
+    }
+    return data;
 
   }
+
+  componentDidMount() {
+    this.props.loadUserFromToken();
+    this.props.getOrientation(this.getScreenDetails());
+  }
+
 
   componentWillMount() {
-    this.props.loadUserFromToken();
-    let getOrientation;
-    getOrientation = window.innerWidth > window.innerHeight ? "Landscape" : "Portrait";
-    this.props.getOrientation(getOrientation);
-    $(window).resize(() => {
-      getOrientation = window.innerWidth > window.innerHeight ? "Landscape" : "Portrait";
-      this.props.getOrientation(getOrientation);
-    });
-
-
+    console.log("componentWillMount")
   }
+
 
   componentWillReceiveProps = (nextProps) => {
     //orientation: nextProps.orientationType,
-    console.log(nextProps.orientationType.getOrientation.data);
-    console.log(nextProps.location.pathname);
+   console.log(nextProps.orientationType.getOrientation.data.getOrientation);
+    //this.props.getOrientation(this.getScreenDetails());
+    let getScreenDetails = null;
 
-    if (nextProps.location.pathname == "/") {
-      if (nextProps.orientationType.getOrientation.data === "Portrait") {
-        this.setState({
-          showBackGroundImg: "show-backGround-img",
-          fitPageToScreen: "fit-page-to-Screen",
-          IsHomePage: "home-page",
-          fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden"
-        });
-      }
-      else if (nextProps.orientationType.getOrientation.data === "Landscape") {
-        if (isMobile) {
-          if ($(window).width() > 768) {  ///ipad
-            this.setState({
-              showBackGroundImg: "show-backGround-img",
-              fitPageToScreen: "fit-page-to-Screen",
-              IsHomePage: "home-page",
-              fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden"
-            });
-          } else {
-            this.setState({
-              showBackGroundImg: "show-backGround-img",
-              fitPageToScreen: "",
-              IsHomePage: "home-page",
-              fitPageToScreenOverflowHidden: ""
-            });
-          }
-        } else { ////desktops
+    //change of state
+    if (this.props.location.pathname != nextProps.location.pathname) {
+      $(document).ready(() => {
+        getScreenDetails = this.getScreenDetails();
+        if ((getScreenDetails.contentContainerHeight + getScreenDetails.footerHeight) >= getScreenDetails.windowInnerHeight) {
           this.setState({
-            showBackGroundImg: "show-backGround-img",
-            fitPageToScreen: "fit-page-to-Screen",
-            IsHomePage: "home-page",
-            fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden"
+            showBackGroundImg: "",
+            fitPageToScreen: "",
+            IsHomePage: "not-home-page",
+            fitPageToScreenOverflowHidden: ""
           });
-        }
-      }
-    }
-    else if (nextProps.location.pathname == "/browseRequests" || nextProps.location.pathname == "/forgotPwd" || nextProps.location.pathname == "/resetPwd" || nextProps.location.pathname == "/forgotPwd" || nextProps.location.pathname == "/signIn") {
-      if (nextProps.orientationType.getOrientation.data === "Portrait") {
-        this.setState({
-          showBackGroundImg: "",
-          fitPageToScreen: "fit-page-to-Screen",
-          IsHomePage: "home-page",
-          fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden"
-        });
-      } else if (nextProps.orientationType.getOrientation.data === "Landscape") {
-        if (isMobile) {
-          if ($(window).width() > 768) {  ///ipad
-            this.setState({
-              showBackGroundImg: "",
-              fitPageToScreen: "fit-page-to-Screen",
-              IsHomePage: "home-page",
-              fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden"
-            });
-          } else {
-            this.setState({
-              showBackGroundImg: "",
-              fitPageToScreen: "",
-              IsHomePage: "not-home-page",
-              fitPageToScreenOverflowHidden: ""
-            });
-
-          }
-        }
-        else { /////smaller phones
+        } else {
           this.setState({
             showBackGroundImg: "",
             fitPageToScreen: "fit-page-to-Screen",
-            IsHomePage: "home-page",
+            IsHomePage: "not-home-page",
             fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden"
           });
         }
-      }
+      })
     }
-    else { ///all other pages
+    //change of orientation
 
-      if (nextProps.orientationType.getOrientation.data === "Landscape") {
-        if (isMobile) {
-          if ($(window).width() > 768) {///ipad
-            this.setState({
-              showBackGroundImg: "",
-              fitPageToScreen: "fit-page-to-Screen",
-              IsHomePage: "home-page",
-              fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden"
-            });
-          } else { ///////smaller phones
-            this.setState({
-              showBackGroundImg: "",
-              fitPageToScreen: "",
-              IsHomePage: "not-home-page",
-              fitPageToScreenOverflowHidden: ""
-            });
-
-          }
+    if (nextProps.orientationType.getOrientation.data.getOrientation === "Landscape") {
+      this.setState({
+        showBackGroundImg: "",
+        fitPageToScreen: "",
+        IsHomePage: "not-home-page",
+        fitPageToScreenOverflowHidden: ""
+      });
+      $(document).ready(() => {
+        getScreenDetails = this.getScreenDetails();
+        if ((getScreenDetails.contentContainerHeight + getScreenDetails.footerHeight) >= getScreenDetails.windowInnerHeight) {
+          this.setState({
+            showBackGroundImg: "",
+            fitPageToScreen: "",
+            IsHomePage: "not-home-page",
+            fitPageToScreenOverflowHidden: ""
+          });
+        } else {
+          this.setState({
+            showBackGroundImg: "",
+            fitPageToScreen: "fit-page-to-Screen",
+            IsHomePage: "not-home-page",
+            fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden"
+          });
         }
-        else { ////desktops
-          //check for smaller heighst
-          if ($(".content-container").height() < 532) {
-            this.setState({
-              showBackGroundImg: "",
-              fitPageToScreen: "fit-page-to-Screen",
-              IsHomePage: "home-page",
-              fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden"
-            });
-
-          } else {///////bigger heights
-            this.setState({
-              showBackGroundImg: "",
-              fitPageToScreen: "",
-              IsHomePage: "not-home-page",
-              fitPageToScreenOverflowHidden: ""
-            });
-          }
+      })
+    } else if (nextProps.orientationType.getOrientation.data.getOrientation === "Portrait") {
+      this.setState({
+        showBackGroundImg: "",
+        fitPageToScreen: "",
+        IsHomePage: "not-home-page",
+        fitPageToScreenOverflowHidden: ""
+      });
+      $(document).ready(() => {
+        getScreenDetails = this.getScreenDetails();
+        if ((getScreenDetails.contentContainerHeight + getScreenDetails.footerHeight) >= getScreenDetails.windowInnerHeight) {
+          this.setState({
+            showBackGroundImg: "",
+            fitPageToScreen: "",
+            IsHomePage: "not-home-page",
+            fitPageToScreenOverflowHidden: ""
+          });
+        } else {
+          this.setState({
+            showBackGroundImg: "",
+            fitPageToScreen: "fit-page-to-Screen",
+            IsHomePage: "not-home-page",
+            fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden"
+          });
         }
-      }
-      else if (nextProps.orientationType.getOrientation.data === "Portrait") { 
-        if (isMobile) {
-          if ($(window).width() > 768) {///ipad
-            this.setState({
-              showBackGroundImg: "",
-              fitPageToScreen: "fit-page-to-Screen",
-              IsHomePage: "home-page",
-              fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden"
-            });
-          } else { ///////smaller phones
-            this.setState({
-              showBackGroundImg: "",
-              fitPageToScreen: "",
-              IsHomePage: "not-home-page",
-              fitPageToScreenOverflowHidden: ""
-            });
-
-          }
-        }
-        else { ////desktops
-          //check for smaller heighst
-          if ($(".content-container").height() < 532) {
-            this.setState({
-              showBackGroundImg: "",
-              fitPageToScreen: "fit-page-to-Screen",
-              IsHomePage: "home-page",
-              fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden"
-            });
-
-          } else {///////bigger heights
-            this.setState({
-              showBackGroundImg: "",
-              fitPageToScreen: "",
-              IsHomePage: "not-home-page",
-              fitPageToScreenOverflowHidden: ""
-            });
-          }
-        }
-      }
+      })
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*
+        if (nextProps.location.pathname == "/") {
+          if (nextProps.orientationType.getOrientation.data === "Portrait") {
+            this.setState({
+              showBackGroundImg: "show-backGround-img",
+              fitPageToScreen: "fit-page-to-Screen",
+              IsHomePage: "home-page",
+              fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden"
+            });
+          }
+          else if (nextProps.orientationType.getOrientation.data === "Landscape") {
+            if (isMobile) {
+              if ($(window).width() > 768) {  ///ipad
+                this.setState({
+                  showBackGroundImg: "show-backGround-img",
+                  fitPageToScreen: "fit-page-to-Screen",
+                  IsHomePage: "home-page",
+                  fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden"
+                });
+              } else {
+                this.setState({
+                  showBackGroundImg: "show-backGround-img",
+                  fitPageToScreen: "",
+                  IsHomePage: "home-page",
+                  fitPageToScreenOverflowHidden: ""
+                });
+              }
+            } else { ////desktops
+              this.setState({
+                showBackGroundImg: "show-backGround-img",
+                fitPageToScreen: "fit-page-to-Screen",
+                IsHomePage: "home-page",
+                fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden"
+              });
+            }
+          }
+        }
+        else if (nextProps.location.pathname == "/browseRequests" || nextProps.location.pathname == "/forgotPwd" || nextProps.location.pathname == "/resetPwd" || nextProps.location.pathname == "/forgotPwd" || nextProps.location.pathname == "/signIn") {
+          if (nextProps.orientationType.getOrientation.data === "Portrait") {
+            this.setState({
+              showBackGroundImg: "",
+              fitPageToScreen: "fit-page-to-Screen",
+              IsHomePage: "home-page",
+              fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden"
+            });
+          } else if (nextProps.orientationType.getOrientation.data === "Landscape") {
+            if (isMobile) {
+              if ($(window).width() > 768) {  ///ipad
+                this.setState({
+                  showBackGroundImg: "",
+                  fitPageToScreen: "fit-page-to-Screen",
+                  IsHomePage: "home-page",
+                  fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden"
+                });
+              } else {
+                this.setState({
+                  showBackGroundImg: "",
+                  fitPageToScreen: "",
+                  IsHomePage: "not-home-page",
+                  fitPageToScreenOverflowHidden: ""
+                });
+    
+              }
+            }
+            else { /////smaller phones
+              this.setState({
+                showBackGroundImg: "",
+                fitPageToScreen: "fit-page-to-Screen",
+                IsHomePage: "home-page",
+                fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden"
+              });
+            }
+          }
+        }
+        else { ///all other pages
+    
+          if (nextProps.orientationType.getOrientation.data === "Landscape") {
+            if (isMobile) {
+              if ($(window).width() > 768) {///ipad
+                this.setState({
+                  showBackGroundImg: "",
+                  fitPageToScreen: "fit-page-to-Screen",
+                  IsHomePage: "home-page",
+                  fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden"
+                });
+              } else { ///////smaller phones
+                this.setState({
+                  showBackGroundImg: "",
+                  fitPageToScreen: "",
+                  IsHomePage: "not-home-page",
+                  fitPageToScreenOverflowHidden: ""
+                });
+    
+              }
+            }
+            else { ////desktops
+              //check for smaller heighst
+              if ($(".content-container").height() < 532) {
+                this.setState({
+                  showBackGroundImg: "",
+                  fitPageToScreen: "fit-page-to-Screen",
+                  IsHomePage: "home-page",
+                  fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden"
+                });
+    
+              } else {///////bigger heights
+                this.setState({
+                  showBackGroundImg: "",
+                  fitPageToScreen: "",
+                  IsHomePage: "not-home-page",
+                  fitPageToScreenOverflowHidden: ""
+                });
+              }
+            }
+          }
+          else if (nextProps.orientationType.getOrientation.data === "Portrait") { 
+            if (isMobile) {
+              if ($(window).width() > 768) {///ipad
+                this.setState({
+                  showBackGroundImg: "",
+                  fitPageToScreen: "fit-page-to-Screen",
+                  IsHomePage: "home-page",
+                  fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden"
+                });
+              } else { ///////smaller phones
+                this.setState({
+                  showBackGroundImg: "",
+                  fitPageToScreen: "",
+                  IsHomePage: "not-home-page",
+                  fitPageToScreenOverflowHidden: ""
+                });
+    
+              }
+            }
+            else { ////desktops
+              //check for smaller heighst
+              if ($(".content-container").height() < 532) {
+                this.setState({
+                  showBackGroundImg: "",
+                  fitPageToScreen: "fit-page-to-Screen",
+                  IsHomePage: "home-page",
+                  fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden"
+                });
+    
+              } else {///////bigger heights
+                this.setState({
+                  showBackGroundImg: "",
+                  fitPageToScreen: "",
+                  IsHomePage: "not-home-page",
+                  fitPageToScreenOverflowHidden: ""
+                });
+              }
+            }
+          }
+        }
+    */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   }
 
 

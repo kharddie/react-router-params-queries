@@ -86,10 +86,11 @@ html,body,#app,.fit-page-to-Screen,.home-page,.not-home-page,.fit-page-to-screen
   overflow: hidden;
 }
 .fit-page-to-Screen{
+  min-height: 100%;
   margin: 0 auto -75px; /* the bottom margin is the negative value of the footer's height */
 }
 
-.app-bg-image{
+.show-backGround-img{
   background: url("../images/bg.png")!important;
   background-repeat:no-repeat;
   background-position:center bottom;
@@ -100,7 +101,7 @@ html,body,#app,.fit-page-to-Screen,.home-page,.not-home-page,.fit-page-to-screen
 }
 
 .content-container {
-  min-height: 100%;
+
   height: auto !important;
   height: 100%;
 }
