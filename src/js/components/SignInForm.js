@@ -24,6 +24,7 @@ function validate(values) {
 
 //For any field errors upon submission (i.e. not instant check)
 const validateAndSignInUser = (values, state, props, dispatch) => {
+  global.signIn = "validateAndSignInUser";
   return dispatch(signInUser(values))
     .then((result) => {
       if (result.payload.status !== 200) {
@@ -57,13 +58,14 @@ class SignInForm extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.user.status === 'authenticated' && nextProps.user.user && !nextProps.user.error) {
-      if (!nextProps.origin && this.props.origin === "forSignInForm") {
+      if (!nextProps.origin && this.props.forSignInForm === "forSignInForm" && global.signIn === "validateAndSignInUser") {
         this.props.history.push('/');
       } else if (nextProps.origin === "signInModalClose") {
         this.props.modalBackdropClicked()
       } else if (nextProps.origin === "signInModalDontClose") {
         nextProps.showModalWhichPos();
       }
+      global.signIn = "";
     }
 
     //error

@@ -219,8 +219,8 @@ class Nav extends React.Component {
               {toTitleCase(authenticatedUser.name)}
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">
-              <Link class="dropdown-item" to={"myRequests/" + this.props.user.user.id} onClick={this.toggleCollapse.bind(this)}>View my requests</Link>
-              <Link class="dropdown-item" to="profile" onClick={this.toggleCollapse.bind(this)}>View my profile</Link>
+              <Link class="dropdown-item" to={"myRequests/" + this.props.user.user.id} onClick={this.toggleCollapse.bind(this)}>View My Requests</Link>
+              <Link class="dropdown-item" to="profile" onClick={this.toggleCollapse.bind(this)}>View My Profile</Link>
             </div>
           </li>
           <li class="nav-item" role="presentation">
@@ -234,12 +234,12 @@ class Nav extends React.Component {
 
     return (
       <ul className="nav  nav-pills navbar-right only-big-screen">
-        <li role="presentation" class={"nav-item " + signUpClass}>
+        <li role="presentation" class={"pres  nav-item " + signUpClass}>
           <Link class="dropdown-item nav-link" role="presentation" to="/signUp">
             Sign up
             </Link>
         </li>
-        <li role="presentation" class={"nav-item " + signInClass}>
+        <li role="presentation" class={"pres  nav-item " + signInClass}>
           <Link class="dropdown-item nav-link" to="/signIn">
             Sign in
             </Link>
@@ -262,28 +262,18 @@ class Nav extends React.Component {
           <li class={"nav-item " + aboutUsClass}>
             <Link class="nav-link" to="aboutUs" onClick={this.toggleCollapse.bind(this)}>
               <span className="nav-image-icon nav-image-icon-mobile"><img class="user-image" src="../../images/logo.svg" alt="" /></span>
-              AboutUs</Link>
+              About Us</Link>
           </li>
           <li class={"nav-item " + createRequestClass} >
             <Link class="nav-link" to="createRequest" onClick={this.toggleCollapse.bind(this)}>
               <span className="nav-image-icon nav-image-icon-mobile"><img class="user-image" src="../../images/plus.svg" alt="" /></span>
               Create a Request</Link>
           </li>
-
           <li class={"nav-item " + browseRequestsClass} >
             <Link class="nav-link" to="browseRequests" onClick={this.toggleCollapse.bind(this)}>
               <span className="nav-image-icon nav-image-icon-mobile"><img class="user-image" src="../../images/search.svg" alt="" /></span>
-              Browse request</Link>
+              Browse Request</Link>
           </li>
-
-          <li class={"nav-item hide" + settingsClass}>
-            <Link class="nav-link" to="settings" onClick={this.toggleCollapse.bind(this)}>Settings</Link>
-          </li>
-
-          <li class={"nav-item hide" + dashboardClass}>
-            <Link class="nav-link " to="dashboard" onClick={this.toggleCollapse.bind(this)}>Dashboard</Link>
-          </li>
-
           <li class="dropdown nav-item only-small-screen">
             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
               <span className="nav-image-icon"><img class="user-image" src="../../images/user-profile.svg" alt="" /></span>
@@ -294,7 +284,7 @@ class Nav extends React.Component {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link class="dropdown-item" to="profile" onClick={this.toggleCollapse.bind(this)}>View my profile
+                <Link class="dropdown-item" to="profile" onClick={this.toggleCollapse.bind(this)}>View My Profile
                 </Link></li>
               <li className="nav-item">
                 <a class="dropdown-item" onClick={this.props.logout} href="javascript:void(0)">
@@ -309,30 +299,22 @@ class Nav extends React.Component {
 
     return (
       <ul class="navbar-nav mr-auto">
-        <li class={"nav-item " + homeClass}>
+        <li class={"ddd nav-item " + homeClass}>
           <IndexLink class="nav-link" to="/" onClick={this.toggleCollapse.bind(this)}>
             <span className="nav-image-icon"><img class="user-image" src="../../images/home.svg" alt="" /></span>
             <span>Home</span>
           </IndexLink>
         </li>
-
-        <li class={"nav-item " + aboutUsClass}>
+        <li class={"ddd nav-item " + aboutUsClass}>
           <Link class="nav-link" to="aboutUs" onClick={this.toggleCollapse.bind(this)}>
             <span className="nav-image-icon nav-image-icon-mobile"><img class="user-image" src="../../images/logo.svg" alt="" /></span>
-            AboutUs</Link>
+            About Us</Link>
         </li>
-
-
-
         <li class={"nav-item " + browseRequestsClass} >
           <Link class="nav-link" to="browseRequests" onClick={this.toggleCollapse.bind(this)}>
             <span className="nav-image-icon nav-image-icon-mobile"><img class="user-image" src="../../images/search.svg" alt="" /></span>
-            Browse request</Link>
+            Browse Request</Link>
         </li>
-        <li class={"nav-item " + settingsClass}>
-          <Link class="nav-link hide" to="settings" onClick={this.toggleCollapse.bind(this)}>Settings</Link>
-        </li>
-
         <li class={"nav-item hide" + dashboardClass}>
           <Link class="nav-link " to="dashboard" onClick={this.toggleCollapse.bind(this)}>Dashboard</Link>
         </li>
@@ -354,7 +336,10 @@ class Nav extends React.Component {
       } else {
         return "hide"
       }
+
+ 
     }
+
     const { location } = this.props;
     const { collapsed } = this.state;
     const homeClass = location.pathname === "/" ? "active" : "";

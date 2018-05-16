@@ -54,9 +54,9 @@ class BrowseRequests extends Component {
         // console.log(nextProps.resetRequestxx.message)
 
         if (nextProps.newOffer.offer) {
-            this.setState({ 
+            this.setState({
                 modalvisibleOffers: false,
-                modalvisibleLikeHomePage:false 
+                modalvisibleLikeHomePage: false
             });
             this.props.resetNewOffer();
         }
@@ -120,21 +120,15 @@ class BrowseRequests extends Component {
         this.setState({ modalvisibleLikeHomePage: true });
     }
 
-
-
-    scrollableContentHeight = () => {
-        this.setState(
-            {
-                requestBoxDetailsCol: 'col-lg-8',
-                requestsSmallCol: 'col-lg-4'
-            }
-        )
+    backButtonholderFn = () => {
+        this.setState({
+            requestBoxDetailsCol: 'col-lg-8',
+            requestsSmallCol: 'col-lg-4'
+        })
         if (isMobile) {
             $(".scrollable-content").show();
             $(".request-box-details").hide();
-            $(".scrollableContentHeight-btn").hide();
-
-
+            $(".backButtonholder").hide();
         }
     }
 
@@ -147,10 +141,8 @@ class BrowseRequests extends Component {
             }
 
             $(".request-box-details").show();
-            $(".scrollableContentHeight-btn").show();
-            $(".scrollableContentHeight-btn-holder").show();
+            $(".backButtonholder").show();
         }
-
 
         this.setState(
             {
@@ -281,16 +273,10 @@ class BrowseRequests extends Component {
                                 <div className="col-sm-3 "><span className="text-uppercase text-uppercase font-weight-normal  tiny-text">{this.timeSpan(data.created, moment)}</span></div>
                                 <div className="col-sm-2 ">
                                     <span className={showAcceptedOfferView ? "show text-uppercase font-weight-normal" : "hide text-uppercase font-weight-normal"}>
-
-
                                         <button className={!showAcceptedOffer ? "show btn btn-link btn-sm btn-img" : "hide btn btn-link btn-sm"} onClick={() => { this.props.acceptOffer(data.offer_id, this.state.request_id, this.state.user_id, this.props.user.id) }}>
                                             Accept offer
                                         </button>
                                         <span className={showAcceptedOffer ? "show" : "hide"}><img className="accepted-offer-tick" src="../../images/checked.svg" alt="" /></span>
-
-
-
-
                                     </span>
                                 </div>
                             </div>
@@ -299,7 +285,6 @@ class BrowseRequests extends Component {
                     </div>
                 )
             })
-
         }
     }
 
@@ -342,20 +327,19 @@ class BrowseRequests extends Component {
             return requests.map((data, index) => {
                 if (data.title != '' && data.address != '' && data.content != '' && data.status) {
                     //get lat long from address
-                    
-                                         Geocode.fromAddress(data.address).then(
-                                             response => {
-                                                 const { lat, lng } = response.results[0].geometry.location;
-                                                 //console.log(lat, lng);
-                                                 global.points.push(
-                                                     { lat: lat, lng: lng, title: data.title, body: data.content, address: data.address }
-                                                 )
-                                             },
-                                             error => {
-                                                 console.error(error);
-                                             }
-                                         )
-                                         
+
+                    Geocode.fromAddress(data.address).then(
+                        response => {
+                            const { lat, lng } = response.results[0].geometry.location;
+                            //console.log(lat, lng);
+                            global.points.push(
+                                { lat: lat, lng: lng, title: data.title, body: data.content, address: data.address }
+                            )
+                        },
+                        error => {
+                            console.error(error);
+                        }
+                    )
 
                     return (
                         <div className="row" key={index} onClick={() => this.displayRequestDetails(data)} >
@@ -432,14 +416,12 @@ class BrowseRequests extends Component {
         $('.requests-small').height((($(window).height() - 270)) + 62);
         $('.request-box-details').height(($(window).height() - 270));
 
-
         $(window).resize(function () {
             $('.requests-small').height((($(window).height() - 270)) + 62);
             $('.request-box-details').height(($(window).height() - 270));
             if ($(window).width() > 1023) {
                 $(".scrollable-content").show();
             }
-
         });
 
         if (acceptOfferListALL.loading) {
@@ -680,8 +662,8 @@ class BrowseRequests extends Component {
 
                 </Modal>
 
-                <div className="scrollableContentHeight-btn-holder">
-                    <button onClick={this.scrollableContentHeight.bind(this)} className="scrollableContentHeight-btn btn btn-secondary btn-block">
+                <div className="backButtonholder">
+                    <button onClick={this.backButtonholderFn.bind(this)} className=" btn btn-secondary btn-block">
                         <img className="user-image" src="../../images/back-arrow.svg" alt="" />
                     </button>
                 </div>

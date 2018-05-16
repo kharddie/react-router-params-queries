@@ -99,9 +99,10 @@ class Home extends React.Component {
                         </Modal>
                     </div>
                 </div>
+                
                 <div className="row">
                     <div className="col-sm-12 col-lg-7">
-                        <div className="intro"><h1 className="text-h1-lg intro-2" >Get more done for FREE!</h1>
+                        <div className="intro"><h1 className="text-h1-lg intro-2" >Get more done for <span className="orange-font">FREE! </span></h1>
                             <h4 className="intro-3">
                                 Find out trusted people in your local community ready to give up their time and complete your task today.
                             </h4>

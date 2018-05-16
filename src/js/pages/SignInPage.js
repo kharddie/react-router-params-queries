@@ -58,6 +58,8 @@ class SignInPage extends React.Component {
               <div className="col-md-11 col-lg-8 sign-in-right-cont">
                 <h1 className="title-page title-page-margin">New customer?</h1>
                 <p> Set up aan account to get free quotes and offer to assist with your skills.</p>
+                <p> Gain new or use existing skills.</p>
+                
                 <Link class="btn btn-primary btn-block" to="signUp">Sign Up</Link>
               </div>
             </div>

@@ -80,7 +80,7 @@ class CreateRequestForm extends Component {
     this.props.resetMe();
     if (this.props.location.href.indexOf("createRequest") > -1) {
       this.setState({
-        divClass: " col-md-6",
+        divClass: " col-md-7",
         formWidthBg: "form-width-bg"
       })
     }
@@ -108,6 +108,7 @@ class CreateRequestForm extends Component {
         <div class="row justify-content-md-center">
           <div class={"col-sm-12" + this.state.divClass}>
             <div>
+            <div><h2>Create Request</h2> </div>
             </div>
 
             <form className={"request-form " + this.state.formWidthBg} onSubmit={handleSubmit((values, dispatch) => { validateAndCreateRequest(values, this.props, dispatch, isMobile); })}>

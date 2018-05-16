@@ -8,6 +8,8 @@ import CommentsReducer from './commentsReducer';
 import UpdateProfileReducer from './reducerUpdateProfile';
 import { reducer as formReducer } from 'redux-form';
 import InfoMessageReducer from './infoMessageReducer';
+import GetOrientationReducer from './getOrientationReducer';
+
 
 import ForgotPwdReducer from './reducerForgotPwd';
 
@@ -21,7 +23,8 @@ const rootReducer = combineReducers({
   form: formReducer, // <-- redux-form
   updateProfile: UpdateProfileReducer,
   infoMessage: InfoMessageReducer,
-  forgotPwd:ForgotPwdReducer
+  forgotPwd: ForgotPwdReducer,
+  getOrientation: GetOrientationReducer,
 });
 
 export default rootReducer;

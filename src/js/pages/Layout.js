@@ -3,7 +3,8 @@ import { Link } from "react-router";
 import Footer from "../components/layout/Footer";
 import Nav from "../components/layout/Nav";
 import { meFromToken, meFromTokenSuccess, meFromTokenFailure, resetToken } from '../actions/users';
-import { connect } from "react-redux"
+import { connect } from "react-redux";
+import { fetchOrientation } from "../actions/getOrientation"
 //import { connect } from "http2";
 import { BrowserView, MobileView, isBrowser, isMobile } from "react-device-detect";
 
@@ -15,9 +16,6 @@ const mapDispatchToProps = (dispatch) => {
       if (!token || token === '') {//if there is no token, dont bother
         return;
       }
-
-      //dispatch(meFromTokenSuccess(token))
-      //fetch user from token (if server deems it's valid token)
       dispatch(meFromToken(token))
         .then((response) => {
           if (!response.error) { // network failure
@@ -39,92 +37,256 @@ const mapDispatchToProps = (dispatch) => {
     resetMe: () => {
       sessionStorage.removeItem('jwtToken');
       dispatch(resetToken());
+    },
+    getOrientation: (getOrientation) => {
+      dispatch(fetchOrientation(getOrientation));
     }
   }
 }
 
 const mapStateToProps = (state) => {
-  profileUpdated: state.profileUpdated
+  return {
+    orientationType: state.getOrientation
+  }
 }
 
-class Layout extends React.Component {
+class Layout extends Component {
+  constructor(props) {
+    super(props);
+    $(window).resize(() => {
+      let getOrientation = window.innerWidth > window.innerHeight ? "Landscape" : "Portrait";
+      props.getOrientation(getOrientation);
+    });
+
+
+
+
+  }
+
+  state = {
+    getOrientation: null,
+    locationPathname: null,
+    showBackGroundImg: "",
+    fitPageToScreen: "",
+    IsHomePage: "",
+    fitPageToScreenOverflowHidden: ""
+  }
+
+  componentDidMount() {
+
+  }
+
   componentWillMount() {
     this.props.loadUserFromToken();
+    let getOrientation;
+    getOrientation = window.innerWidth > window.innerHeight ? "Landscape" : "Portrait";
+    this.props.getOrientation(getOrientation);
+    $(window).resize(() => {
+      getOrientation = window.innerWidth > window.innerHeight ? "Landscape" : "Portrait";
+      this.props.getOrientation(getOrientation);
+    });
+
+
   }
 
   componentWillReceiveProps = (nextProps) => {
-    this.props.location.pathname == "/"
+    //orientation: nextProps.orientationType,
+    console.log(nextProps.orientationType.getOrientation.data);
+    console.log(nextProps.location.pathname);
+
+    if (nextProps.location.pathname == "/") {
+      if (nextProps.orientationType.getOrientation.data === "Portrait") {
+        this.setState({
+          showBackGroundImg: "show-backGround-img",
+          fitPageToScreen: "fit-page-to-Screen",
+          IsHomePage: "home-page",
+          fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden"
+        });
+      }
+      else if (nextProps.orientationType.getOrientation.data === "Landscape") {
+        if (isMobile) {
+          if ($(window).width() > 768) {  ///ipad
+            this.setState({
+              showBackGroundImg: "show-backGround-img",
+              fitPageToScreen: "fit-page-to-Screen",
+              IsHomePage: "home-page",
+              fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden"
+            });
+          } else {
+            this.setState({
+              showBackGroundImg: "show-backGround-img",
+              fitPageToScreen: "",
+              IsHomePage: "home-page",
+              fitPageToScreenOverflowHidden: ""
+            });
+          }
+        } else { ////desktops
+          this.setState({
+            showBackGroundImg: "show-backGround-img",
+            fitPageToScreen: "fit-page-to-Screen",
+            IsHomePage: "home-page",
+            fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden"
+          });
+        }
+      }
+    }
+    else if (nextProps.location.pathname == "/browseRequests" || nextProps.location.pathname == "/forgotPwd" || nextProps.location.pathname == "/resetPwd" || nextProps.location.pathname == "/forgotPwd" || nextProps.location.pathname == "/signIn") {
+      if (nextProps.orientationType.getOrientation.data === "Portrait") {
+        this.setState({
+          showBackGroundImg: "",
+          fitPageToScreen: "fit-page-to-Screen",
+          IsHomePage: "home-page",
+          fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden"
+        });
+      } else if (nextProps.orientationType.getOrientation.data === "Landscape") {
+        if (isMobile) {
+          if ($(window).width() > 768) {  ///ipad
+            this.setState({
+              showBackGroundImg: "",
+              fitPageToScreen: "fit-page-to-Screen",
+              IsHomePage: "home-page",
+              fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden"
+            });
+          } else {
+            this.setState({
+              showBackGroundImg: "",
+              fitPageToScreen: "",
+              IsHomePage: "not-home-page",
+              fitPageToScreenOverflowHidden: ""
+            });
+
+          }
+        }
+        else { /////smaller phones
+          this.setState({
+            showBackGroundImg: "",
+            fitPageToScreen: "fit-page-to-Screen",
+            IsHomePage: "home-page",
+            fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden"
+          });
+        }
+      }
+    }
+    else { ///all other pages
+
+      if (nextProps.orientationType.getOrientation.data === "Landscape") {
+        if (isMobile) {
+          if ($(window).width() > 768) {///ipad
+            this.setState({
+              showBackGroundImg: "",
+              fitPageToScreen: "fit-page-to-Screen",
+              IsHomePage: "home-page",
+              fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden"
+            });
+          } else { ///////smaller phones
+            this.setState({
+              showBackGroundImg: "",
+              fitPageToScreen: "",
+              IsHomePage: "not-home-page",
+              fitPageToScreenOverflowHidden: ""
+            });
+
+          }
+        }
+        else { ////desktops
+          //check for smaller heighst
+          if ($(".content-container").height() < 532) {
+            this.setState({
+              showBackGroundImg: "",
+              fitPageToScreen: "fit-page-to-Screen",
+              IsHomePage: "home-page",
+              fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden"
+            });
+
+          } else {///////bigger heights
+            this.setState({
+              showBackGroundImg: "",
+              fitPageToScreen: "",
+              IsHomePage: "not-home-page",
+              fitPageToScreenOverflowHidden: ""
+            });
+          }
+        }
+      }
+      else if (nextProps.orientationType.getOrientation.data === "Portrait") { 
+        if (isMobile) {
+          if ($(window).width() > 768) {///ipad
+            this.setState({
+              showBackGroundImg: "",
+              fitPageToScreen: "fit-page-to-Screen",
+              IsHomePage: "home-page",
+              fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden"
+            });
+          } else { ///////smaller phones
+            this.setState({
+              showBackGroundImg: "",
+              fitPageToScreen: "",
+              IsHomePage: "not-home-page",
+              fitPageToScreenOverflowHidden: ""
+            });
+
+          }
+        }
+        else { ////desktops
+          //check for smaller heighst
+          if ($(".content-container").height() < 532) {
+            this.setState({
+              showBackGroundImg: "",
+              fitPageToScreen: "fit-page-to-Screen",
+              IsHomePage: "home-page",
+              fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden"
+            });
+
+          } else {///////bigger heights
+            this.setState({
+              showBackGroundImg: "",
+              fitPageToScreen: "",
+              IsHomePage: "not-home-page",
+              fitPageToScreenOverflowHidden: ""
+            });
+          }
+        }
+      }
+    }
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
   render() {
     const { location, history } = this.props;
     const containerStyle = {
       marginTop: "40px"
     };
 
-    const pageFitScreen = () => {
-      if (location.pathname == "/" || location.pathname == "/browseRequests") {
-        return "app-bg-image page-fit-screen-fit ";
-      }
+    $(document).ready(function () {
+      /*var observer = new MutationObserver(function(mutations) {
+        alert('size changed!');
+      });
+      var target = document.querySelector('#main-content');
+      observer.observe(target, {
+        attributes: true, 
+        childList: true, 
+        characterData: true 
+      });
+      */
+    });
 
-      else if (location.pathname == "/forgotPwd" || location.pathname == "/resetPwd" || location.pathname == "/forgotPwd") {
-        if (isMobile) {
-          return "notHomePage";
-        } else {
-          return "app-bg-image page-fit-screen-fit ";
-        }
-      }
-
-      else if (location.pathname == "/signUp") {
-        if (isMobile) {
-          return "notHomePage";
-        } else {
-          return "app-bg-image app-bg-image-height-auto";
-        }
-      }
-
-      /* 
-       else if (location.pathname == "/browseRequests") {
-         if (isMobile) {
-           return "notHomePage";
-         } else {
-           return "app-bg-image page-fit-screen-fit ";
-         }
-       } 
-       */
-      else {
-        return "notHomePage";
-      }
-    }
-
-    const pageFitScreen2 = () => {
-      if (location.pathname == "/" || location.pathname == "/browseRequests") {
-        return "content-container-fit-screen";
-      }
-
-      else if (location.pathname == "/forgotPwd" || location.pathname == "/resetPwd" || location.pathname == "/forgotPwd") {
-        if (isMobile) {
-          return "notHomePage";
-        } else {
-          return "content-container-fit-screen";
-        }
-      }
-      /*else if (location.pathname == "/browseRequests") {
-        if (isMobile) {
-          return "notHomePage";
-        } else {
-          return "content-container-fit-screen";
-        }
-      } 
-      */else {
-        return "notHomePage";
-      }
-    }
 
     return (
-      <div className={pageFitScreen()}>
-        <div class={"content-container " + pageFitScreen2()}>
+      <div className={this.state.showBackGroundImg + " " + this.state.fitPageToScreenOverflowHidden}>
+        <div class={"content-container " + this.state.fitPageToScreen}>
           <Nav location={location} history={history} />
-          <div className=" main-content container " style={containerStyle}>
+          <div id="main-content" className=" main-content container " style={containerStyle}>
             <div className="row">
               <div className="col col-12">
                 {this.props.children}
@@ -134,9 +296,8 @@ class Layout extends React.Component {
         </div>
         <Footer />
       </div>
-
     );
   }
 }
 
-export default connect(null, mapDispatchToProps)(Layout)
+export default connect(mapStateToProps, mapDispatchToProps)(Layout)

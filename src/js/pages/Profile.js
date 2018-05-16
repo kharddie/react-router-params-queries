@@ -22,8 +22,12 @@ class Profile extends Component {
                 </div>
                 <div class="col-6 col-sm-6 ">
                   <ol className="carousel-indicators custom">
-                    <li data-target="#carouselExampleIndicators" data-slide-to="0" className="active"><FontAwesomeIcon size="sm" icon={faUser} /></li>
-                    <li data-target="#carouselExampleIndicators" data-slide-to="1"><FontAwesomeIcon size="sm" icon={faEdit} /></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="0" className="active">
+                    <img class="user-image profile-img" src="../../images/user-profile.svg" />
+                    </li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="1">
+                    <img class="user-image edit-img" src="../../images/edit.svg" />
+                    </li>
                   </ol>
                 </div>
               </div>
