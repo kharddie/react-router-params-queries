@@ -45,7 +45,7 @@ const validateAndSignInUser = (values, state, props, dispatch) => {
     });
 };
 
-class SignInForm extends Component {
+class SignInForm extends React.Component {
   static contextTypes = {
     router: PropTypes.object
   };
@@ -76,6 +76,10 @@ class SignInForm extends Component {
     }
   }
 
+  singUpFromHome = () => {
+    this.props.singUpFromHome();
+  }
+
   render() {
     const { asyncValidating, handleSubmit, submitting } = this.props;
     return (
@@ -102,6 +106,16 @@ class SignInForm extends Component {
                   <span className={!this.props.user.loading ? "show" : "hide"} > Sign In</span>
                   <span className={this.props.user.loading ? "show" : "hide"}  ><FontAwesomeIcon size="lg" className="fa-spin spinner" icon={faSpinner} /></span>
                 </button>
+
+                <button
+                  type="button"
+                  className="btn btn-secondary  btn-block"
+                  onClick={() => this.singUpFromHome()}>
+                  <span> Sign Up</span>
+                </button>
+
+
+
               </div>
             </form>
           </div>

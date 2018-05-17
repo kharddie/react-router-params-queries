@@ -83,6 +83,9 @@ const validateAndSignUpUser = (values, dispatch) => {
         dispatch(signUpUserFailure(result.payload.response.data));
         throw new SubmissionError(result.payload.response.data);
         dispatch(showInfoMessage(result.payload.data));
+        if (props.showModalCreateRequest) {
+          props.showModalCreateRequest();
+        }
       }
       //sessionStorage.setItem('jwtToken', result.payload.data.token);
       dispatch(resetToken());
@@ -96,15 +99,30 @@ class SignUpForm extends Component {
     router: PropTypes.object
   };
 
+  state = {
+    divClass: " col-md-7",
+    showHeading: true,
+  }
+
   componentWillMount() {
     //Important! If your component is navigating based on some global state(from say componentWillReceiveProps)
     //always reset that global state back to null when you REMOUNT
     this.props.resetMe();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.user.status === 'signup'  && !nextProps.user.error && nextProps.user.success) {
-     // this.props.history.push('/');
+  componentWillReceiveProps = (nextProps) => {
+    if (this.props.callingFromHome) {
+      this.setState({
+        divClass: " col-md-12",
+      })
+    }
+    if (this.props.showHeading) {
+      this.setState({
+        showHeading: false,
+      })
+    }
+    if (nextProps.user.status === 'signup' && !nextProps.user.error && nextProps.user.success) {
+      // this.props.history.push('/');
     }
   }
 
@@ -113,48 +131,47 @@ class SignUpForm extends Component {
     const { asyncValidating, handleSubmit, submitting, asyncValidate, validate } = this.props;
     return (
 
-        <div class="row justify-content-md-center ">
-          <div class="col-sm-12 col-md-7">
-            <div><h2>Sign up</h2>
-            </div>
-            <form class="sign-up" onSubmit={handleSubmit(validateAndSignUpUser)}>
-              <Field
-                name="name"
-                type="text"
-                component={renderField}
-                label="Full Name*" />
-              <Field
-                name="username"
-                type="text"
-                component={renderField}
-                label="Username*" />
-              <Field
-                name="email"
-                type="email"
-                component={renderField}
-                label="Email*" />
-              <Field
-                name="password"
-                type="password"
-                component={renderField}
-                label="Password*" />
-              <Field
-                name="confirmPassword"
-                type="password"
-                component={renderField}
-                label="Confirm Password*" />
-              <div>
-                <button
-                  type="submit"
-                  className="btn btn-primary btn-block"
-                  disabled={submitting}>
-                  Submit
+      <div class="row justify-content-md-center ">
+        <div class={"col-sm-12" + this.state.divClass}>
+          <div className={this.state.showHeading ? "show" : "hide"} ><h2>Sign up</h2></div>
+          <form class="sign-up" onSubmit={handleSubmit(validateAndSignUpUser)}>
+            <Field
+              name="name"
+              type="text"
+              component={renderField}
+              label="Full Name*" />
+            <Field
+              name="username"
+              type="text"
+              component={renderField}
+              label="Username*" />
+            <Field
+              name="email"
+              type="email"
+              component={renderField}
+              label="Email*" />
+            <Field
+              name="password"
+              type="password"
+              component={renderField}
+              label="Password*" />
+            <Field
+              name="confirmPassword"
+              type="password"
+              component={renderField}
+              label="Confirm Password*" />
+            <div>
+              <button
+                type="submit"
+                className="btn btn-primary btn-block"
+                disabled={submitting}>
+                Submit
             </button>
 
-              </div>
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
+      </div>
 
 
     )

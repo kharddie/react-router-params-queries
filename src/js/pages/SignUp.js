@@ -1,22 +1,15 @@
-import SignUpForm from '../components/SignUpForm.js';
-import { resetValidateUserFields } from '../actions/validateUserFields';
-import { connect } from 'react-redux';
+import React, { Component } from 'react';
+import SignUpFormContainer from '../containers/signUpFormContainer.js';
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    resetMe: () => {
-      dispatch(resetValidateUserFields());
-    }
+class SignUp extends Component {
+  render() {
+    return (
+      <div>
+        <SignUpFormContainer />
+      </div>
+    );
   }
 }
 
-function mapStateToProps(state, ownProps) {
-  return {
-    user: state.user,
-    validateFields: state.validateFields,
-    history: ownProps.history,
-    infoMessage:state.infoMessage
-  };
-}
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignUpForm);
+export default SignUp;
