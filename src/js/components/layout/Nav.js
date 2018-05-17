@@ -61,7 +61,7 @@ class Nav extends React.Component {
   constructor(props) {
     super(props);
     this.props.history.listen((location, action) => {
-      console.log("navigation detect=" + global.retainInfoMsg)
+     // console.log("navigation detect=" + global.retainInfoMsg)
       if (!global.retainInfoMsg) {
         /*this.hideInfoBox();
         this.setState({
@@ -188,20 +188,20 @@ class Nav extends React.Component {
   }
 
   componentWillUnmount() {
-    console.log("*** componentWillUnmount");
+    //console.log("*** componentWillUnmount");
     //Important! If your component is navigating based on some global state(from say componentWillReceiveProps)
     //always reset that global state back to null when you REMOUNT
 
   }
 
   componentDidMount() {
-    console.log("*** componentDidMount");
+    //console.log("*** componentDidMount");
 
   }
 
 
   componentWillMount() {
-    console.log("*** componentWillMount");
+    //console.log("*** componentWillMount");
   }
 
   toggleCollapse = () => {
