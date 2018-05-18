@@ -14,7 +14,7 @@ function mapStateToProps(state, ownProps) {
   return {
     user: state.user,
     validateFields: state.validateFields,
-    infoMessage:state.infoMessage
+    infoMessage:state.infoMessage,
   };
 }
 

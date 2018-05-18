@@ -91,7 +91,7 @@ class BrowseRequests extends Component {
         showRequestDetails: "hide",
         showOffersAScceptBtn: true,
         showOfferModal: true,
-        requestBoxDetailsCol: 'col-lg-8',
+        requestsBigCol: 'col-lg-8',
         requestsSmallCol: 'col-lg-4',
         modalvisibleLikeHomePage: false,
         origin: "",
@@ -122,17 +122,34 @@ class BrowseRequests extends Component {
 
     backButtonholderFn = () => {
         this.setState({
-            requestBoxDetailsCol: 'col-lg-8',
+            requestsBigCol: 'col-lg-8',
             requestsSmallCol: 'col-lg-4'
         })
-        if (isMobile) {
-            $(".scrollable-content").show();
-            $(".request-box-details").hide();
+
+        if ($(window).width() < 992) {
+            this.toggleRequestClassesOut();
             $(".backButtonholder").hide();
         }
     }
 
+    toggleRequestClasses = () => {
+        $('.requestsSmall').removeClass("requestsSmallStart");
+        $('.requestsSmall').addClass("requestsSmallOut");
+
+        $('.requestsBig').removeClass("requestsBigStart");
+        $('.requestsBig').addClass("requestsBigOut");
+    }
+
+    toggleRequestClassesOut = () => {
+        $('.requestsSmall').removeClass("requestsSmallOut");
+        $('.requestsSmall').addClass("requestsSmallStart");
+
+        $('.requestsBig').removeClass("requestsBigOut");
+        $('.requestsBig').addClass("requestsBigStart");
+    }
+
     displayRequestDetails = (data) => {
+        /*
         if (isMobile) {
             if ($(window).width() < 1024) {
                 $(".scrollable-content").hide();
@@ -143,13 +160,26 @@ class BrowseRequests extends Component {
             $(".request-box-details").show();
             $(".backButtonholder").show();
         }
+    
+        if ($(window).width() < 992) {
+            $('.requestsSmall').animate({
+                left: $(window).width()
+            }, 400, function () {
+                // Add hash (#) to URL when done scrolling (default click behavior)
+            });
+           $('.requestsBig').animate({
+                left: 0
+            }, 400, function () {
+                // Add hash (#) to URL when done scrolling (default click behavior)
+            });       
+        } 
+    */
+        if ($(window).width() < 992) {
+            this.toggleRequestClasses();
+            $(".backButtonholder").show();
+        }
 
-        this.setState(
-            {
-                //  requestBoxDetailsCol: 'col-lg-12',
-                //  requestsSmallCol: 'col-lg-12'
-            }
-        )
+
 
 
         // disabled if its the user that created the request
@@ -411,16 +441,45 @@ class BrowseRequests extends Component {
         const isLoggedIn = this.props.user;
         let loadingAcceptOfferListALL = true;
 
+        let clearBoth = {
+            clear: "both"
+        }
+
+        $(document).ready(function(){
+            var footerPos = $(".footer.footer").position();
+            var backButtonholderPos = $(".backButtonholder").position(); 
+            $(".backButtonholder").css("bottom",($(".backButtonholder").height())+10);
+        })
+
+
         $('.map').height(($(window).height() - 270));
 
         $('.requests-small').height((($(window).height() - 270)) + 62);
         $('.request-box-details').height(($(window).height() - 270));
 
+        
+
+        if ($(window).width() < 992) {
+            $('.container.requests').height((($(window).height() - 270)) + 62);
+            $('.container.requests').height((($(window).height() - 270)) + 62);
+        }
+
+        if ($(window).width() > 991) {
+            $(".backButtonholder").hide();
+        }
+        
+
         $(window).resize(function () {
             $('.requests-small').height((($(window).height() - 270)) + 62);
             $('.request-box-details').height(($(window).height() - 270));
+            if ($(window).width() < 992) {
+                $('.container.requests').height((($(window).height() - 270)) + 62);
+            }
             if ($(window).width() > 1023) {
                 $(".scrollable-content").show();
+            }
+            if ($(window).width() > 991) {
+                $(".backButtonholder").hide();
             }
         });
 
@@ -468,14 +527,14 @@ class BrowseRequests extends Component {
             <div className="container requests">
                 {this.getRequestsTotal(requests)}
                 <div className="row">
-                    <div className={this.state.requestsSmallCol + " scrollable-content requests-small"}>
+                    <div className={"requestsSmall requestsSmallStart  " + this.state.requestsSmallCol + " scrollable-content requests-small"}>
                         <div className="loader-show loader-spinner-container">
                             <FontAwesomeIcon size="lg" className="fa-spin spinner" icon={faSpinner} />
                         </div>
                         {this.renderRequests(requests)}
                         {noRequestsMessage}
                     </div>
-                    <div className={this.state.requestBoxDetailsCol}>
+                    <div className={"requestsBig requestsBigStart " + this.state.requestsBigCol}>
                         <div className="row" >
                             <div className="col-12 request-box request-box-details">
                                 <div className={"row map " + this.state.showGoogleMap}>
@@ -510,7 +569,7 @@ class BrowseRequests extends Component {
 
                                             <div className="row" >
                                                 <div className="col-sm-2 col-max-width-fifty">
-                                                    <img className="user-image" src="../../images/user.svg" alt="" />
+                                                    <img className="user-image make-small" src="../../images/user.svg" alt="" />
                                                 </div>
                                                 <div className="col col-sm-6   text-uppercase font-weight-bold titles">Posted by: <br /><span className="text-capitalize"><span className="font-weight-normal">{this.state.name}</span></span></div>
                                                 <div className="col col-sm-4 text-right"><br /><span className="text-capitalize font-weight-normal">{this.timeSpan(this.state.created, moment)}.</span></div>
@@ -576,7 +635,7 @@ class BrowseRequests extends Component {
                                                     <CreateCommentForm fetchComments={this.props.fetchComments} requestId={this.state.request_id} />
                                                 ) : (
                                                         <div >
-                                                            <div className="col-12 col-xs-12 ">
+
                                                                 <div className="row">
                                                                     <div className="col-12 text-left">
                                                                         <span className="text-uppercase font-weight-bold">Join the conversation</span>
@@ -584,7 +643,7 @@ class BrowseRequests extends Component {
                                                                     <div className="col-12 col-sm-5 join-convo-image-wrapper">
                                                                         <button onClick={this.modalvisibleSignIn.bind(this)} className="btn btn-primary btn-sm">log in</button>
                                                                     </div>
-                                                                </div>
+                                                              
                                                             </div>
                                                         </div>
                                                     )}
@@ -720,7 +779,7 @@ class BrowseRequests extends Component {
                     </div>
                 </div>
 
-
+                <div style={clearBoth}></div>
 
 
 

@@ -100,7 +100,7 @@ class SignUpForm extends Component {
   };
 
   state = {
-    divClass: " col-md-7",
+    divClass: " col-md-8",
     showHeading: true,
   }
 
@@ -128,12 +128,14 @@ class SignUpForm extends Component {
 
   render() {
     //debugger;
-    const { asyncValidating, handleSubmit, submitting, asyncValidate, validate } = this.props;
+    const { asyncValidating, handleSubmit, submitting, asyncValidate, validate, history } = this.props;
+    let showHeading = this.props.location.pathname === "/" ? "hide" : "show";
+
     return (
 
       <div class="row justify-content-md-center ">
         <div class={"col-sm-12" + this.state.divClass}>
-          <div className={this.state.showHeading ? "show" : "hide"} ><h2>Sign up</h2></div>
+          <div className={showHeading} ><h2>Sign up</h2></div>
           <form class="sign-up" onSubmit={handleSubmit(validateAndSignUpUser)}>
             <Field
               name="name"

@@ -80,7 +80,7 @@ class CreateRequestForm extends Component {
     this.props.resetMe();
     if (this.props.location.href.indexOf("createRequest") > -1) {
       this.setState({
-        divClass: " col-md-7",
+        divClass: " col-md-8",
         formWidthBg: "form-width-bg"
       })
     }

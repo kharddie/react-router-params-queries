@@ -91,9 +91,12 @@ html,body,#app,.fit-page-to-Screen,.home-page,.not-home-page,.fit-page-to-screen
 }
 
 .show-backGround-img{
-  background: url("../images/bg.png")!important;
+  background-image: url("../images/bg.png")!important;
   background-repeat:no-repeat;
-  background-position:center bottom;
+  @media screen and (max-width:768px){
+    background-position:43% bottom;
+  }
+  background-position:50% bottom;
 }
 
 .fit-page-to-Screen{
@@ -231,6 +234,10 @@ html,body,#app,.fit-page-to-Screen,.home-page,.not-home-page,.fit-page-to-screen
 
   /* utilities*/
 
+.welcome {
+    font-size: 121%;
+}
+
 .orange-font {
     color: #ff9e19;
     font-weight: 500;
@@ -238,22 +245,22 @@ html,body,#app,.fit-page-to-Screen,.home-page,.not-home-page,.fit-page-to-screen
 .backButtonholder{
   display: block;
   position: fixed;
-  z-index: 123523;
-  right: 49px;
-  height: 40px;
-  height: 40px;
-  width: 40px;
-  display: none;
-  background-color: $secondary-color;
-  border-radius: 40px;
-  bottom: 113px;
+  z-index: 5734573457457345;
+  right: 0;
+  left: 0;
+  margin: auto;
+  height: 50px;
+  width: 50px;
+  background-color: rgba(255, 147, 25, 0.5);
+  border-radius: 50px;
     .btn {
       background-color: transparent;
       border: none;
       padding: 0;
-      height: 40px;
+      height: 50px;
       img{
-          width:20px;
+          width:30px;
+          @include justify-content-center-center
       }
   }
 }
@@ -799,7 +806,9 @@ only screen and (min-resolution: 2dppx) {
 }
 }
 
-
+.user-image.make-small{
+  width: 20px;
+}
     .user-image{
       @include justify-content-center-center;
       height: 30px;
@@ -824,11 +833,54 @@ only screen and (min-resolution: 2dppx) {
 
 
 }
+
 .map,.request-box-details{
+  /*
   width:100%;
   @media screen and (max-width:991px){
   display: none;
   }
+  */
+}
+
+
+
+@media screen and (max-width:991px){
+  .requestsBig,.requestsSmall {
+    transition: all 300ms;
+      position: absolute;
+      top:0;
+  }
+
+  .requestsSmall{
+    z-index: 10;
+  }
+  .requestsBig{
+    z-index: 9;
+  }
+
+  .container.requests{
+    overflow-x: hidden;
+    position: relative;
+  }
+
+    .requestsBigStart{
+      left: 100vw;
+      z-index: 9;
+    }
+    .requestsSmallStart{
+      left: 0;
+      z-index: 10;
+    }
+
+    .requestsSmallOut{
+      transform: translateX(100vw);
+    }
+    .requestsBigOut{
+      transform: translateX(0);
+    }
+
+
 }
 
 

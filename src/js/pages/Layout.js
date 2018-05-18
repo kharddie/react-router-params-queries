@@ -143,7 +143,9 @@ class Layout extends Component {
         showBackGroundImg: "show-backGround-img"
       });
     } else {
-      showBackGroundImg: ""
+      this.setState({
+        showBackGroundImg: ""
+      });
     }
 
     //change of state

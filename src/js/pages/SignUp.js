@@ -3,9 +3,10 @@ import SignUpFormContainer from '../containers/signUpFormContainer.js';
 
 class SignUp extends Component {
   render() {
+    const { location, history } = this.props;
     return (
       <div>
-        <SignUpFormContainer />
+        <SignUpFormContainer location={location} history={history}/>
       </div>
     );
   }

@@ -82,6 +82,7 @@ class SignInForm extends React.Component {
 
   render() {
     const { asyncValidating, handleSubmit, submitting } = this.props;
+    let showSignUpBtn = this.props.location.pathname === "/signIn" ? "hide" : "show";
     return (
 
       <div>
@@ -109,7 +110,7 @@ class SignInForm extends React.Component {
 
                 <button
                   type="button"
-                  className="btn btn-secondary  btn-block"
+                  className={"btn btn-secondary  btn-block " + showSignUpBtn}
                   onClick={() => this.singUpFromHome()}>
                   <span> Sign Up</span>
                 </button>
