@@ -77,12 +77,19 @@ class SignInForm extends React.Component {
   }
 
   singUpFromHome = () => {
-    this.props.singUpFromHome();
+    if (this.props.location.pathname === "/") {
+      this.props.singUpFromHome();
+    }
   }
 
   render() {
     const { asyncValidating, handleSubmit, submitting } = this.props;
-    let showSignUpBtn = this.props.location.pathname === "/signIn" ? "hide" : "show";
+    let showSignUpBtn = "hide";
+    if (this.props.location.pathname === "/signIn" || this.props.location.pathname === "/browseRequests") {
+      showSignUpBtn = "hide";
+    } else {
+      showSignUpBtn = "show";
+    }
     return (
 
       <div>
@@ -104,7 +111,7 @@ class SignInForm extends React.Component {
                   type="submit"
                   className="btn btn-primary btn-with-spinner btn-block"
                   disabled={submitting}>
-                  <span className={!this.props.user.loading ? "show" : "hide"} > Sign In</span>
+                  <span className={!this.props.user.loading ? "show" : "hide"} > Sign in</span>
                   <span className={this.props.user.loading ? "show" : "hide"}  ><FontAwesomeIcon size="lg" className="fa-spin spinner" icon={faSpinner} /></span>
                 </button>
 
@@ -112,7 +119,7 @@ class SignInForm extends React.Component {
                   type="button"
                   className={"btn btn-secondary  btn-block " + showSignUpBtn}
                   onClick={() => this.singUpFromHome()}>
-                  <span> Sign Up</span>
+                  <span> Sign up</span>
                 </button>
 
 

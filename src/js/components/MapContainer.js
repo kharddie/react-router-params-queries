@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import { Map, InfoWindow, Marker, GoogleApiWrapper } from 'google-maps-react';
 import { toTitleCase } from '../helper/index.js';
 import renderHTML from 'react-render-html';
-
+import Geocode from "react-geocode";
+Geocode.setApiKey("AIzaSyCSGUZtwqI8T3N-_qBhy8iJ6AEyrtuTqls");
+// Enable or disable logs. Its optional.
+Geocode.enableDebug();
 
 export class MapContainer extends Component {
   state = {
@@ -21,7 +24,8 @@ export class MapContainer extends Component {
     this.setState({
       selectedPlace: props,
       activeMarker: marker,
-      showingInfoWindow: true
+      showingInfoWindow: true,
+      renderMakers: null
     });
 
   onMapClicked = (props) => {
@@ -37,32 +41,37 @@ export class MapContainer extends Component {
 
   }
 
-
-
-  renderMarkers() {
-    return points.map((thisMarker, key) => {
-      return (
-        <Marker
-          onClick={this.onMarkerClick}
-          key={key}
-          title={thisMarker.title}
-          body={thisMarker.body}
-          address={thisMarker.address}
-          position={{ lat: thisMarker.lat, lng: thisMarker.lng }}
-          icon={{
-            url: "../../images/placeholder.png",
-            anchor: new google.maps.Point(32, 32)
-          }} />
-      )
-    })
-
+  renderMarkers = (requests) => {
+    if (requests.length > 0) {
+      return requests.map((thisMarker, key) => {
+        console.log("thisMarker =" + thisMarker);
+        return (
+          <Marker
+            onClick={this.onMarkerClick}
+            key={key}
+            title={thisMarker.title}
+            body={thisMarker.content}
+            address={thisMarker.address}
+            position={{ lat: thisMarker.lat, lng: thisMarker.lng }}
+            icon={{
+              url: "../../images/placeholder.png",
+              anchor: new google.maps.Point(32, 32)
+            }} />
+        )
+      })
+      this.props.markerDetails=[];
+    }
   }
+
 
   render() {
 
-    if (this.props.location.href.indexOf("browseRequests") > -1) {
-      this.renderMarkers()
-    }
+    const {requests} = this.props;
+
+    $(window).resize(() => {
+      console.log("}}}}}}resize}}}}}}}this.props.markerDetails =" + this.props.markerDetails);
+      this.forceUpdate();
+    });
 
     return (
       <Map
@@ -72,7 +81,10 @@ export class MapContainer extends Component {
         zoom={10}
         onClick={this.mapClicked}
       >
-        {this.renderMarkers()}
+
+
+        {this.renderMarkers(requests)}
+
         <InfoWindow
           marker={this.state.activeMarker}
           visible={this.state.showingInfoWindow}>
@@ -80,7 +92,7 @@ export class MapContainer extends Component {
             <h3>{this.state.selectedPlace.title ? toTitleCase(this.state.selectedPlace.title) : this.state.selectedPlace.title}</h3>
             <body>
               <b>{this.state.selectedPlace.address}</b><br /><br />
-              {this.state.selectedPlace.body? renderHTML(this.state.selectedPlace.body) :this.state.selectedPlace.body }
+              {this.state.selectedPlace.body ? renderHTML(this.state.selectedPlace.body) : this.state.selectedPlace.body}
             </body>
           </div>
         </InfoWindow>

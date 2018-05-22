@@ -8,6 +8,7 @@ import { resetShowInfoMessage } from '../../actions/infoMessage'
 import { resetUser } from '../../actions/users';
 import { resetForgotPwdEmail, resetForgotPwdReset } from '../../actions/forgotPwdEmail';
 import { BrowserView, MobileView, isBrowser, isMobile } from "react-device-detect";
+import { fetchRequests, resetRequest, fetchRequestsSuccess, fetchRequestsFailure } from '../../actions/requests';
 
 
 
@@ -21,7 +22,8 @@ function mapStateToProps(state) {
     newOffer: state.offers.newOffer,
     acceptOffer: state.offers.acceptOffer,
     infoMessage: state.infoMessage.infoMessage,
-    forgotPwd: state.forgotPwd
+    forgotPwd: state.forgotPwd,
+    requestsList: state.requests.requestsList,
   };
 }
 
@@ -36,6 +38,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     resetUpdateProfileState: () => {
       dispatch(resetUpdateProfileState())
+    },
+    resetRequest: () => {
+      dispatch(resetRequest());
     },
 
     resetUser: () => {
@@ -60,20 +65,20 @@ class Nav extends React.Component {
 
   constructor(props) {
     super(props);
-    this.props.history.listen((location, action) => {
-     // console.log("navigation detect=" + global.retainInfoMsg)
-      if (!global.retainInfoMsg) {
-        /*this.hideInfoBox();
-        this.setState({
-          renderInfoText: '',
-          showInfoBox: "hide"
-        })*/
-      } else {
-        /*this.showInfoBox();
-        global.retainInfoMsg = false;
-        */
-      }
-    });
+
+  }
+
+  clearshowInfoBox = () => {
+    if (!global.retainInfoMsg) {
+      this.hideInfoBox();
+      this.setState({
+        renderInfoText: '',
+        showInfoBox: "hide"
+      })
+    } else {
+      this.showInfoBox();
+      global.retainInfoMsg = false;
+    }
   }
 
   state = {
@@ -105,6 +110,17 @@ class Nav extends React.Component {
           })
         }
     */
+
+    //get requests
+    //console.log(nextProps.infoMessage)
+    if (nextProps.requestsList.error === 'error') {
+      this.setState({
+        renderInfoText: nextProps.requestsList.message,
+        showInfoBox: "show"
+      })
+      this.props.resetRequest();
+    }
+
     //forgot password email message
     if (nextProps.forgotPwd.forgotPwdEmail.message) {
       this.setState({
@@ -319,10 +335,15 @@ class Nav extends React.Component {
           <Link class="nav-link " to="dashboard" onClick={this.toggleCollapse.bind(this)}>Dashboard</Link>
         </li>
         <li class={"nav-item only-mobile " + showLogin()} >
-          <Link class="nav-link" to="signIn" onClick={this.toggleCollapse.bind(this)}>{!authenticatedUser}Sign In</Link>
+          <Link class="nav-link" to="signIn" onClick={this.toggleCollapse.bind(this)}>{!authenticatedUser}
+            <span className="nav-image-icon nav-image-icon-mobile"><img class="user-image" src="../../images/sign-in.svg" alt="" /></span>
+            Sign In</Link>
         </li>
         <li class={"nav-item only-mobile " + showLogin()} >
-          <Link class="nav-link" to="signUp" onClick={this.toggleCollapse.bind(this)}>Sign Up</Link>
+          <Link class="nav-link" to="signUp" onClick={this.toggleCollapse.bind(this)}>
+            <span className="nav-image-icon nav-image-icon-mobile"><img class="user-image" src="../../images/sign-up.svg" alt="" /></span>
+            Sign Up
+          </Link>
         </li>
       </ul>
     );
@@ -337,7 +358,12 @@ class Nav extends React.Component {
         return "hide"
       }
 
- 
+      this.props.history.listen((location, action) => {
+        console.log("navigation detect=" + global.retainInfoMsg)
+        this.clearshowInfoBox();
+      });
+
+
     }
 
     const { location } = this.props;
@@ -356,11 +382,17 @@ class Nav extends React.Component {
 
     const navClass = collapsed ? "collapse" : "";
 
+    $(function(){ 
+      $('.navbar>a').on('click', function(){
+        $('.navbar-collapse').collapse('hide');
+    });
+  });
+
     return (
       <div>
         <div className="header">
-          <nav class="navbar navbar-expand-lg navbar-light" role="navigation">
-            <a class="navbar-brand " href="#"><span className="logo-span"><img class="user-image" src="../../images/logo.svg" alt="" /></span></a>
+          <nav  class="navbar navbar-expand-lg navbar-light" role="navigation">
+            <a class="navbar-brand" href="#"><span className="logo-span"><img class="user-image" src="../../images/logo.svg" alt="" /></span></a>
 
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>

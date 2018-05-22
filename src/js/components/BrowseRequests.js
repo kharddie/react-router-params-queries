@@ -11,37 +11,35 @@ import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner';
 import CreateOfferContainer from '../containers/CreateOfferContainer.js';
 import CreateCommentForm from '../containers/CreateCommentFormContainer.js';
 import GoogleApiWrapper from './MapContainer';
-import Geocode from "react-geocode";
+
 import { BrowserView, MobileView, isBrowser, isMobile } from "react-device-detect";
 import SignInFormContainer from '../containers/SignInFormContainer.js';
 // set Google Maps Geocoding API for purposes of quota management. Its optional but recommended.
-Geocode.setApiKey("AIzaSyCSGUZtwqI8T3N-_qBhy8iJ6AEyrtuTqls");
+
 import { toTitleCase } from '../helper/index.js';
 import renderHTML from 'react-render-html';
 
 
-// Enable or disable logs. Its optional.
-Geocode.enableDebug();
+
 
 class BrowseRequests extends Component {
     constructor(props) {
         super(props);
-        this.props.history.listen((location, action) => {
-            //this.props.resetRequest();
-            this.props.fetchRequests();
-        });
     }
     componentWillMount() {
-        console.log("componentWillMount");
+        sessionStorage.setItem('stopFetchRequests', 'true');
         this.props.fetchRequests();
-
     }
 
     componentWillUnmount() {
 
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps = (nextProps) => {
+        if (this.props.location.pathname != nextProps.location.pathname && !nextProps.requestsList.loading) {
+           // this.props.fetchRequests();
+           // sessionStorage.setItem('stopFetchRequests', 'null');
+        }
         //update request status to assigned 
         if (nextProps.requestToBeUpdated) {
             this.setState({
@@ -95,6 +93,7 @@ class BrowseRequests extends Component {
         requestsSmallCol: 'col-lg-4',
         modalvisibleLikeHomePage: false,
         origin: "",
+        requestsBigColOpen: false,
 
     }
 
@@ -128,7 +127,9 @@ class BrowseRequests extends Component {
 
         if ($(window).width() < 992) {
             this.toggleRequestClassesOut();
-            $(".backButtonholder").hide();
+            $(".backButtonholder").addClass("hide");
+            $(".backButtonholder").removeClass("show");
+            this.setState({ requestsBigColOpen: false });
         }
     }
 
@@ -149,34 +150,12 @@ class BrowseRequests extends Component {
     }
 
     displayRequestDetails = (data) => {
-        /*
-        if (isMobile) {
-            if ($(window).width() < 1024) {
-                $(".scrollable-content").hide();
-            } else {
-                $(".scrollable-content").show();
-            }
 
-            $(".request-box-details").show();
-            $(".backButtonholder").show();
-        }
-    
-        if ($(window).width() < 992) {
-            $('.requestsSmall').animate({
-                left: $(window).width()
-            }, 400, function () {
-                // Add hash (#) to URL when done scrolling (default click behavior)
-            });
-           $('.requestsBig').animate({
-                left: 0
-            }, 400, function () {
-                // Add hash (#) to URL when done scrolling (default click behavior)
-            });       
-        } 
-    */
         if ($(window).width() < 992) {
             this.toggleRequestClasses();
-            $(".backButtonholder").show();
+            $(".backButtonholder").addClass("show");
+            $(".backButtonholder").removeClass("hide");
+            this.setState({ requestsBigColOpen: true });
         }
 
 
@@ -350,26 +329,12 @@ class BrowseRequests extends Component {
         }
     }
 
-    renderRequests(requests) {
-        global.points = [];
-        //  if (requests.hasOwnProperty("data")) {
+    renderRequests = (requests) => {
+        console.log("_________________________calling renderRequests")
         if (requests.length > 0) {
             return requests.map((data, index) => {
                 if (data.title != '' && data.address != '' && data.content != '' && data.status) {
-                    //get lat long from address
 
-                    Geocode.fromAddress(data.address).then(
-                        response => {
-                            const { lat, lng } = response.results[0].geometry.location;
-                            //console.log(lat, lng);
-                            global.points.push(
-                                { lat: lat, lng: lng, title: data.title, body: data.content, address: data.address }
-                            )
-                        },
-                        error => {
-                            console.error(error);
-                        }
-                    )
 
                     return (
                         <div className="row" key={index} onClick={() => this.displayRequestDetails(data)} >
@@ -428,6 +393,8 @@ class BrowseRequests extends Component {
                 }
 
             })
+
+            
         }
     }
 
@@ -440,46 +407,59 @@ class BrowseRequests extends Component {
         const { history, acceptedOffer, user, acceptOfferListALL } = this.props;
         const isLoggedIn = this.props.user;
         let loadingAcceptOfferListALL = true;
+        global.markerDetails =  [];
+
+        console.log("################### initiate ######################")
+        console.log(global.markerDetails)
+        console.log("################### end -- initiate ######################")
+
 
         let clearBoth = {
             clear: "both"
         }
 
-        $(document).ready(function(){
+        $(document).ready(function () {
+            //backButtonholder position
             var footerPos = $(".footer.footer").position();
-            var backButtonholderPos = $(".backButtonholder").position(); 
-            $(".backButtonholder").css("bottom",($(".backButtonholder").height())+10);
+            var backButtonholderPos = $(".backButtonholder").position();
+            $(".backButtonholder").css("bottom", ($(".backButtonholder").height()) + 10);
         })
 
 
         $('.map').height(($(window).height() - 270));
-
         $('.requests-small').height((($(window).height() - 270)) + 62);
         $('.request-box-details').height(($(window).height() - 270));
 
-        
+
 
         if ($(window).width() < 992) {
-            $('.container.requests').height((($(window).height() - 270)) + 62);
             $('.container.requests').height((($(window).height() - 270)) + 62);
         }
 
         if ($(window).width() > 991) {
-            $(".backButtonholder").hide();
+            if (!this.state.requestsBigColOpen) {
+                //  $(".backButtonholder").hide();
+            }
         }
-        
 
-        $(window).resize(function () {
+
+        $(window).resize(() => {
             $('.requests-small').height((($(window).height() - 270)) + 62);
             $('.request-box-details').height(($(window).height() - 270));
-            if ($(window).width() < 992) {
-                $('.container.requests').height((($(window).height() - 270)) + 62);
-            }
+            $('.container.requests').height((($(window).height() - 270)) + 62);
             if ($(window).width() > 1023) {
                 $(".scrollable-content").show();
             }
             if ($(window).width() > 991) {
-                $(".backButtonholder").hide();
+                // if (!this.state.requestsBigColOpen) {
+                $(".backButtonholder").addClass("hide");
+                $(".backButtonholder").removeClass("show");
+                //  }
+            } else if ($(window).width() < 992) {
+                if (this.state.requestsBigColOpen) {
+                    $(".backButtonholder").addClass("show");
+                    $(".backButtonholder").removeClass("hide");
+                }
             }
         });
 
@@ -500,7 +480,6 @@ class BrowseRequests extends Component {
         newArray;
 
         let noRequestsMessage = '';
-        global.points = [];
 
         if (requests.length == 0) {
             noRequestsMessage = message;
@@ -539,7 +518,7 @@ class BrowseRequests extends Component {
                             <div className="col-12 request-box request-box-details">
                                 <div className={"row map " + this.state.showGoogleMap}>
                                     <div className="col-12 map">
-                                        <GoogleApiWrapper location={location} points={global.points} />
+                                        <GoogleApiWrapper location={this.props.location} history={this.props.history} requests={requests} />
                                     </div>
                                 </div>
                                 <div className={this.state.showRequestDetails}>
@@ -636,14 +615,14 @@ class BrowseRequests extends Component {
                                                 ) : (
                                                         <div >
 
-                                                                <div className="row">
-                                                                    <div className="col-12 text-left">
-                                                                        <span className="text-uppercase font-weight-bold">Join the conversation</span>
-                                                                    </div>
-                                                                    <div className="col-12 col-sm-5 join-convo-image-wrapper">
-                                                                        <button onClick={this.modalvisibleSignIn.bind(this)} className="btn btn-primary btn-sm">log in</button>
-                                                                    </div>
-                                                              
+                                                            <div className="row">
+                                                                <div className="col-12 text-left">
+                                                                    <span className="text-uppercase font-weight-bold">Join the conversation</span>
+                                                                </div>
+                                                                <div className="col-12 col-sm-5 join-convo-image-wrapper">
+                                                                    <button onClick={this.modalvisibleSignIn.bind(this)} className="btn btn-primary btn-sm">log in</button>
+                                                                </div>
+
                                                             </div>
                                                         </div>
                                                     )}
@@ -683,7 +662,7 @@ class BrowseRequests extends Component {
                                 <div className="carousel-inner">
                                     <div className="carousel-item active">
 
-                                        <div><CreateOfferContainer fetchOffers={this.props.fetchOffers} modalvisibleOffers={this.state.modalvisibleOffers} initialValues={this.props.initialValues} requestId={this.state.request_id} location={location} history={history} /></div>
+                                        <div><CreateOfferContainer fetchOffers={this.props.fetchOffers} modalvisibleOffers={this.state.modalvisibleOffers} initialValues={this.props.initialValues} requestId={this.state.request_id} location={this.props.location} history={this.props.history} /></div>
                                     </div>
                                     <div className="carousel-item">
                                         <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</div>
@@ -715,14 +694,14 @@ class BrowseRequests extends Component {
                     </div>
                     <div className="modal-body">
                         <div className="container">
-                            <SignInFormContainer location={location} history={history} showModalWhichPos={this.showModalWhichPos} heading="Sign in to join conversation" origin={this.state.origin} modalBackdropClicked={this.modalBackdropClicked} />
+                            <SignInFormContainer location={this.props.location} history={this.props.history} showModalWhichPos={this.showModalWhichPos} heading="Sign in to join conversation" origin={this.state.origin} modalBackdropClicked={this.modalBackdropClicked} />
                         </div>
                     </div>
 
                 </Modal>
 
-                <div className="backButtonholder">
-                    <button onClick={this.backButtonholderFn.bind(this)} className=" btn btn-secondary btn-block">
+                <div className="backButtonholder hide">
+                    <button onClick={this.backButtonholderFn.bind(this)} className=" btn btn-secondary btn-block ">
                         <img className="user-image" src="../../images/back-arrow.svg" alt="" />
                     </button>
                 </div>
@@ -752,7 +731,7 @@ class BrowseRequests extends Component {
                                             <div className="carousel-inner">
                                                 <div className="carousel-item active">
                                                     <div>
-                                                        <SignInFormContainer location={location} history={history} showModalWhichPos={this.showModalWhichPos} heading="" origin={this.state.origin} modalBackdropClicked={this.modalBackdropClicked} />
+                                                        <SignInFormContainer location={this.props.location} history={this.props.history} showModalWhichPos={this.showModalWhichPos} heading="" origin={this.state.origin} modalBackdropClicked={this.modalBackdropClicked} />
                                                     </div>
                                                 </div>
                                                 <div className="carousel-item">

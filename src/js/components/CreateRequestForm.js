@@ -10,6 +10,10 @@ import Moment from 'react-moment';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { isMobile } from "react-device-detect";
+import Geocode from "react-geocode";
+Geocode.setApiKey("AIzaSyCSGUZtwqI8T3N-_qBhy8iJ6AEyrtuTqls");
+// Enable or disable logs. Its optional.
+//Geocode.enableDebug();
 
 //Client side validation
 function validate(values) {
@@ -32,10 +36,9 @@ function validate(values) {
       errors.content = 'Tell us a bit more.';
     }
   }
-
+  
   return errors;
 }
-
 
 //For any field errors upon submission (i.e. not instant check)
 const validateAndCreateRequest = (values, props, dispatch, isMobile) => {
@@ -48,18 +51,35 @@ const validateAndCreateRequest = (values, props, dispatch, isMobile) => {
     values.due_date = moment(moment(values.date), "YYY,MM,DD").toISOString();
   }
 
-  return dispatch(createRequest(values, sessionStorage.getItem('jwtToken')))
-    .then(result => {
-      // Note: Error's "data" is in result.payload.response.data (inside "response")
-      // success's "data" is in result.payload.data
-      if (result.payload.response && result.payload.response.status !== 200) {
-        dispatch(createRequestFailure(result.payload.response.data));
-        throw new SubmissionError(result.payload.response.data);
+  if( moment(values.created).isBefore(moment(values.due_date), 'year')){
+//
+  }
+
+  //get lat long from address
+  Geocode.fromAddress(values.address).then(
+    response => {
+      if (response.status === "OK") {
+        const { lat, lng } = response.results[0].geometry.location;
+        values.lat = lat;
+        values.lng = lng;
+        return dispatch(createRequest(values, sessionStorage.getItem('jwtToken')))
+          .then(result => {
+            // Note: Error's "data" is in result.payload.response.data (inside "response")
+            // success's "data" is in result.payload.data
+            if (result.payload.response && result.payload.response.status !== 200) {
+              dispatch(createRequestFailure(result.payload.response.data));
+              throw new SubmissionError(result.payload.response.data);
+            }
+            //let other components know that everything is fine by updating the redux` state
+            dispatch(createRequestSuccess(result.payload.data)); //ps: this is same as dispatching RESET_USER_FIELDS
+            dispatch(reset('CreateRequestForm'));
+          });
       }
-      //let other components know that everything is fine by updating the redux` state
-      dispatch(createRequestSuccess(result.payload.data)); //ps: this is same as dispatching RESET_USER_FIELDS
-      dispatch(reset('CreateRequestForm'));
-    });
+    },
+    error => {
+      console.log("address is not valid");
+    }
+  )
 
 }
 
@@ -108,7 +128,7 @@ class CreateRequestForm extends Component {
         <div class="row justify-content-md-center">
           <div class={"col-sm-12" + this.state.divClass}>
             <div>
-            <div><h2>Create Request</h2> </div>
+              <div><h2>Create Request</h2> </div>
             </div>
 
             <form className={"request-form " + this.state.formWidthBg} onSubmit={handleSubmit((values, dispatch) => { validateAndCreateRequest(values, this.props, dispatch, isMobile); })}>
@@ -136,7 +156,7 @@ class CreateRequestForm extends Component {
                   component={renderField}
                   label="Due dateM*" />
               </div>
-              <div className='form-group'>
+              <div className={'form-group' + !isMobile ? "show" : "hide"} >
                 <label className="control-label">Due date*</label>
                 <div className={!isMobile ? "show" : "hide"}>
                   <DatePicker
@@ -150,6 +170,7 @@ class CreateRequestForm extends Component {
                   />
                 </div>
               </div>
+
               <Field
                 name="content"
                 component={renderTextArea}

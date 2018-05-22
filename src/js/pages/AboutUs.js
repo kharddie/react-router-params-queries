@@ -30,18 +30,19 @@ export default class AboutUs extends React.Component {
             <h3>What is it?  </h3>
             <p> Anyone can volunteer. It can be very rewarding and is a great way to:</p>
             <ul>
-              <li>meet new people</li>
-              <li>gain new or use existing skills</li>
-              <li>get experience</li>
-              <li>make a big difference to your community</li>
+              <li>Meet new people</li>
+              <li>Gain new or use existing skills</li>
+              <li>Get experience</li>
+              <li>Make a big difference to your community</li>
             </ul>
             <p>
               There are lots of easy ways to give your time to help others – from having a cup of tea with an elderly neighbour, to helping out in your local area or making a regular commitment to volunteer with a charity or community group.
            </p>
             <h3>  How can to get involved?</h3>
             <ul>
-              <li> Start by telling us about your request. Mention when and where (in person or online) you need it done. Post any task you need from gardening, cleaning s – for free! There's no obligation assign anyone.</li>
-              <li>Take a look at profiles and reviews to pick the best volunteer for your request. When you accept an offer you can call or text the volunteer for more detail. </li>
+              <li> Start by signing up to create your account.</li>
+              <li> Log in and tell us about your request. Mention due date, when and where (in person or online) you need it done. Post any task you need from gardening, cleaning, transport all for free! There's no obligation assign anyone.</li>
+              <li>Take a look at profiles and reviews to pick the best offer for your request. When you accept an offer you can call or text the volunteer for more detail. </li>
             </ul>
             <p>We are committed to supporting, enabling and celebrating volunteering in all its diversity. Volunteering is someone spending time, unpaid, doing something that aims to benefit the environment or someone who they're not closely related to. Volunteering must be a choice freely made by each individual. </p>
           </div>

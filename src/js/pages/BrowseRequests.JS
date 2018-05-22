@@ -3,7 +3,7 @@ import { fetchRequests, resetRequest, fetchRequestsSuccess, fetchRequestsFailure
 import BrowseRequests from '../components/BrowseRequests';
 import {
   resetNewOffer, fetchOffers, fetchOffersSuccess, fetchOffersFailure, resetOffers,
-  acceptOffer, acceptOfferSuccess, acceptOfferFailure,resetAcceptedOffer
+  acceptOffer, acceptOfferSuccess, acceptOfferFailure, resetAcceptedOffer
 } from '../actions/offers';
 import { fetchComments, fetchCommentsSuccess, fetchCommentsFailure, resetComments } from '../actions/comments';
 import { fetchAcceptedOfferList, fetchAcceptedOfferListSuccess, fetchAcceptedOfferListFailure } from '../actions/offers';
@@ -21,7 +21,7 @@ const mapStateToProps = (state, ownProps) => {
         requestToBeUpdated = data;
       }
     });
-    
+
   }
 
   return {
@@ -48,11 +48,17 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   let jwtToken = sessionStorage.getItem('jwtToken');
   let userParamId = !ownProps.params.id ? null : ownProps.params.id;
   let date = moment(moment(), "YYY,MM,DD").toISOString();
+  let myRequests = null;
+
+
   return {
     fetchRequests: () => {
-      // dispatch(resetRequest());
-      dispatch(fetchRequests(jwtToken, userParamId)).then((response) => {
-        !response.error ? dispatch(fetchRequestsSuccess(response.payload.data)) : dispatch(fetchRequestsFailure(response.payload.data));
+      dispatch(resetRequest());
+      if (ownProps.location.pathname.indexOf("myRequests") > -1) {
+        myRequests = "myRequests";
+      }
+      dispatch(fetchRequests(jwtToken, userParamId, myRequests)).then((response) => {
+        !response.error ? dispatch(fetchRequestsSuccess(response.payload.data)) : dispatch(fetchRequestsFailure(response.payload));
       });
     },
     resetRequest: () => {

@@ -149,7 +149,7 @@ class Home extends React.Component {
                             </h4>
                             <div className="form-footer">
                                 <button className="btn btn-primary btn-lg" onClick={this.showModalCreateRequest.bind(this)}>Get started now</button>
-                                <button className="btn btn-primary btn-lg" onClick={this.goTOaboutUsPage}>More Info</button>
+                                <button className="btn btn-primary btn-lg" onClick={this.goTOaboutUsPage}>More info</button>
                             </div>
                         </div>
                     </div>

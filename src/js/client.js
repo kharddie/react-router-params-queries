@@ -30,6 +30,7 @@ import Profile from './pages/Profile';
 import CreateRequest from './pages/CreateRequest';
 import ForgotPwd from './pages/ForgotPwd';
 import ResetPwd from './pages/ResetPwd';
+import VerifyAccount from './pages/VerifyAccount';
 
 import BrowseRequests from './pages/BrowseRequests';
 import MyRequests from './pages/MyRequests';
@@ -60,6 +61,7 @@ ReactDOM.render(
         <Route path="/createRequest" name="CreateRequest" component={CreateRequest}/>
         <Route path="/forgotPwd" name="ForgotPwd" component={ForgotPwd}/>
         <Route path="/resetPwd" name="ResetPwd" component={ResetPwd}/>
+        <Route path="/verifyAccount" name="VerifyAccount" component={VerifyAccount}/>
         <Route path="/browseRequests" name="BrowseRequests" component={BrowseRequests}/>
         <Route path="/myRequests/:id" name="MyRequests" component={BrowseRequests}/>
         <Route path="/profile" component={Profile} />

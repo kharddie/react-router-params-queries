@@ -29,6 +29,12 @@ export const UPDATE_USER_PROFILE = 'UPDATE_USER_PROFILE';
 //log out user
 export const LOGOUT_USER = 'LOGOUT_USER';
 
+//verify account
+export const VERIFY_ACCOUNT = 'VERIFY_ACCOUNT';
+export const VERIFY_ACCOUNT_SUCCESS = 'VERIFY_ACCOUNT_SUCCESS';
+export const VERIFY_ACCOUNT_FAILURE = 'VERIFY_ACCOUNT_FAILURE';
+export const RESET_VERIFY_ACCOUNT = 'RESET_VERIFY_ACCOUNT';
+
 
 
 export function validateEmail(validateEmailToken) {
@@ -157,4 +163,40 @@ export function updateUserProfile(payload) {
   };
 }
 
+
+
+
+export function verifyAccount(data) {
+  const request = axios({
+    method: 'post',
+     data: data,   
+    url: `${ROOT_URL}/users/verify_account.php`,
+    headers: {}
+  });
+
+  return {
+    type: VERIFY_ACCOUNT,
+    payload: request
+  };
+}
+
+export function verifyAccountSuccess(user) {
+  return {
+    type: VERIFY_ACCOUNT_SUCCESS,
+    payload: user
+  };
+}
+
+export function verifyAccountFailure(error) {
+  return {
+    type: VERIFY_ACCOUNT_FAILURE,
+    payload: error
+  };
+}
+
+export function resetVerifyAccount() {
+  return {
+    type: RESET_VERIFY_ACCOUNT,
+  };
+}
 

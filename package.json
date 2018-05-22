@@ -1,7 +1,7 @@
 {
-  "name": "react-tutorials",
+  "name": "Saidia-pp",
   "version": "0.0.0",
-  "description": "",
+  "description": "Find out how to volunteer in your local community and give your time to help others.",
   "dependencies": {
     "babel-plugin-add-module-exports": "^0.1.2",
     "babel-plugin-react-html-attrs": "^2.0.0",

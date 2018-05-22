@@ -10,13 +10,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchRequests: () => {
-      dispatch(fetchRequests()).then((response) => {
-            !response.error ? dispatch(fetchRequestsSuccess(response.payload.data)) : dispatch(fetchRequestsFailure(response.payload.data));
-          });
-    }
-  }
+
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(MyRequests);

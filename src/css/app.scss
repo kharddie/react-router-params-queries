@@ -87,11 +87,11 @@ html,body,#app,.fit-page-to-Screen,.home-page,.not-home-page,.fit-page-to-screen
 }
 .fit-page-to-Screen{
   min-height: 100%;
-  margin: 0 auto -75px; /* the bottom margin is the negative value of the footer's height */
+  margin: 0 auto -100px; /* the bottom margin is the negative value of the footer's height */
 }
 
 .show-backGround-img{
-  background-image: url("../images/bg.png")!important;
+  background-image: url("../images/bg.svg")!important;
   background-repeat:no-repeat;
   @media screen and (max-width:768px){
     background-position:43% bottom;
@@ -112,17 +112,11 @@ html,body,#app,.fit-page-to-Screen,.home-page,.not-home-page,.fit-page-to-screen
   /*footer*/
 
   footer.footer {
-    margin-top: 30px;
+    margin-top: 46px;
     background-color: #26272b;
-    height: 75px; /* .push must be the same height as .footer */
-    padding-top: 15px;
+    height: 70px; /* .push must be the same height as .footer */
     color: #808288;
-
-    @media screen and (min-width:400px){
- 
-    }
-    padding-top: 3px;
-
+        position: relative;
     .heading{
       font-size:14px;
     }
@@ -131,14 +125,13 @@ html,body,#app,.fit-page-to-Screen,.home-page,.not-home-page,.fit-page-to-screen
           padding:20px 0;
           width: 100%;
     }
-
       .container{
-        padding-top: 9px;
+        @include justify-content-center-center;
+        height:30px;
         p {
           margin:0;
         }
       }
-
   }
 
 //buttons
@@ -233,6 +226,31 @@ html,body,#app,.fit-page-to-Screen,.home-page,.not-home-page,.fit-page-to-screen
   }
 
   /* utilities*/
+input:focus::-webkit-input-placeholder { color:transparent; }
+input:focus:-moz-placeholder { color:transparent; }
+  .form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #ff9e19;
+    outline: 0;
+    box-shadow:none; 
+}
+
+  ::-webkit-input-placeholder {
+   color:transparent;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+   color:transparent; 
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+   color:transparent; 
+}
+
+:-ms-input-placeholder {  
+   color:transparent;
+}
 
 .welcome {
     font-size: 121%;
@@ -243,7 +261,7 @@ html,body,#app,.fit-page-to-Screen,.home-page,.not-home-page,.fit-page-to-screen
     font-weight: 500;
 }
 .backButtonholder{
-  display: block;
+  display: none;
   position: fixed;
   z-index: 5734573457457345;
   right: 0;
@@ -352,26 +370,27 @@ h2, .h2 {
 }
 
 .btn-with-spinner {
-  min-height: 31px;
+  min-height: 40px;
 }
 
 .form-control {
   border-radius: 0;
 }
 
-h1.title-page-margin {
-    margin: 1em 0;
-}
+
  
 h1.title-page {
     margin: 0 0 1em;
+    @media screen and (max-width:400px){
+ margin: 0 0 .5em;
+    }
     font-size: 1.875em!important;
     font-weight: 400;
 }
 
 .help-block {
-    color: #721c24;
-    padding: 1px 0 1px 7px;
+    color: #ff9e19;
+    padding: 1px 0 1px 0px;
 }
 
 

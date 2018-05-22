@@ -26,8 +26,7 @@ export default function (state = INITIAL_STATE, action) {
     case FETCH_REQUESTS_SUCCESS:// return list of requests and make loading = false
       return { ...state, requestsList: { requests: action.payload.data, error: action.payload.error, loading: false, message: action.payload.message } };
     case FETCH_REQUESTS_FAILURE:// return error and make loading = false
-      error = action.payload || { message: action.payload.message };//2nd one is network or server down errors
-      return { ...state, requestsList: { requests: [], error: error, loading: false, message: null } };      
+      return { ...state, requestsList: { requests: [], error: "error", loading: false, message: action.payload.message } };      
     case RESET_REQUESTS:// reset requestList to initial state
       return { ...state, resetRequest: { requests: [], error: null, loading: false, message: "reset" } };
 

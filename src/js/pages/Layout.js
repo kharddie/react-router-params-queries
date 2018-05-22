@@ -54,7 +54,7 @@ class Layout extends Component {
   constructor(props) {
     super(props);
     $(window).resize(() => {
-      this.props.getOrientation(this.getScreenDetailsRenderStles(false, "resize"));
+      this.props.getOrientation(this.getScreenDetailsRenderStyles(true, "resize"));
     });
   }
 
@@ -67,7 +67,7 @@ class Layout extends Component {
     fitPageToScreenOverflowHidden: ""
   }
 
-  getScreenDetailsRenderStles = (execute, whoIs) => {
+  getScreenDetailsRenderStyles = (execute, whoIs) => {
     this.setState({
       fitPageToScreen: "",
       IsHomePage: "not-home-page",
@@ -119,7 +119,7 @@ class Layout extends Component {
     this.props.loadUserFromToken();
     console.log("+++++++++++++++++++++++++++++++++  layout componentDidMount() ++++++++++++++++++++++++");
     let getScreenDetails = null;
-    getScreenDetails = this.getScreenDetailsRenderStles(true, "componentDidMount");
+    getScreenDetails = this.getScreenDetailsRenderStyles(true, "componentDidMount");
 
     if (this.props.location.pathname === "/") {
       this.setState({
@@ -128,11 +128,27 @@ class Layout extends Component {
     } else {
       showBackGroundImg: ""
     }
+
+/*
+  document.addEventListener('touchstart', function(event) {
+    event.preventDefault();
+    if(event.touches && event.touches.length > 1) {
+      getScreenDetails = this.getScreenDetailsRenderStyles(true, "touchstart");
+    }
+
+}, false);
+*/
+
   }
 
 
   componentWillMount() {
     console.log("componentWillMount");
+    // will trigger the callback function whenever a new Route renders a component(as long as this component stays mounted as routes change)
+    // this.props.history.listen((location) => {
+    // view new URL
+    //   console.log('New URL', location.pathname);
+    //  });
   }
 
   componentWillReceiveProps = (nextProps) => {
@@ -152,7 +168,7 @@ class Layout extends Component {
     if (this.props.location.pathname != nextProps.location.pathname) {
       console.log("&&&&&&&&&&&&&&&&&&&&& change of state calling new dimentions current=" + this.props.location.pathname + "   to==" + nextProps.location.pathname);
       $(document).ready(() => {
-        getScreenDetails = this.getScreenDetailsRenderStles(true, "location.pathname");
+        getScreenDetails = this.getScreenDetailsRenderStyles(true, "location.pathname");
 
       })
     }
@@ -161,7 +177,7 @@ class Layout extends Component {
     if (this.props.orientationType.getOrientation.data) {
       if (this.props.orientationType.getOrientation.data.getOrientation != nextProps.orientationType.getOrientation.data.getOrientation) {
         console.log("Change of orientation");
-        getScreenDetails = this.getScreenDetailsRenderStles(true, "change of orientation");
+        getScreenDetails = this.getScreenDetailsRenderStyles(true, "change of orientation");
       }
     }
 

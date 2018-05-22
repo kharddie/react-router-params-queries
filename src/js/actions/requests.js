@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {ROOT_URL} from '../helper/config';
+import { ROOT_URL } from '../helper/config';
 
 //Request list
 export const FETCH_REQUESTS = 'FETCH_REQUESTS';
@@ -32,14 +32,18 @@ export const DELETE_REQUEST_FAILURE = 'DELETE_REQUEST_FAILURE';
 export const RESET_DELETED_REQUEST = 'RESET_DELETED_REQUEST';
 
 
-export function fetchRequests(token, userParamId) {
+export function fetchRequests(token, userParamId, myRequests) {
   let url;
   if (userParamId) {
-    url = `${ROOT_URL}/requests/read.php?uid=${userParamId}`;
+    if (myRequests) {
+      url = `${ROOT_URL}/requests/read.php?uid=${userParamId}`;
+    } else {
+      url = `${ROOT_URL}/requests/read.php`
+    }
   } else {
     url = `${ROOT_URL}/requests/read.php`
   }
-
+console.log("%%%%%%%%%%="+url);
   const request = axios({
     method: 'get',
     url: url,

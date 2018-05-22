@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 
 class MyRequest extends Component {
   componentWillMount() {
-    this.props.fetchRequests();
+    //this.props.fetchRequests();
   }
 
   renderCategories(categories) {
