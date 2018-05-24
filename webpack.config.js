@@ -5,6 +5,10 @@ const path = require('path');
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
+
+
 const PATHS = {
   app: path.join(__dirname, "src"),
   build: path.join(__dirname, "dist"),
@@ -97,7 +101,9 @@ module.exports = {
     new CopyWebpackPlugin([
       { from: PATHS.app + '/images', to: 'images' }
     ]),
+    new BundleAnalyzerPlugin(),
 
   ],
+  
 };
 

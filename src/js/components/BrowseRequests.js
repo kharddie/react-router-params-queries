@@ -222,17 +222,17 @@ class BrowseRequests extends Component {
         }
     }
 
-    toggleImg(event) {
-        event.stopPropagation();
+    toggleImg() {
+       // event.stopPropagation();
 
         if ($('.more-details').hasClass("collapsed")) {
             console.log("collapsed");
-            $('.more-details img').removeClass("arrow-up");
-            $('.more-details img').addClass("arrow-down");
+            //$('.more-details img').removeClass("arrow-up");
+            //$('.more-details img').addClass("arrow-down");
         } else {
             console.log("not collapsed");
-            $('.more-details img').removeClass("arrow-down");
-            $('.more-details img').addClass("arrow-up");
+            //$('.more-details img').removeClass("arrow-down");
+            //$('.more-details img').addClass("arrow-up");
 
         }
     }
@@ -329,7 +329,7 @@ class BrowseRequests extends Component {
         }
     }
 
-    renderRequests = (requests) => {
+    renderRequests = (requests, moment) => {
         console.log("_________________________calling renderRequests")
         if (requests.length > 0) {
             return requests.map((data, index) => {
@@ -354,9 +354,9 @@ class BrowseRequests extends Component {
                                 <div className="row">
                                     <div className="col-9">
                                         <div><FontAwesomeIcon className="fa-right" size="sm" icon={faMapMarker} />{data.address}</div>
-                                        <div><FontAwesomeIcon className="fa-right" size="sm" icon={faCalendar} />{moment(data.due_date).format('d MMM YYYY')}</div>
+                                        <div><FontAwesomeIcon className="fa-right" size="sm" icon={faCalendar} />{moment(data.due_date,'YYYY MM DD').format('D MMM YYYY')}</div>
                                         <div className="more-info-btn">
-                                            <a className="btn  more-details" onclick={this.toggleImg(event)} data-toggle="collapse" data-target={"#mf-" + index}>
+                                            <a className="btn  more-details" onclick={this.toggleImg(this)} data-toggle="collapse" data-target={"#mf-" + index}>
                                                 <img src="../../../images/down-arrow.svg" id="arrow" />
                                             </a>
                                         </div>
@@ -510,13 +510,13 @@ class BrowseRequests extends Component {
                         <div className="loader-show loader-spinner-container">
                             <FontAwesomeIcon size="lg" className="fa-spin spinner" icon={faSpinner} />
                         </div>
-                        {this.renderRequests(requests)}
+                        {this.renderRequests(requests,moment)}
                         {noRequestsMessage}
                     </div>
                     <div className={"requestsBig requestsBigStart " + this.state.requestsBigCol}>
                         <div className="row" >
                             <div className="col-12 request-box request-box-details">
-                                <div className={"row map " + this.state.showGoogleMap}>
+                                <div className={"row map-holder " + this.state.showGoogleMap}>
                                     <div className="col-12 map">
                                         <GoogleApiWrapper location={this.props.location} history={this.props.history} requests={requests} />
                                     </div>
@@ -534,7 +534,7 @@ class BrowseRequests extends Component {
                                     <div className="row">
                                         <div className="col-12 col-xs-12 col-sm-8">
                                             <div className="row" >
-                                                <div className="col-12 col-xs-12 col-sm-12 col-md-8">
+                                                <div className="col-12 col-xs-12 col-sm-12 col-md-9">
                                                     <div className="row tiny-text" >
                                                         <div className="col "><span className="request-status request-status-bg-color request-status-open">Open</span></div>
                                                         <div className="col "><span className={this.state.status === "Assigned" ? "request-status request-status-bg-color request-status-assigned" : "request-status  request-status-assigned"}>Assigned</span></div>
@@ -570,7 +570,7 @@ class BrowseRequests extends Component {
 
                                             <div className="row" >
                                                 <div className="col-sm-2 col-max-width-fifty"><img className="icon-image" src="../../images/calendar.svg" alt="" /></div>
-                                                <div className="col-sm-10 "><span className="text-uppercase font-weight-bold titles">Due date</span><br />{moment(this.state.due_date).format('d MMM YYYY')}</div>
+                                                <div className="col-sm-10 "><span className="text-uppercase font-weight-bold titles">Due date</span><br />{moment(this.state.due_date,'YYYY MM DD').format('D MMM YYYY')}</div>
                                             </div>
 
 

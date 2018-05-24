@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import IntlTelInput from 'react-bootstrap-intl-tel-input'
+//import IntlTelInput from 'react-bootstrap-intl-tel-input'
 
 const RenderPhoneNumber = (props) => {
     return (

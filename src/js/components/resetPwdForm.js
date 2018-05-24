@@ -98,7 +98,7 @@ class SignUpForm extends Component {
                 component={renderField}
                 label="Password*" />
               <Field
-                name="ConfirmPassword"
+                name="confirmPassword"
                 type="password"
                 component={renderField}
                 label="Confirm Password*" />

@@ -30,7 +30,8 @@ function validate(values) {
 const validateAndCreateComment = (values, dispatch, props) => {
   values.request_id = props.requestId;
   values.user_id = props.user.id;
-  values.created = moment(moment(), "YYY,MM,DD").toISOString();
+  values.created = moment(moment(), "YYY MM DD").toISOString();
+
   return dispatch(createComment(values, sessionStorage.getItem('jwtToken')))
     .then(result => {
       // Note: Error's "data" is in result.payload.response.data (inside "response")

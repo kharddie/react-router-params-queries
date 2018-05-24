@@ -5,17 +5,27 @@ $font-stack:    Helvetica, sans-serif;
 $primary-color: #9fc104;
 $primary-color-darker: #90ab16;
 $blue-color-darker:#e3ebef;
-
 $nav-bar-dark:#789008;
 $nav-bar-darker:#5a6d04;
-
 $menu-bg:#8ca821;
 $menu-bg-stroke:#789008;
-
 $secondary-color: #ff9e19;
 $secondary-color-dark: #f59717;
 $primary-btn-color: $secondary-color;
 $primary-btn-color-hover: $secondary-color-dark;
+$footer-bg:#26272b;
+$footer-color:#808288;
+$line-dotted:#89a1ab;
+$comment-border-dotted:#e7eef1;
+$states-green:#809f24;
+$white-dark:#ced4da;
+$border:#cad7dc;
+$white:#fff;
+$nav-bg-green:#a8cc08;
+$nav-border-green:#99b904;
+$card-separator:#dee8ec;
+$navbar-right-dropdown-hover:#3a3d3e;
+
 
 
 @mixin icon-md{
@@ -113,15 +123,15 @@ html,body,#app,.fit-page-to-Screen,.home-page,.not-home-page,.fit-page-to-screen
 
   footer.footer {
     margin-top: 46px;
-    background-color: #26272b;
+    background-color:$footer-bg;
     height: 70px; /* .push must be the same height as .footer */
-    color: #808288;
+    color: $footer-color;
         position: relative;
     .heading{
       font-size:14px;
     }
     .renderCommnts,.joinConvo,.offers-top{
-          border-top: 1px solid #e7eef1;
+          border-top: 1px solid $comment-border-dotted;
           padding:20px 0;
           width: 100%;
     }
@@ -136,18 +146,18 @@ html,body,#app,.fit-page-to-Screen,.home-page,.not-home-page,.fit-page-to-screen
 
 //buttons
 .btn-primary {
-  color: #fff;
+  color: $white;
   background-color: $primary-btn-color;
   border-color: $primary-btn-color;
 }
 .btn-primary:hover {
-  color: #fff;
+  color: $white;
   background-color: $primary-btn-color-hover;
   border-color: $primary-btn-color-hover;
 }
 
 .btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active, .show > .btn-primary.dropdown-toggle {
-  color: #fff;
+  color: $white;
   background-color: $secondary-color; 
   border-color: $secondary-color; 
 }
@@ -187,14 +197,14 @@ html,body,#app,.fit-page-to-Screen,.home-page,.not-home-page,.fit-page-to-screen
 }
 .form-container-width-btn-inside{
   .btn-outline-secondary{
-    border: 1px solid #ced4da;
+    border: 1px solid $white-dark;
   }
   
   display: block;
   width: 100%;
-  background-color: #fff;
+  background-color: $white;
   background-clip: padding-box;
-  border: 1px solid #ced4da;
+  border: 1px solid $white-dark;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   margin: 15px 0;
   label {
@@ -230,8 +240,8 @@ input:focus::-webkit-input-placeholder { color:transparent; }
 input:focus:-moz-placeholder { color:transparent; }
   .form-control:focus {
     color: #495057;
-    background-color: #fff;
-    border-color: #ff9e19;
+    background-color: $white;
+    border-color: $secondary-color;
     outline: 0;
     box-shadow:none; 
 }
@@ -257,7 +267,7 @@ input:focus:-moz-placeholder { color:transparent; }
 }
 
 .orange-font {
-    color: #ff9e19;
+    color: $secondary-color;
     font-weight: 500;
 }
 .backButtonholder{
@@ -319,7 +329,7 @@ input:focus:-moz-placeholder { color:transparent; }
    }
 
  .comments-span-top {
-    border-top: 1px dotted#e7eef1;
+    border-top: 1px dotted$comment-border-dotted;
     margin-top: 5px;
     display: block;
   }
@@ -389,7 +399,7 @@ h1.title-page {
 }
 
 .help-block {
-    color: #ff9e19;
+    color: $secondary-color;
     padding: 1px 0 1px 0px;
 }
 
@@ -480,8 +490,8 @@ help-block {
     border:1px solid transparent;
 
     @media screen and (max-width:991px) {
-      background-color: #a8cc08;
-      border: 1px solid #99b904;
+      background-color: $nav-bg-green;
+      border: 1px solid $nav-border-green;
       margin: 2px 0;
       }
       .dropdown-menu{
@@ -512,13 +522,13 @@ help-block {
     top: 68px;
     border-radius: 0;
     border:none;
-    background-color: #9fc104;
+    background-color: $primary-color;
     .dropdown-item {
       background-color: transparent!important;
-      color:white!important;
+      color:$white!important;
     }
     .dropdown-item:hover,.dropdown-item:active {
-      color: #3a3d3e!important;
+      color: $navbar-right-dropdown-hover!important;
     }
 
 
@@ -526,7 +536,7 @@ help-block {
   .navbar-right{
     .navbar .dropdown-item:hover, .navbar .dropdown-item:focus {
       background-color: transparent;
-      color: #3a3d3e;
+      color: $navbar-right-dropdown-hover;
     }
   }
 
@@ -565,7 +575,7 @@ help-block {
     .navbar-right{
 
       li.user-profile{
-        background-color: #ff9e19;
+        background-color: $secondary-color;
         border: 1px solid #a9c81e;
       }
     }
@@ -610,7 +620,7 @@ help-block {
 
     a{
     @media screen and (max-width:992px){
-      color: white;
+      color: $white;
      }
     }
   }
@@ -656,7 +666,7 @@ help-block {
   .only-small-screen.nav-item.show{
 
         @media screen and (max-width:991px){
-        background-color: #a8cc08!important;
+        background-color: $nav-bg-green!important;
         a{
           background-color: #8ca821;
         }
@@ -668,7 +678,7 @@ help-block {
       .dropdown-menu {
         background-color: transparent;
         border: none;
-        color:white;
+        color:$white;
       }
   }
 }
@@ -700,7 +710,7 @@ help-block {
   
   .main {
     height: 90vh;
-    background: #fff;
+    background: $white;
     box-shadow: 0px 13px 40px -13px rgba(0,0,0,0.75);
     width: 80%;
     margin: 0 auto;
@@ -708,7 +718,6 @@ help-block {
   
   .title-container {
     height: 90vh;
-    background: url("../images/bg.jpg") center center no-repeat;
     background-size: cover;
     display: flex;
     align-items: center;
@@ -785,13 +794,13 @@ only screen and (min-resolution: 2dppx) {
 
 
   .request-box{
-    border: 1px solid #dee8ec;
+    border: 1px solid $card-separator;
     margin-bottom: 10px;
     padding-top: 15px;
     border-radius: 3px;
     padding-bottom: 15px;
-    border-left: 4px solid #ff9e19;
-    background-color: white;
+    border-left: 4px solid $secondary-color;
+    background-color: $white;
     font-size: 92%;
     .btn.more-details{
       margin-top: 5px;
@@ -816,7 +825,7 @@ only screen and (min-resolution: 2dppx) {
       margin-bottom: 10px;
     }
     .separator.cardx{
-      border-top: 1px solid #dee8ec;
+      border-top: 1px solid $card-separator;
     }
 
 .more-info{
@@ -853,16 +862,36 @@ only screen and (min-resolution: 2dppx) {
 
 }
 
-.map,.request-box-details{
-  /*
+.map-holder{
   width:100%;
+}
+
+.map,.request-box-details{
+  width:100%;
+  /*
+
   @media screen and (max-width:991px){
   display: none;
   }
   */
 }
-
-
+.gm-style-iw {
+  
+  padding: 4px;
+  .info-window h3{
+    background-color: $primary-color;
+    color: $white;
+    padding: 10px 14px;
+    font-size: 137%;
+  }
+  .info-window-body{
+    padding: 5px 12px;
+  }
+  .info-window-content{
+    max-height: 143px;
+    overflow-y: auto;
+  }
+}
 
 @media screen and (max-width:991px){
   .requestsBig,.requestsSmall {
@@ -904,14 +933,14 @@ only screen and (min-resolution: 2dppx) {
 
 
   .request-box.request-box-details{
-      border-left: 1px solid #dee8ec;
+      border-left: 1px solid $card-separator;
       @media screen and (min-width:400px){
         padding: 30px;
       }
       .payment-panel {
         .amount {
           font-size: x-large;
-          color: #e7eef1;
+          color: $comment-border-dotted;
         }
         .header {
           font-size: 17px;
@@ -965,7 +994,7 @@ only screen and (min-resolution: 2dppx) {
 
 
       .separator div:nth-last-child(1){
-        border-top: 1px solid #e7eef1;
+        border-top: 1px solid $comment-border-dotted;
       }
 
 
@@ -977,7 +1006,7 @@ only screen and (min-resolution: 2dppx) {
 
 
     .payment-panel {
-      border: 1px solid #cad7dc;
+      border: 1px solid $border;
       border-radius: 0;
       transform: translateZ(0);
     }
@@ -994,7 +1023,7 @@ only screen and (min-resolution: 2dppx) {
       text-transform: uppercase;
       white-space: nowrap;
       padding: 2px 10px;
-      color: #cad7dc;
+      color: $border;
       letter-spacing: .36px;
     }
 
@@ -1003,7 +1032,7 @@ only screen and (min-resolution: 2dppx) {
     }
 
     .request-status{
-      color: #809f24;
+      color: $states-green;
       border-radius: 4px;
       display: inline-block;
       padding: 1px 8px;
@@ -1011,7 +1040,7 @@ only screen and (min-resolution: 2dppx) {
   }
 
   .btn-request {
-    color: white!important;
+    color: $white!important;
     margin-bottom: 15px;
     @include justify-content-center;
 }
@@ -1021,10 +1050,11 @@ only screen and (min-resolution: 2dppx) {
 .modal{
   .modal-header {
     background-color: $primary-color;
-    color: white;
+    color: $white;
   }
   .modal-body {
     padding-bottom: 2rem;
+    padding-top: 2rem;
    }
 }
 
@@ -1062,7 +1092,7 @@ form.request-form > div:first-of-type {
     .profile-card {
       h2, .h2 {
         font-size: 1.6rem;
-        border-bottom: 1px dotted #89a1ab;
+        border-bottom: 1px dotted $line-dotted;
         padding-bottom: 10px;
       }
       .userName{
@@ -1119,7 +1149,7 @@ form.request-form > div:first-of-type {
 
   .sign-in-links {
     margin-top: 29px;
-    border-top: 1px dotted #ced4da;
+    border-top: 1px dotted $white-dark;
     padding-top: 6px;
     a {
       padding: 0;
@@ -1129,7 +1159,7 @@ form.request-form > div:first-of-type {
   .sign-in-links-b {
     @media screen and (max-width: 767px) {
     margin-top: 10px;
-    border-top: 1px dotted #ced4da;
+    border-top: 1px dotted $white-dark;
     }
   }
 
@@ -1147,7 +1177,7 @@ form.request-form > div:first-of-type {
     .sign-in-left{
       display: flex; 
       justify-content: flex-end;
-      border-right: 1px solid #ced4da;
+      border-right: 1px solid $white-dark;
       padding-right: 30px;
     }
     .sign-in-right {
@@ -1162,7 +1192,7 @@ form.request-form > div:first-of-type {
     }
     .sign-in-links-b {
       margin-top: 10px;
-      border-top: 1px dotted #ced4da;
+      border-top: 1px dotted $white-dark;
     }
   }
 

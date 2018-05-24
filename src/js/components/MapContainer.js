@@ -54,7 +54,7 @@ export class MapContainer extends Component {
             address={thisMarker.address}
             position={{ lat: thisMarker.lat, lng: thisMarker.lng }}
             icon={{
-              url: "../../images/placeholder.png",
+              url: "../../images/placeholder_map.png",
               anchor: new google.maps.Point(32, 32)
             }} />
         )
@@ -70,7 +70,7 @@ export class MapContainer extends Component {
 
     $(window).resize(() => {
       console.log("}}}}}}resize}}}}}}}this.props.markerDetails =" + this.props.markerDetails);
-      this.forceUpdate();
+     // this.forceUpdate();
     });
 
     return (
@@ -86,14 +86,15 @@ export class MapContainer extends Component {
         {this.renderMarkers(requests)}
 
         <InfoWindow
+          className="info-window-holder"
           marker={this.state.activeMarker}
           visible={this.state.showingInfoWindow}>
-          <div>
-            <h3>{this.state.selectedPlace.title ? toTitleCase(this.state.selectedPlace.title) : this.state.selectedPlace.title}</h3>
-            <body>
-              <b>{this.state.selectedPlace.address}</b><br /><br />
-              {this.state.selectedPlace.body ? renderHTML(this.state.selectedPlace.body) : this.state.selectedPlace.body}
-            </body>
+          <div className="info-window">
+            <h3 className="font-weight-bold">{this.state.selectedPlace.title ? toTitleCase(this.state.selectedPlace.title) : this.state.selectedPlace.title}</h3>
+            <div className="info-window-body">
+            <div className="info-window-address font-weight-bold"><b>{this.state.selectedPlace.address}</b><br /><br /></div>
+            <div className="info-window-content"> {this.state.selectedPlace.body ? renderHTML(this.state.selectedPlace.body) : this.state.selectedPlace.body}</div>
+            </div>
           </div>
         </InfoWindow>
       </Map>

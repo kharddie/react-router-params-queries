@@ -119,6 +119,13 @@ class Nav extends React.Component {
         showInfoBox: "show"
       })
       this.props.resetRequest();
+      this.props.history.push('/createRequest');
+    }
+    if (this.props.requestsList.message == null && nextProps.requestsList.message === "success") {
+      this.setState({
+        renderInfoText: "",
+        showInfoBox: "hide"
+      })
     }
 
     //forgot password email message
@@ -149,20 +156,22 @@ class Nav extends React.Component {
       //this.props.history.push('/');
     }
 
-    if (this.props.user.status == 'signin' && nextProps.user.error == 'error') {
-      this.setState({
-        renderInfoText: nextProps.user.message,
-        showInfoBox: "show"
-      })
-      this.props.resetUser();
+
+    if (nextProps) {
+      if (nextProps.user.status === 'signin' && nextProps.user.error === 'error') {
+        this.setState({
+          renderInfoText: nextProps.user.message,
+          showInfoBox: "show"
+        })
+        this.props.resetUser();
+      } else if (this.props.user.status === 'signin' && !this.props.user.error) {
+        this.setState({
+          renderInfoText: "",
+          showInfoBox: "hide"
+        })
+      }
     }
 
-    //this hides the info bar after successfule login
-    if (nextProps.user.status === 'authenticated' && !nextProps.user.error) {
-      this.setState({
-        isAthenticatedUser: true
-      })
-    }
 
     //log out user
     if (nextProps.user.status === 'logout') {
@@ -240,7 +249,7 @@ class Nav extends React.Component {
             </div>
           </li>
           <li class="nav-item" role="presentation">
-            <a class="nav-item nav-link" onClick={this.props.logout} href="javascript:void(0)">
+            <a class="nav-item nav-link log-out" onClick={this.props.logout} href="javascript:void(0)">
               Log out
               </a>
           </li>
@@ -303,7 +312,7 @@ class Nav extends React.Component {
                 <Link class="dropdown-item" to="profile" onClick={this.toggleCollapse.bind(this)}>View My Profile
                 </Link></li>
               <li className="nav-item">
-                <a class="dropdown-item" onClick={this.props.logout} href="javascript:void(0)">
+                <a class="dropdown-item log-out" onClick={this.props.logout} href="javascript:void(0)">
                   Log out
               </a>
               </li>
@@ -382,16 +391,16 @@ class Nav extends React.Component {
 
     const navClass = collapsed ? "collapse" : "";
 
-    $(function(){ 
-      $('.navbar>a').on('click', function(){
+    $(function () {
+      $('.navbar>a,a.log-out').on('click', function () {
         $('.navbar-collapse').collapse('hide');
+      });
     });
-  });
 
     return (
       <div>
         <div className="header">
-          <nav  class="navbar navbar-expand-lg navbar-light" role="navigation">
+          <nav class="navbar navbar-expand-lg navbar-light" role="navigation">
             <a class="navbar-brand" href="#"><span className="logo-span"><img class="user-image" src="../../images/logo.svg" alt="" /></span></a>
 
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

@@ -28,7 +28,7 @@ export default function (state = INITIAL_STATE, action) {
     case FETCH_REQUESTS_FAILURE:// return error and make loading = false
       return { ...state, requestsList: { requests: [], error: "error", loading: false, message: action.payload.message } };      
     case RESET_REQUESTS:// reset requestList to initial state
-      return { ...state, resetRequest: { requests: [], error: null, loading: false, message: "reset" } };
+      return { ...state, requestsList: { requests: [], error: null, loading: false, message: null } };
 
     case FETCH_REQUEST:
       return { ...state, activeRequest: { ...state.activeRequest, loading: true } };

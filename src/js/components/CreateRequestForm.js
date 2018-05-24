@@ -36,23 +36,23 @@ function validate(values) {
       errors.content = 'Tell us a bit more.';
     }
   }
-  
+
   return errors;
 }
 
 //For any field errors upon submission (i.e. not instant check)
-const validateAndCreateRequest = (values, props, dispatch, isMobile) => {
+const validateAndCreateRequest = (values, props, dispatch, isMobile, startDate,moment) => {
   values.id = props.user.id;
-  values.created = moment(moment(), "YYY,MM,DD").toISOString();
+  values.created = moment(moment(), "YYY MM DD").toISOString();
 
   if (isMobile) {
-    values.due_date = moment(moment(values.Due_dateM), "YYY,MM,DD").toISOString();
+    values.due_date = moment(moment(values.Due_dateM), "YYY MM DD  HH:mm:ss").add(1, 'days').toISOString();
   } else {
-    values.due_date = moment(moment(values.date), "YYY,MM,DD").toISOString();
+    values.due_date = moment(moment(startDate), "YYY MM DD  HH:mm:ss").add(1, 'days').toISOString();
   }
 
-  if( moment(values.created).isBefore(moment(values.due_date), 'year')){
-//
+  if (moment(moment().format('YYYY MM DD')).isBefore(moment(values.due_date).format('YYYY MM DD'), 'year')) {
+    //
   }
 
   //get lat long from address
@@ -122,16 +122,16 @@ class CreateRequestForm extends Component {
 
   render() {
     const { handleSubmit, submitting, newRequest, user } = this.props;
-
+    let showHeading = this.props.location.href.indexOf("createRequest") > -1 ? "show" : "hide";
     return (
-      <div className='container'>
-        <div class="row justify-content-md-center">
-          <div class={"col-sm-12" + this.state.divClass}>
+      <div >
+        <div className="row justify-content-md-center">
+          <div className={"col-sm-12" + this.state.divClass}>
             <div>
-              <div><h2>Create Request</h2> </div>
+              <div className={showHeading} ><h2>Create Request</h2> </div>
             </div>
 
-            <form className={"request-form " + this.state.formWidthBg} onSubmit={handleSubmit((values, dispatch) => { validateAndCreateRequest(values, this.props, dispatch, isMobile); })}>
+            <form className={"request-form " + this.state.formWidthBg} onSubmit={handleSubmit((values, dispatch) => { validateAndCreateRequest(values, this.props, dispatch, isMobile, this.state.startDate,moment); })}>
               <Field
                 name="id"
                 type="hidden"
