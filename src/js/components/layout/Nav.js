@@ -10,8 +10,6 @@ import { resetForgotPwdEmail, resetForgotPwdReset } from '../../actions/forgotPw
 import { BrowserView, MobileView, isBrowser, isMobile } from "react-device-detect";
 import { fetchRequests, resetRequest, fetchRequestsSuccess, fetchRequestsFailure } from '../../actions/requests';
 
-
-
 function mapStateToProps(state) {
   return {
     authenticatedUser: state.user.status === 'authenticated' ? state.user.user : null,
@@ -156,7 +154,6 @@ class Nav extends React.Component {
       //this.props.history.push('/');
     }
 
-
     if (nextProps) {
       if (nextProps.user.status === 'signin' && nextProps.user.error === 'error') {
         this.setState({
@@ -171,7 +168,6 @@ class Nav extends React.Component {
         })
       }
     }
-
 
     //log out user
     if (nextProps.user.status === 'logout') {
@@ -223,7 +219,6 @@ class Nav extends React.Component {
     //console.log("*** componentDidMount");
 
   }
-
 
   componentWillMount() {
     //console.log("*** componentWillMount");
@@ -371,8 +366,6 @@ class Nav extends React.Component {
         console.log("navigation detect=" + global.retainInfoMsg)
         this.clearshowInfoBox();
       });
-
-
     }
 
     const { location } = this.props;

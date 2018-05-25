@@ -101,7 +101,7 @@ module.exports = {
     new CopyWebpackPlugin([
       { from: PATHS.app + '/images', to: 'images' }
     ]),
-    new BundleAnalyzerPlugin(),
+   // new BundleAnalyzerPlugin(),
 
   ],
   

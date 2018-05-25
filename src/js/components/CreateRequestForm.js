@@ -41,7 +41,7 @@ function validate(values) {
 }
 
 //For any field errors upon submission (i.e. not instant check)
-const validateAndCreateRequest = (values, props, dispatch, isMobile, startDate,moment) => {
+const validateAndCreateRequest = (values, props, dispatch, isMobile, startDate, moment) => {
   values.id = props.user.id;
   values.created = moment(moment(), "YYY MM DD").toISOString();
 
@@ -55,7 +55,7 @@ const validateAndCreateRequest = (values, props, dispatch, isMobile, startDate,m
     //
   }
 
-  //get lat long from address
+  ////get lat long from address
   Geocode.fromAddress(values.address).then(
     response => {
       if (response.status === "OK") {
@@ -95,6 +95,11 @@ class CreateRequestForm extends Component {
   }
 
   componentWillMount() {
+    if (!this.props.user) {
+      if (this.props.location.href.indexOf("createRequest") > -1) {
+        this.props.history.push('/signin');
+      }
+    }
     //Important! If your component is navigating based on some global state(from say componentWillReceiveProps)
     //always reset that global state back to null when you REMOUNT
     this.props.resetMe();
@@ -131,7 +136,7 @@ class CreateRequestForm extends Component {
               <div className={showHeading} ><h2>Create Request</h2> </div>
             </div>
 
-            <form className={"request-form " + this.state.formWidthBg} onSubmit={handleSubmit((values, dispatch) => { validateAndCreateRequest(values, this.props, dispatch, isMobile, this.state.startDate,moment); })}>
+            <form className={"request-form " + this.state.formWidthBg} onSubmit={handleSubmit((values, dispatch) => { validateAndCreateRequest(values, this.props, dispatch, isMobile, this.state.startDate, moment); })}>
               <Field
                 name="id"
                 type="hidden"
