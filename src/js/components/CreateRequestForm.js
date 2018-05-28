@@ -135,7 +135,6 @@ class CreateRequestForm extends Component {
             <div>
               <div className={showHeading} ><h2>Create Request</h2> </div>
             </div>
-
             <form className={"request-form " + this.state.formWidthBg} onSubmit={handleSubmit((values, dispatch) => { validateAndCreateRequest(values, this.props, dispatch, isMobile, this.state.startDate, moment); })}>
               <Field
                 name="id"

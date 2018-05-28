@@ -5,7 +5,7 @@ const path = require('path');
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+//const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 
 
@@ -19,7 +19,7 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   context: PATHS.app,
-
+  devtool: 'source-map',
   entry: "./js/client.js",
   output: {
     path: PATHS.build,
@@ -40,7 +40,7 @@ module.exports = {
         loader: 'babel-loader',
         query: {
           presets: ['react', 'es2015', 'stage-0'],
-          plugins: ['react-html-attrs', 'transform-class-properties', 'transform-decorators-legacy'],
+          plugins: ['react-html-attrs', 'transform-class-properties', 'transform-decorators-legacy','transform-runtime'],
         }
       },
       {
