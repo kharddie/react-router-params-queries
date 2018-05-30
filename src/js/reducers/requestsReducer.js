@@ -3,9 +3,9 @@ import {
   FETCH_REQUEST, FETCH_REQUEST_SUCCESS, FETCH_REQUEST_FAILURE, RESET_ACTIVE_REQUEST,
   CREATE_REQUEST, CREATE_REQUEST_SUCCESS, CREATE_REQUEST_FAILURE, RESET_NEW_REQUEST,
   DELETE_REQUEST, DELETE_REQUEST_SUCCESS, DELETE_REQUEST_FAILURE, RESET_DELETED_REQUEST,
+  UPDATE_REQUEST, UPDATE_REQUEST_SUCCESS, UPDATE_REQUEST_FAILURE, RESET_UPDATED_REQUEST,
   VALIDATE_REQUEST_FIELDS, VALIDATE_REQUEST_FIELDS_SUCCESS, VALIDATE_REQUEST_FIELDS_FAILURE, RESET_REQUEST_FIELDS
 } from '../actions/requests';
-
 
 const INITIAL_STATE = {
   requestsList: { requests: [], error: null, loading: false, message: null },
@@ -13,6 +13,7 @@ const INITIAL_STATE = {
   activeRequest: { request: null, error: null, loading: false, message: null },
   deletedRequest: { request: null, error: null, loading: false, message: null },
   resetRequest: { requests: [], error: null, loading: false, message: null },
+  updateRequest: { requests: {}, error: null, loading: false, message: null }
 
 
 };
@@ -26,7 +27,7 @@ export default function (state = INITIAL_STATE, action) {
     case FETCH_REQUESTS_SUCCESS:// return list of requests and make loading = false
       return { ...state, requestsList: { requests: action.payload.data, error: action.payload.error, loading: false, message: action.payload.message } };
     case FETCH_REQUESTS_FAILURE:// return error and make loading = false
-      return { ...state, requestsList: { requests: [], error: "error", loading: false, message: action.payload.message } };      
+      return { ...state, requestsList: { requests: [], error: "error", loading: false, message: action.payload.message } };
     case RESET_REQUESTS:// reset requestList to initial state
       return { ...state, requestsList: { requests: [], error: null, loading: false, message: null } };
 
@@ -49,13 +50,12 @@ export default function (state = INITIAL_STATE, action) {
     case RESET_NEW_REQUEST:
       return { ...state, newRequest: { request: null, error: null, loading: false, message: null } }
 
-
     case DELETE_REQUEST:
       return { ...state, deletedRequest: { ...state.deletedRequest, loading: true, message: null } }
     case DELETE_REQUEST_SUCCESS:
       return { ...state, deletedRequest: { request: action.payload, error: null, loading: false, message: null } }
     case DELETE_REQUEST_FAILURE:
-      error = action.payload || { message: action.payload.message };//2nd one is network or server down errors
+      error = action.payload || { message: action.payload.message };
       return { ...state, deletedRequest: { request: null, error: error, loading: false, message: null } }
     case RESET_DELETED_REQUEST:
       return { ...state, deletedRequest: { request: null, error: null, loading: false, message: null } }
@@ -75,9 +75,24 @@ export default function (state = INITIAL_STATE, action) {
     case RESET_REQUEST_FIELDS:
       return { ...state, newRequest: { ...state.newRequest, error: null, loading: null } }
 
-
-
-
+    case UPDATE_REQUEST:
+      return { ...state, updateRequest: { request: [], error: null, loading: true, message: action.payload.message } };
+    case UPDATE_REQUEST_SUCCESS:
+      const newStateUPS = Object.assign({}, state);
+      const index = newStateUPS.requestsList.requests.findIndex(data => parseInt(data.id) === parseInt(action.payload.data.id));
+      newStateUPS.requestsList.requests.splice(index, 1);
+      newStateUPS.requestsList.requests.push(action.payload.data);
+      return { ...newStateUPS, updateRequest: { request: action.payload.data, error: null, loading: false, message: action.payload.message } }
+    case UPDATE_REQUEST_FAILURE:
+      error = action.payload || { error: error, loading: false };
+      if (action.payload.error !== undefined && action.payload.data.error !== "true") {
+        error = false;
+      } else {
+        error = true;
+      }
+      return { ...state, updateRequest: { request: [], error: error, loading: false } };
+    case RESET_UPDATED_REQUEST:
+      return { ...state, updateRequest: { request: [], error: null, loading: false, message: null } };
 
     default:
       return state;

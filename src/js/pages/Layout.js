@@ -3,13 +3,14 @@ import { Link } from "react-router";
 import Footer from "../components/layout/Footer";
 import Nav from "../components/layout/Nav";
 import { meFromToken, meFromTokenSuccess, meFromTokenFailure, resetToken } from '../actions/users';
+import { fetchRequests, resetRequest, fetchRequestsSuccess, fetchRequestsFailure } from '../actions/requests';
 import { connect } from "react-redux";
 import { fetchOrientation } from "../actions/getOrientation"
 //import { connect } from "http2";
 import { BrowserView, MobileView, isBrowser, isMobile } from "react-device-detect";
 
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     loadUserFromToken: () => {
       let token = sessionStorage.getItem('jwtToken');
@@ -22,7 +23,15 @@ const mapDispatchToProps = (dispatch) => {
             //check for server token failure 
             if (!response.payload.data.error) {
               sessionStorage.setItem('jwtToken', response.payload.data.token);
-              dispatch(meFromTokenSuccess(response.payload.data))
+              dispatch(meFromTokenSuccess(response.payload.data));
+
+              //get requests for user when on update request page in case the page is reloaded
+              if (ownProps.location.pathname.indexOf("createRequest") > -1 && ownProps.params.hasOwnProperty("requestId") ) {
+                let myRequests = "myRequests";
+                dispatch(fetchRequests(response.payload.data.token, parseInt(response.payload.data.data.user.id), myRequests)).then((response) => {
+                  !response.error ? dispatch(fetchRequestsSuccess(response.payload.data)) : dispatch(fetchRequestsFailure(response.payload));
+                });
+              }
             } else {
               sessionStorage.removeItem('jwtToken');
               dispatch(meFromTokenFailure(response.payload.data));
@@ -32,8 +41,8 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(meFromTokenFailure(response.payload.data));
           }
         });
-
     },
+
     resetMe: () => {
       sessionStorage.removeItem('jwtToken');
       dispatch(resetToken());
@@ -116,7 +125,9 @@ class Layout extends Component {
   }
 
   componentDidMount() {
+    //on reload
     this.props.loadUserFromToken();
+
     console.log("+++++++++++++++++++++++++++++++++  layout componentDidMount() ++++++++++++++++++++++++");
     let getScreenDetails = null;
     getScreenDetails = this.getScreenDetailsRenderStyles(true, "componentDidMount");
@@ -129,15 +140,15 @@ class Layout extends Component {
       showBackGroundImg: ""
     }
 
-/*
-  document.addEventListener('touchstart', function(event) {
-    event.preventDefault();
-    if(event.touches && event.touches.length > 1) {
-      getScreenDetails = this.getScreenDetailsRenderStyles(true, "touchstart");
-    }
-
-}, false);
-*/
+    /*
+      document.addEventListener('touchstart', function(event) {
+        event.preventDefault();
+        if(event.touches && event.touches.length > 1) {
+          getScreenDetails = this.getScreenDetailsRenderStyles(true, "touchstart");
+        }
+    
+    }, false);
+    */
 
   }
 
@@ -184,7 +195,7 @@ class Layout extends Component {
   };
 
   render() {
-    const { location, history } = this.props;
+    const { location, history, params } = this.props;
     const containerStyle = {
       marginTop: "40px"
     };
@@ -192,7 +203,7 @@ class Layout extends Component {
     return (
       <div className={this.state.showBackGroundImg + " " + this.state.fitPageToScreenOverflowHidden}>
         <div class={"content-container " + this.state.fitPageToScreen}>
-          <Nav location={location} history={history} />
+          <Nav location={location} history={history} params={params} />
           <div id="main-content" className=" main-content container " style={containerStyle}>
             <div className="row">
               <div className="col col-12">

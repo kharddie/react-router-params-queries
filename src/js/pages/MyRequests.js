@@ -1,6 +1,5 @@
 import { connect } from 'react-redux'
-import { fetchRequests, fetchRequestsSuccess, fetchRequestsFailure } from '../actions/requests';
-import MyRequests from '../components/MyRequest';
+import MyRequests from '../components/MyRequests';
 
 
 const mapStateToProps = (state) => {

@@ -3,10 +3,10 @@ import CreateRequestContainer from '../containers/CreateRequestContainer.js';
 
 class CreateRequest extends React.Component {
   render() {
-    const { history } = this.props;
+    const { history,params } = this.props;
     return (
       <div>
-        <CreateRequestContainer location={location} history={history} />
+        <CreateRequestContainer location={location} history={history} params={params} />
       </div>
     )
   }

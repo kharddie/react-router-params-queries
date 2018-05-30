@@ -31,6 +31,11 @@ export const DELETE_REQUEST_SUCCESS = 'DELETE_REQUEST_SUCCESS';
 export const DELETE_REQUEST_FAILURE = 'DELETE_REQUEST_FAILURE';
 export const RESET_DELETED_REQUEST = 'RESET_DELETED_REQUEST';
 
+//update request
+export const UPDATE_REQUEST = 'UPDATE_REQUEST';
+export const UPDATE_REQUEST_SUCCESS = 'UPDATE_REQUEST_SUCCESS';
+export const UPDATE_REQUEST_FAILURE = 'UPDATE_REQUEST_FAILURE';
+export const RESET_UPDATED_REQUEST = 'RESET_UPDATED_REQUEST';
 
 export function fetchRequests(token, userParamId, myRequests) {
   let url;
@@ -183,11 +188,12 @@ export function resetActiveRequest() {
   }
 }
 
-
+//DELETE
 export function deleteRequest(id, tokenFromStorage) {
   const request = axios({
-    method: 'delete',
-    url: `${ROOT_URL}/requests/${id}`,
+    method: 'DELETE',
+    data:{request_id:id},
+    url :`${ROOT_URL}/requests/delete.php`,
     headers: {
       'Authorization': `Bearer ${tokenFromStorage}`
     }
@@ -210,6 +216,43 @@ export function deleteRequestFailure(response) {
     type: DELETE_REQUEST_FAILURE,
     payload: response
   };
+}
+
+// UPDATE
+export function updateRequest(props, tokenFromStorage) {
+  const request = axios({
+    method: 'post',
+    data: props,
+    url: `${ROOT_URL}/requests/update.php`,
+    headers: {
+      'Authorization': `Bearer ${tokenFromStorage}`
+    }
+  });
+
+  return {
+    type: UPDATE_REQUEST,
+    payload: request
+  };
+}
+
+export function updateRequestSuccess(updateReques) {
+  return {
+    type: UPDATE_REQUEST_SUCCESS,
+    payload: updateReques
+  };
+}
+
+export function updateRequestFailure(payload) {
+  return {
+    type: UPDATE_REQUEST_FAILURE,
+    payload: payload
+  };
+}
+
+export function resetUpdatedProduct() {
+  return {
+    type: RESET_UPDATED_REQUEST
+  }
 }
 
 

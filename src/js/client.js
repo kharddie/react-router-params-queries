@@ -33,6 +33,7 @@ import ResetPwd from './pages/ResetPwd';
 import VerifyAccount from './pages/VerifyAccount';
 
 import BrowseRequests from './pages/BrowseRequests';
+import MyRequestsDetails from './pages/MyRequestsDetails'
 import MyRequests from './pages/MyRequests';
 
 
@@ -58,12 +59,14 @@ ReactDOM.render(
         <Route path="/aboutUs(/:aboutUs)" name="aboutUs" component={AboutUs}/>
         <Route path="/validateEmail/:token" component={ValidateEmail} />
         <Route path="settings" name="settings" component={Settings}/>
-        <Route path="/createRequest" name="CreateRequest" component={CreateRequest}/>
+        <Route exact path="/createRequest" name="CreateRequest" component={CreateRequest}/>
+        <Route path="/createRequest/:requestId" name="CreateRequest" component={CreateRequest}/>
         <Route path="/forgotPwd" name="ForgotPwd" component={ForgotPwd}/>
         <Route path="/resetPwd" name="ResetPwd" component={ResetPwd}/>
         <Route path="/verifyAccount" name="VerifyAccount" component={VerifyAccount}/>
         <Route path="/browseRequests" name="BrowseRequests" component={BrowseRequests}/>
         <Route path="/myRequests/:id" name="MyRequests" component={BrowseRequests}/>
+        <Route path="/myRequestsDetails/:id" name="MyRequestsDetails" component={MyRequestsDetails}/>
         <Route path="/profile" component={Profile} />
       </Route>
     </Router>

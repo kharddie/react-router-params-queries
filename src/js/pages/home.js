@@ -77,7 +77,7 @@ class Home extends React.Component {
                 interval: false
             })
         });
-        const { history, user } = this.props;
+        const { history, user,params } = this.props;
         let welcomeName = null;
         if (user.user) {
             welcomeName = user.user.userName ? user.user.userName : user.user.name;
@@ -108,13 +108,13 @@ class Home extends React.Component {
                                         </ol>
                                         <div className="carousel-inner">
                                             <div className="carousel-item active">
-                                                <div><SignInFormContainer location={location} history={history} singUpFromHome={this.singUpFromHome} showModalCreateRequest={this.showModalCreateRequest} origin={this.state.origin} /></div>
+                                                <div><SignInFormContainer location={location} history={history} params={params} singUpFromHome={this.singUpFromHome} showModalCreateRequest={this.showModalCreateRequest} origin={this.state.origin} /></div>
                                             </div>
                                             <div className="carousel-item">
-                                                <div><CreateRequestContainer location={location} history={history} modalBackdropClicked={this.modalBackdropClicked} /></div>
+                                                <div><CreateRequestContainer location={location} history={history} params={params} modalBackdropClicked={this.modalBackdropClicked} /></div>
                                             </div>
                                             <div className="carousel-item">
-                                                <div><SignUpFormContainer  callingFromHome={true} location={location} history={history} modalBackdropClicked={this.modalBackdropClicked} /></div>
+                                                <div><SignUpFormContainer callingFromHome={true} location={location} params={params} history={history} modalBackdropClicked={this.modalBackdropClicked} /></div>
                                             </div>
                                         </div>
                                         <a className="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
@@ -137,7 +137,7 @@ class Home extends React.Component {
                         <div className="intro">
                             <div className="row">
                                 <div className={user.user ? "col-12 font-weight-bold welcome" : "hide"}>
-                                    {welcomeName ? "Welcome " + toTitleCase(welcomeName)+"!":'' }
+                                    {welcomeName ? "Welcome " + toTitleCase(welcomeName) + "!" : ''}
                                 </div>
                                 <div className="col-12">
                                     <h1 className="text-h1-lg intro-2" >Get more done for <span className="orange-font">FREE! </span></h1>

@@ -4,7 +4,10 @@ import { reduxForm, Field, SubmissionError, reset } from 'redux-form';
 import renderField from './renderField';
 import renderTextArea from './renderTextArea';
 import { validateRequestFields, validateRequestFieldsSuccess, validateRequestFieldsFailure } from '../actions/requests';
-import { createRequest, createRequestSuccess, createRequestFailure, resetNewRequest } from '../actions/requests';
+import {
+  createRequest, createRequestSuccess, createRequestFailure, resetNewRequest,
+  updateRequest, updateRequestSuccess, updateRequestFailure, resetUpdatedProduct
+} from '../actions/requests';
 import moment from 'moment'
 import Moment from 'react-moment';
 import DatePicker from 'react-datepicker';
@@ -32,8 +35,10 @@ function validate(values) {
     errors.content = 'Enter some content';
   }
   if (values.hasOwnProperty("content")) {
-    if (values.content.length < 30) {
-      errors.content = 'Tell us a bit more.';
+    if (values.content) {
+      if (values.content.length < 30) {
+        errors.content = 'Tell us a bit more.';
+      }
     }
   }
 
@@ -62,18 +67,39 @@ const validateAndCreateRequest = (values, props, dispatch, isMobile, startDate, 
         const { lat, lng } = response.results[0].geometry.location;
         values.lat = lat;
         values.lng = lng;
-        return dispatch(createRequest(values, sessionStorage.getItem('jwtToken')))
-          .then(result => {
-            // Note: Error's "data" is in result.payload.response.data (inside "response")
-            // success's "data" is in result.payload.data
-            if (result.payload.response && result.payload.response.status !== 200) {
-              dispatch(createRequestFailure(result.payload.response.data));
-              throw new SubmissionError(result.payload.response.data);
-            }
-            //let other components know that everything is fine by updating the redux` state
-            dispatch(createRequestSuccess(result.payload.data)); //ps: this is same as dispatching RESET_USER_FIELDS
-            dispatch(reset('CreateRequestForm'));
-          });
+
+        if (values.requestId) {
+          return dispatch(updateRequest(values, sessionStorage.getItem('jwtToken')))
+            .then(result => {
+              // Note: Error's "data" is in result.payload.response.data (inside "response")
+              // success's "data" is in result.payload.data
+              if (result.payload.response && result.payload.response.status !== 200) {
+                dispatch(updateRequestFailure(result.payload.response.data));
+                throw new SubmissionError(result.payload.response.data);
+              }
+              //let other components know that everything is fine by updating the redux` state
+              dispatch(updateRequestSuccess(result.payload.data)); //ps: this is same as dispatching RESET_USER_FIELDS
+              dispatch(reset('CreateRequestForm'));
+            });
+        } else {
+          return dispatch(createRequest(values, sessionStorage.getItem('jwtToken')))
+            .then(result => {
+              // Note: Error's "data" is in result.payload.response.data (inside "response")
+              // success's "data" is in result.payload.data
+              if (result.payload.response && result.payload.response.status !== 200) {
+                dispatch(createRequestFailure(result.payload.response.data));
+                throw new SubmissionError(result.payload.response.data);
+              }
+              //let other components know that everything is fine by updating the redux` state
+              dispatch(createRequestSuccess(result.payload.data)); //ps: this is same as dispatching RESET_USER_FIELDS
+              dispatch(reset('CreateRequestForm'));
+            });
+        }
+
+
+
+
+
       }
     },
     error => {
@@ -91,15 +117,30 @@ class CreateRequestForm extends Component {
   state = {
     divClass: "",
     formWidthBg: "",
-    startDate: moment()
+    startDate: null
   }
-
-  componentWillMount() {
+  componentDidMount() {
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxcomponentDidMount"+this.props.initialValues)
+    if (this.props.params.requestId) {
+      this.setState({
+       // startDate: moment(this.props.initialValues.Due_dateM)
+      })
+      //this.props.initialValues.Due_dateM = moment(this.props.initialValues.Due_dateM);
+    } else {
+      this.setState({
+        startDate: moment()
+      })
+    }
+  }
+  componentWillMount = () => {
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxcomponentWillMount"+this.props.initialValues)
     if (!this.props.user) {
       if (this.props.location.href.indexOf("createRequest") > -1) {
-        this.props.history.push('/signin');
+        // this.props.history.push('/signin');
       }
     }
+
+
     //Important! If your component is navigating based on some global state(from say componentWillReceiveProps)
     //always reset that global state back to null when you REMOUNT
     this.props.resetMe();
@@ -112,6 +153,7 @@ class CreateRequestForm extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxcomponentWillReceiveProps"+this.props.initialValues)
     if (nextProps.newRequest.request && !nextProps.newRequest.error) {
       this.props.history.push('/browseRequests');
       this.props.resetMe();

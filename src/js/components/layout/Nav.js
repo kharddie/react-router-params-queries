@@ -32,6 +32,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     logout: () => {
       sessionStorage.removeItem('jwtToken');
+      sessionStorage.removeItem('user');
       dispatch(logoutUser());
     },
     resetUpdateProfileState: () => {
@@ -117,7 +118,7 @@ class Nav extends React.Component {
         showInfoBox: "show"
       })
       this.props.resetRequest();
-      this.props.history.push('/createRequest');
+     // this.props.history.push('/createRequest');
     }
     if (this.props.requestsList.message == null && nextProps.requestsList.message === "success") {
       this.setState({

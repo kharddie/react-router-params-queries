@@ -18,8 +18,6 @@ export default class ProfileCard extends React.Component {
 
     }
 
-
-
     return (
       <div>
         <div className="row profile-card">

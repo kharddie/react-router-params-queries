@@ -32,6 +32,7 @@ const validateAndSignInUser = (values, state, props, dispatch) => {
       }
       if (!result.payload.data.error) { //success
         sessionStorage.setItem('jwtToken', result.payload.data.token);
+        sessionStorage.setItem('user', JSON.stringify(result.payload.data.data.user));
         dispatch(signInUserSuccess(result.payload.data));
         if (props.showModalCreateRequest) {
           props.showModalCreateRequest();
