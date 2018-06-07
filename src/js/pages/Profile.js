@@ -72,7 +72,7 @@ class Profile extends Component {
         </div>
 
         <div class="row justify-content-md-center">
-          <div class="col-6 col-sm-6 text-left">
+          <div class="col-sm-12 col-md-6 text-left">
             <p></p>
             <MyRequestsContainer user={this.props.user} params={params} />
           </div>

@@ -175,7 +175,7 @@ class BrowseRequests extends Component {
             $(".offer-to-assist").prop("disabled", false)
             this.setState({ showOfferModal: true })
         }
-        console.log(data);
+        
         this.setState({
             title: data.title,
             address: data.address,
@@ -226,11 +226,11 @@ class BrowseRequests extends Component {
        // event.stopPropagation();
 
         if ($('.more-details').hasClass("collapsed")) {
-            console.log("collapsed");
+
             //$('.more-details img').removeClass("arrow-up");
             //$('.more-details img').addClass("arrow-down");
         } else {
-            console.log("not collapsed");
+
             //$('.more-details img').removeClass("arrow-down");
             //$('.more-details img').addClass("arrow-up");
 
@@ -330,7 +330,7 @@ class BrowseRequests extends Component {
     }
 
     renderRequests = (requests, moment) => {
-        console.log("_________________________calling renderRequests")
+
         if (requests.length > 0) {
             return requests.map((data, index) => {
                 if (data.title != '' && data.address != '' && data.content != '' && data.status) {
@@ -408,11 +408,6 @@ class BrowseRequests extends Component {
         const isLoggedIn = this.props.user;
         let loadingAcceptOfferListALL = true;
         global.markerDetails =  [];
-
-        console.log("################### initiate ######################")
-        console.log(global.markerDetails)
-        console.log("################### end -- initiate ######################")
-
 
         let clearBoth = {
             clear: "both"
@@ -495,11 +490,9 @@ class BrowseRequests extends Component {
         if (loading) {
             $(".loader-spinner-container").removeClass("loader-hide")
             $(".loader-spinner-container").addClass("loader-show")
-            // console.log("loading")
         } else {
             $(".loader-spinner-container").removeClass("loader-show")
             $(".loader-spinner-container").addClass("loader-hide")
-            // console.log("finished loading")
         }
 
         return (

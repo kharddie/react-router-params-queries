@@ -15,6 +15,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { isMobile } from "react-device-detect";
 import Geocode from "react-geocode";
 Geocode.setApiKey("AIzaSyCSGUZtwqI8T3N-_qBhy8iJ6AEyrtuTqls");
+import ButtonWithLoader from './ButtonWithLoader';
+
 // Enable or disable logs. Its optional.
 //Geocode.enableDebug();
 
@@ -117,23 +119,13 @@ class CreateRequestForm extends Component {
   state = {
     divClass: "",
     formWidthBg: "",
-    startDate: null
+    startDate: null,
+
   }
   componentDidMount() {
-    console.log("xxxxxxxxxxxxxxxxxxxxxxxcomponentDidMount"+this.props.initialValues)
-    if (this.props.params.requestId) {
-      this.setState({
-       // startDate: moment(this.props.initialValues.Due_dateM)
-      })
-      //this.props.initialValues.Due_dateM = moment(this.props.initialValues.Due_dateM);
-    } else {
-      this.setState({
-        startDate: moment()
-      })
-    }
+
   }
   componentWillMount = () => {
-    console.log("xxxxxxxxxxxxxxxxxxxxxxxcomponentWillMount"+this.props.initialValues)
     if (!this.props.user) {
       if (this.props.location.href.indexOf("createRequest") > -1) {
         // this.props.history.push('/signin');
@@ -153,7 +145,16 @@ class CreateRequestForm extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("xxxxxxxxxxxxxxxxxxxxxxxcomponentWillReceiveProps"+this.props.initialValues)
+    if (this.props.params.requestId) {
+      this.setState({
+        startDate: this.props.initialValues && moment(this.props.initialValues.Due_dateM),
+      })
+      //this.props.initialValues.Due_dateM = moment(this.props.initialValues.Due_dateM);
+    } else {
+      this.setState({
+        startDate: moment(),
+      })
+    }
     if (nextProps.newRequest.request && !nextProps.newRequest.error) {
       this.props.history.push('/browseRequests');
       this.props.resetMe();
@@ -168,14 +169,28 @@ class CreateRequestForm extends Component {
   }
 
   render() {
-    const { handleSubmit, submitting, newRequest, user } = this.props;
+    const { handleSubmit, submitting, newRequest, user, initialValues, params } = this.props;
     let showHeading = this.props.location.href.indexOf("createRequest") > -1 ? "show" : "hide";
+    let title = "";
+    let loading = true;
+
+    if (params.hasOwnProperty("requestId")) {
+      title = "Update Request";
+      if (initialValues) {
+        loading = false;
+      }
+    } else {
+      title = "Create Request";
+      initialValues: true;
+      loading = false;
+    }
+
     return (
       <div >
         <div className="row justify-content-md-center">
           <div className={"col-sm-12" + this.state.divClass}>
             <div>
-              <div className={showHeading} ><h2>Create Request</h2> </div>
+              <div className={showHeading} ><h2>{title}</h2> </div>
             </div>
 
             <form className={"request-form " + this.state.formWidthBg} onSubmit={handleSubmit((values, dispatch) => { validateAndCreateRequest(values, this.props, dispatch, isMobile, this.state.startDate, moment); })}>
@@ -203,9 +218,9 @@ class CreateRequestForm extends Component {
                   component={renderField}
                   label="Due dateM*" />
               </div>
-              <div className={'form-group' + !isMobile ? "show" : "hide"} >
-                <label className="control-label">Due date*</label>
-                <div className={!isMobile ? "show" : "hide"}>
+              <div className={!isMobile ? "show" : "hide"} >
+              <div className="form-group">
+                <label className={"control-label " + !isMobile ? "show" : "hide"} >Due date*</label>
                   <DatePicker
                     selected={this.state.startDate}
                     onChange={this.handleChange}
@@ -222,16 +237,12 @@ class CreateRequestForm extends Component {
                 name="content"
                 component={renderTextArea}
                 label="Describe your Request in more detail*" />
-              <div className="form-footer">
-                <button
-                  type="submit"
-                  className="btn btn-primary btn-block"
-                  disabled={submitting}>
-                  Submit
-            </button>
 
+              <div className="form-footer">
+                <ButtonWithLoader loading={loading} name="Submit" submitting={submitting} />
               </div>
             </form>
+
           </div>
         </div>
       </div>

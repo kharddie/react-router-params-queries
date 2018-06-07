@@ -51,9 +51,16 @@ export default function (state = INITIAL_STATE, action) {
       return { ...state, newRequest: { request: null, error: null, loading: false, message: null } }
 
     case DELETE_REQUEST:
-      return { ...state, deletedRequest: { ...state.deletedRequest, loading: true, message: null } }
+      return { ...state, deletedRequest: { ...state.deletedRequest, loading: true, message: null,error: null, } }
     case DELETE_REQUEST_SUCCESS:
-      return { ...state, deletedRequest: { request: action.payload, error: null, loading: false, message: null } }
+      const newStateUPR = Object.assign({}, state);
+      newStateUPR.requestsList.requests.some(function (el, i) {
+        if (parseInt(el.id) == parseInt(action.payload.data)) {
+         // newStateUPR.requestsList.requests.splice(i, 1);
+        }
+      });
+      newStateUPR.requestsList.requests.splice(0, 1);
+      return { ...newStateUPR, deletedRequest: { request: {}, error: null, loading: false, message: action.payload.message } }
     case DELETE_REQUEST_FAILURE:
       error = action.payload || { message: action.payload.message };
       return { ...state, deletedRequest: { request: null, error: error, loading: false, message: null } }

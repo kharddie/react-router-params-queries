@@ -66,7 +66,7 @@ ReactDOM.render(
         <Route path="/verifyAccount" name="VerifyAccount" component={VerifyAccount}/>
         <Route path="/browseRequests" name="BrowseRequests" component={BrowseRequests}/>
         <Route path="/myRequests/:id" name="MyRequests" component={BrowseRequests}/>
-        <Route path="/myRequestsDetails/:id" name="MyRequestsDetails" component={MyRequestsDetails}/>
+        <Route path="/myRequestsDetails/:requestId" name="MyRequestsDetails" component={MyRequestsDetails}/>
         <Route path="/profile" component={Profile} />
       </Route>
     </Router>

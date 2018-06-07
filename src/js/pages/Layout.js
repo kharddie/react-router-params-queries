@@ -8,6 +8,8 @@ import { connect } from "react-redux";
 import { fetchOrientation } from "../actions/getOrientation"
 //import { connect } from "http2";
 import { BrowserView, MobileView, isBrowser, isMobile } from "react-device-detect";
+import ResizeSensor from 'resize-sensor--react';
+import 'resize-sensor--react/build/resize-sensor.css';
 
 
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -25,8 +27,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
               sessionStorage.setItem('jwtToken', response.payload.data.token);
               dispatch(meFromTokenSuccess(response.payload.data));
 
-              //get requests for user when on update request page in case the page is reloaded
-              if (ownProps.location.pathname.indexOf("createRequest") > -1 && ownProps.params.hasOwnProperty("requestId") ) {
+              //get requests for user when on update request page in case the page is reloaded 
+              if (ownProps.location.pathname.indexOf("createRequest") > -1 || ownProps.location.pathname.indexOf("myRequestsDetails") > -1 && ownProps.params.hasOwnProperty("requestId")) {
                 let myRequests = "myRequests";
                 dispatch(fetchRequests(response.payload.data.token, parseInt(response.payload.data.data.user.id), myRequests)).then((response) => {
                   !response.error ? dispatch(fetchRequestsSuccess(response.payload.data)) : dispatch(fetchRequestsFailure(response.payload));
@@ -62,9 +64,27 @@ const mapStateToProps = (state) => {
 class Layout extends Component {
   constructor(props) {
     super(props);
-    $(window).resize(() => {
-      this.props.getOrientation(this.getScreenDetailsRenderStyles(true, "resize"));
-    });
+    /*
+        function onElementHeightChange(elm, callback){
+          var lastHeight = elm.clientHeight, newHeight;
+          (function run(){
+            newHeight = elm.clientHeight;
+            if( lastHeight != newHeight )
+              callback();
+            lastHeight = newHeight;
+        
+                if( elm.onElementHeightChangeTimer )
+                  clearTimeout(elm.onElementHeightChangeTimer);
+        
+            elm.onElementHeightChangeTimer = setTimeout(run, 200);
+          })();
+        }
+        
+        onElementHeightChange(document.body, function(){
+          alert('Body height changed');
+        });
+    
+        */
   }
 
   state = {
@@ -72,65 +92,46 @@ class Layout extends Component {
     locationPathname: null,
     showBackGroundImg: "",
     fitPageToScreen: "",
-    IsHomePage: "",
-    fitPageToScreenOverflowHidden: ""
+    IsHomePage: "not-home-page",
+    fitPageToScreenOverflowHidden: "",
   }
 
-  getScreenDetailsRenderStyles = (execute, whoIs) => {
-    this.setState({
-      fitPageToScreen: "",
-      IsHomePage: "not-home-page",
-      fitPageToScreenOverflowHidden: ""
-    });
+  getScreenDetailsRenderStyles = (w, h) => {
     let windowInnerWidth = window.innerWidth;
     let windowInnerHeight = window.innerHeight;
-    let contentContainerHeight = $(".content-container").outerHeight(true);
+    let contentContainerHeight = h;
     let footerHeight = $(".footer").outerHeight(true);
     let getOrientation = windowInnerWidth > windowInnerHeight ? "Landscape" : "Portrait";
-    let data = {
-      windowInnerWidth: windowInnerWidth,
-      windowInnerHeight: windowInnerHeight,
-      contentContainerHeight: contentContainerHeight,
-      footerHeight: footerHeight,
-      getOrientation: getOrientation
-    }
 
-    console.log("---------------document ready-----------------");
-    console.log("@@@@@whoIs==" + whoIs);
-    console.log("@@@@@execute==" + execute);
-    console.log("@@@@@content-container==" + data.contentContainerHeight);
-    console.log("footer==" + data.footerHeight);
-    console.log("window height=" + $(window).height());
-    console.log("total==" + ($(".footer").outerHeight(true) + $(".content-container").outerHeight(true)));
-    console.log((contentContainerHeight + footerHeight) > windowInnerHeight ? "dont apply" : "apply");
-    console.log("---------------end document ready--------------------");
+    if (contentContainerHeight > windowInnerHeight) {
+      console.log("@@@@@ cc=" + contentContainerHeight + " > wh=" + windowInnerHeight + " ::remove");
+      //$(".main-content").css("padding-bottom", "50px");
+      this.setState({
+        fitPageToScreen: "",
+        IsHomePage: "not-home-page",
+        fitPageToScreenOverflowHidden: "",
+      });
+    } else if (contentContainerHeight == windowInnerHeight) {
+      console.log("@@@@@ cc=" + contentContainerHeight + " == wh=" + windowInnerHeight + " ::applied");
+      this.setState({
+        fitPageToScreen: "fit-page-to-Screen",
+        IsHomePage: "not-home-page",
+        fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden",
+      });
 
-    if (execute) {
-      if ((contentContainerHeight + footerHeight) >= windowInnerHeight) {
-        this.setState({
-          fitPageToScreen: "",
-          IsHomePage: "not-home-page",
-          fitPageToScreenOverflowHidden: ""
-        });
-      } else {
-        this.setState({
-          fitPageToScreen: "fit-page-to-Screen",
-          IsHomePage: "not-home-page",
-          fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden"
-        });
-      }
-    } else {
-      return data;
+    } else if (contentContainerHeight < windowInnerHeight) {
+      console.log("@@@@@ cc=" + contentContainerHeight + " < wh=" + windowInnerHeight + " ::apply");
+      this.setState({
+        fitPageToScreen: "fit-page-to-Screen",
+        IsHomePage: "not-home-page",
+        fitPageToScreenOverflowHidden: "fit-page-to-screen-overflow-hidden",
+      });
     }
   }
 
   componentDidMount() {
     //on reload
     this.props.loadUserFromToken();
-
-    console.log("+++++++++++++++++++++++++++++++++  layout componentDidMount() ++++++++++++++++++++++++");
-    let getScreenDetails = null;
-    getScreenDetails = this.getScreenDetailsRenderStyles(true, "componentDidMount");
 
     if (this.props.location.pathname === "/") {
       this.setState({
@@ -140,21 +141,10 @@ class Layout extends Component {
       showBackGroundImg: ""
     }
 
-    /*
-      document.addEventListener('touchstart', function(event) {
-        event.preventDefault();
-        if(event.touches && event.touches.length > 1) {
-          getScreenDetails = this.getScreenDetailsRenderStyles(true, "touchstart");
-        }
-    
-    }, false);
-    */
-
   }
 
 
   componentWillMount() {
-    console.log("componentWillMount");
     // will trigger the callback function whenever a new Route renders a component(as long as this component stays mounted as routes change)
     // this.props.history.listen((location) => {
     // view new URL
@@ -163,8 +153,9 @@ class Layout extends Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
-    //console.log(nextProps.orientationType.getOrientation.data.getOrientation);
+
     let getScreenDetails = null;
+
     if (nextProps.location.pathname === "/") {
       this.setState({
         showBackGroundImg: "show-backGround-img"
@@ -175,22 +166,6 @@ class Layout extends Component {
       });
     }
 
-    //change of state
-    if (this.props.location.pathname != nextProps.location.pathname) {
-      console.log("&&&&&&&&&&&&&&&&&&&&& change of state calling new dimentions current=" + this.props.location.pathname + "   to==" + nextProps.location.pathname);
-      $(document).ready(() => {
-        getScreenDetails = this.getScreenDetailsRenderStyles(true, "location.pathname");
-
-      })
-    }
-
-    //change of orientation
-    if (this.props.orientationType.getOrientation.data) {
-      if (this.props.orientationType.getOrientation.data.getOrientation != nextProps.orientationType.getOrientation.data.getOrientation) {
-        console.log("Change of orientation");
-        getScreenDetails = this.getScreenDetailsRenderStyles(true, "change of orientation");
-      }
-    }
 
   };
 
@@ -203,6 +178,13 @@ class Layout extends Component {
     return (
       <div className={this.state.showBackGroundImg + " " + this.state.fitPageToScreenOverflowHidden}>
         <div class={"content-container " + this.state.fitPageToScreen}>
+          <ResizeSensor
+            onResize={
+              (w, h) => {
+                this.getScreenDetailsRenderStyles(w, h)
+              }
+            }
+          />
           <Nav location={location} history={history} params={params} />
           <div id="main-content" className=" main-content container " style={containerStyle}>
             <div className="row">

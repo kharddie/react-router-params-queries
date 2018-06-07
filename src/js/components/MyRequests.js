@@ -6,8 +6,8 @@ class MyRequests extends Component {
     this.props.fetchRequests(this.props.user);
   }
 
-  componentWillReceive() {
-    this.props.fetchRequests(this.props.user);
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps.requestsList.requests)
   }
 
   renderRequestsx(requests) {
@@ -27,45 +27,51 @@ class MyRequests extends Component {
         );
       })
   }
+
   deleteRequest = (id) => {
     this.props.deleteRequest(id);
   }
+
   renderRequests(requests) {
     if (requests.length > 0)
       return requests.map((request, index) => {
         return (
-          <div key={index}>
+          <div className="zebra-row" key={index}>
             <div className="row">
-              <div className="col-sm-12"><Link to={"myRequestsDetails/" + request.id} href="#">{request.title}</Link></div>
-            </div>
-            <div className="row justify-content-left">
-              <div className="col-sm-4">
-                <a onClick={()=> {this.deleteRequest(request.id)}}><img className="svg-icon svg-icon-smaller svg-icon-margin-right" src="../../images/delete.svg" alt="X" /></a>
-                <Link to={"createRequest/" + request.id} ><img className="svg-icon svg-icon-smaller" src="../../images/edit.svg" alt="Update" /></Link>
+              <div className="col-xs-12 col-sm-7 col-md-8">
+                <Link to={"myRequestsDetails/" + request.id} href="#">{request.title}</Link>
+              </div>
+              <div className="col-xs-12 col-sm-5 col-md-4 text-right justify-content-left">
+                <a className="inline-block svg-icon-margin-right cursor-pointer" onClick={() => { this.deleteRequest(request.id) }}><img className="svg-mid-width svg-icon-smaller " src="../../images/delete.svg" alt="X" /></a>
+                <Link to={"createRequest/" + request.id} ><img className="svg-icon svg-mid-width svg-icon-smaller" src="../../images/edit.svg" alt="Update" /></Link>
               </div>
             </div>
-
           </div>
         );
       })
   }
 
   render() {
-    const { user, requestsList } = this.props;
 
+    const { user, requestsList } = this.props;
     if (requestsList.loading) {
       return <div className="container"><h1>Requests</h1><h3>Loading...</h3></div>
-    } else if (requestsList.error) {
+    } else if (requestsList.loading) {
       return <div className="alert alert-danger">Error: {requestsList.message}</div>
     }
 
     return (
-      <div>
+      <div className="profile-container">
         <h2>My requests</h2>
 
-        {this.renderRequests(requestsList.requests)}
+        <div className={requestsList.requests.length === 0 ? "show zebra" : "hide"}>
+          You do not not have any request. Please post a <Link to="/createRequest" >request,</Link> or offer to <Link to="/browseRequests" >assist</Link>. 
+        </div>
 
-      </div>
+        <div className="zebra">
+          {this.renderRequests(requestsList.requests)}
+        </div>
+      </div >
     );
   }
 }

@@ -14,7 +14,7 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  console.log(moment())
+  //console.log(moment())
   let initialValues = null;
   if (state.requests.requestsList.requests.length > 0 && ownProps.params.hasOwnProperty("requestId")) {
     let listFiltered = state.requests.requestsList.requests.filter(list => parseInt(list.id) === parseInt(ownProps.params.requestId));
@@ -23,8 +23,8 @@ const mapStateToProps = (state, ownProps) => {
       id: parseInt(listFiltered[0].user_id),
       title: listFiltered[0].title,
       address: listFiltered[0].address,
-      Due_dateM: listFiltered[0].due_date,
-      //Due_dateM: moment(moment(listFiltered[0].due_date), "YYY MM DD  HH:mm:ss").subtract(2, 'days'),
+      date: moment(moment(listFiltered[0].due_date), "YYY MM DD  HH:mm:ss").subtract(1, 'days'),
+      Due_dateM: moment(moment(listFiltered[0].due_date), "YYY MM DD  HH:mm:ss").subtract(1, 'days'),
       content: listFiltered[0].title
     }
   }

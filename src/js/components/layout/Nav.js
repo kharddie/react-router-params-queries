@@ -204,7 +204,11 @@ class Nav extends React.Component {
         renderInfoText: nextProps.newOffer.offer.message,
         showInfoBox: "show"
       })
+    }
 
+    if (this.props.location.pathname != nextProps.location.pathname) {
+      console.log("change of location");
+      this.clearshowInfoBox();
     }
 
   }
@@ -363,10 +367,14 @@ class Nav extends React.Component {
         return "hide"
       }
 
+      
       this.props.history.listen((location, action) => {
         console.log("navigation detect=" + global.retainInfoMsg)
         this.clearshowInfoBox();
       });
+
+ 
+  
     }
 
     const { location } = this.props;
@@ -395,7 +403,7 @@ class Nav extends React.Component {
       <div>
         <div className="header">
           <nav class="navbar navbar-expand-lg navbar-light" role="navigation">
-            <a class="navbar-brand" href="#"><span className="logo-span"><img class="user-image" src="../../images/logo.svg" alt="" /></span></a>
+            <a class="navbar-brand" href="#"><span className="logo-span"><img class="user-image spin" src="../../images/logo.svg" alt="" /></span></a>
 
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>

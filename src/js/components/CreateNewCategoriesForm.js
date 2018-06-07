@@ -11,7 +11,6 @@ import { createCategories, createCategoriesSuccess, createCategoriesFailure, res
 //For any field errors upon submission (i.e. not instant check)
 const validateAndCreatePost = (values, dispatch, props) => {
   props.hideModal();
-  console.log(values);
   props.props.createCategories(values);
 }
 
@@ -51,7 +50,6 @@ class CreateNewCategoriesForm extends React.Component {
     // }
 
     if (nextProps.props.dataToProps.newProductDetails.data !== undefined) {
-      console.log(nextProps.props.dataToProps.newProductDetails.data);
       //nextProps.props.fetchCategories();
     }
   }
@@ -63,7 +61,6 @@ class CreateNewCategoriesForm extends React.Component {
 
     if (nextProps.props.dataToProps.newProductDetails.data.data !== undefined) {
       this.props.fetchCategories();
-      console.log(nextProps.props.dataToProps.newProductDetails.data.data)
     }
 
   }

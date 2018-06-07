@@ -24,7 +24,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         deleteRequest: (id) => {
             dispatch(deleteRequest(id, jwtToken)).then((response) => {
-                !response.error ? dispatch(deleteRequestSuccess(response.payload.data)) : dispatch(deleteRequestFailure(response.payload));
+                !response.error ? dispatch(fetchRequestsSuccess(response.payload.data)) : dispatch(deleteRequestFailure(response.payload));
             })
         },
         updateRequest: () => {
