@@ -7,7 +7,13 @@ class MyRequests extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps.requestsList.requests)
+    console.log(nextProps.requestsList.requests);
+    if (nextProps.deletedRequest.request) {
+      if (nextProps.deletedRequest.request.hasOwnProperty("data") && !nextProps.deletedRequest.error) {
+        this.props.resetDeletedRequest();
+        this.props.fetchRequests(this.props.user);
+      }
+    }
   }
 
   renderRequestsx(requests) {
@@ -65,7 +71,7 @@ class MyRequests extends Component {
         <h2>My requests</h2>
 
         <div className={requestsList.requests.length === 0 ? "show zebra" : "hide"}>
-          You do not not have any request. Please post a <Link to="/createRequest" >request,</Link> or offer to <Link to="/browseRequests" >assist</Link>. 
+          You do not not have any request. Please post a <Link to="/createRequest" >request,</Link> or offer to <Link to="/browseRequests" >assist</Link>.
         </div>
 
         <div className="zebra">

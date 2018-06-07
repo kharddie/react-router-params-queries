@@ -149,14 +149,7 @@ export function resetNewRequest() {
     type: RESET_NEW_REQUEST
   }
 }
-;
 
-export function resetDeletedRequest() {
-  return {
-    type: RESET_DELETED_REQUEST
-  }
-}
-;
 
 export function fetchRequest(id) {
   const request = axios.get(`${ROOT_URL}/requests/${id}`);
@@ -218,6 +211,12 @@ export function deleteRequestFailure(response) {
   };
 }
 
+export function resetDeletedRequest() {
+  return {
+    type: RESET_DELETED_REQUEST
+  }
+}
+
 // UPDATE
 export function updateRequest(props, tokenFromStorage) {
   const request = axios({
@@ -249,7 +248,7 @@ export function updateRequestFailure(payload) {
   };
 }
 
-export function resetUpdatedProduct() {
+export function resetUpdatedRequest() {
   return {
     type: RESET_UPDATED_REQUEST
   }

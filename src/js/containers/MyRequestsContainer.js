@@ -2,7 +2,7 @@ import MyRequests from '../components/MyRequests';
 import { connect } from 'react-redux';
 import {
     fetchRequests, fetchRequestsSuccess, fetchRequestsFailure, resetRequest,
-    deleteRequest, deleteRequestSuccess, deleteRequestFailure,
+    deleteRequest, deleteRequestSuccess, deleteRequestFailure,resetDeletedRequest
 } from '../actions/requests';
 
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -24,8 +24,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         deleteRequest: (id) => {
             dispatch(deleteRequest(id, jwtToken)).then((response) => {
-                !response.error ? dispatch(fetchRequestsSuccess(response.payload.data)) : dispatch(deleteRequestFailure(response.payload));
+                !response.error ? dispatch(deleteRequestSuccess(response.payload.data)) : dispatch(deleteRequestFailure(response.payload));
             })
+        },   
+        resetDeletedRequest: () => {
+            dispatch(resetDeletedRequest());
         },
         updateRequest: () => {
             dispatch(updateRequest(id, jwtToken)).then((response) => {
@@ -39,6 +42,7 @@ function mapStateToProps(state, ownProps) {
     return {
         user: state.user.user,
         requestsList: state.requests.requestsList,
+        deletedRequest: state.requests.deletedRequest,
     };
 }
 
