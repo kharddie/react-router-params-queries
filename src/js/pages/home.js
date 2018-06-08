@@ -7,6 +7,9 @@ import { connect } from 'react-redux';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import faTimes from '@fortawesome/fontawesome-free-solid/faTimes';
 import { toTitleCase } from '../helper/index.js';
+import 'resize-sensor--react/build/resize-sensor.css';
+import Hand from '../components/hand';
+
 
 const mapDispatchToProps = (dispatch) => {
     return {
@@ -28,7 +31,8 @@ class Home extends React.Component {
         modalvisibleHomePage: false,
         origin: "fromHomePage",
         heading: "",
-        userName: ""
+        userName: "",
+        isPlay: true
     }
 
     modalBackdropClicked = () => {
@@ -70,6 +74,10 @@ class Home extends React.Component {
         }
     }
 
+    play = () => {
+        this.setState({ isPlay: true });
+    }
+
     render() {
 
         $(document).ready(function () {
@@ -77,7 +85,7 @@ class Home extends React.Component {
                 interval: false
             })
         });
-        const { history, user,params } = this.props;
+        const { history, user, params } = this.props;
         let welcomeName = null;
         if (user.user) {
             welcomeName = user.user.userName ? user.user.userName : user.user.name;
@@ -143,7 +151,6 @@ class Home extends React.Component {
                                     <h1 className="text-h1-lg intro-2" >Get more done for <span className="orange-font">FREE! </span></h1>
                                 </div>
                             </div>
-
                             <h4 className="intro-3">
                                 Find out trusted people in your local community ready to give up their time and complete your task today.
                             </h4>
@@ -151,6 +158,7 @@ class Home extends React.Component {
                                 <button className="btn btn-primary btn-lg" onClick={this.showModalCreateRequest.bind(this)}>Get started now</button>
                                 <button className="btn btn-primary btn-lg" onClick={this.goTOaboutUsPage}>More info</button>
                             </div>
+
                         </div>
                     </div>
                     <div className="col-sm-12 col-lg-5"></div>

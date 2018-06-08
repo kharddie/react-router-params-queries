@@ -251,8 +251,37 @@ html,body,#app,.fit-page-to-Screen,.home-page,.not-home-page,.fit-page-to-screen
 }
 }
 
+.main-content-holder{
+  position: relative;
+  width:100%;
+  height:100%;
+  border:4px solid red;
+}
+.hand-animation,.main-content{
+  position: absolute;
+  width:100%;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+}
+.hand-animation{
+overflow: hidden;
+height:100%;
+z-index: 5;
+height: 497px;
+border: 2px solid green;
+}
+.main-content{
+  z-index: 10;
+  border: 2px solid yellow;
+}
 
-
+#hand{
+  height:100%;
+  width:100%;
+  position: relative;
+}
   
 .wrapper {
     background: linear-gradient(to right, #e67e22, #e74c3c);
@@ -265,7 +294,7 @@ html,body,#app,.fit-page-to-Screen,.home-page,.not-home-page,.fit-page-to-screen
   display: inline-block;
 }
   /* utilities*/
-  
+
 img.spin{
   @include spin;
 }

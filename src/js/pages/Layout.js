@@ -10,6 +10,7 @@ import { fetchOrientation } from "../actions/getOrientation"
 import { BrowserView, MobileView, isBrowser, isMobile } from "react-device-detect";
 import ResizeSensor from 'resize-sensor--react';
 import 'resize-sensor--react/build/resize-sensor.css';
+import Hand from '../components/hand';
 
 
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -94,6 +95,11 @@ class Layout extends Component {
     fitPageToScreen: "",
     IsHomePage: "not-home-page",
     fitPageToScreenOverflowHidden: "",
+    isPlay: true
+  }
+
+  play = () => {
+    this.setState({ isPlay: true });
   }
 
   getScreenDetailsRenderStyles = (w, h) => {
@@ -186,12 +192,18 @@ class Layout extends Component {
             }
           />
           <Nav location={location} history={history} params={params} />
-          <div id="main-content" className=" main-content container " style={containerStyle}>
-            <div className="row">
-              <div className="col col-12">
-                {this.props.children}
+
+          <div className="main-content-holder">
+            <div id="main-content" className=" main-content container " style={containerStyle}>
+              <div className="row">
+                <div className="col col-12">
+                  {this.props.children}
+                </div>
               </div>
             </div>
+            <div className="hand-animation" >
+              <button onClick={this.play}>Play</button>
+              <Hand isPlay={this.state.isPlay} onComplete={this.resetPlay} /></div>
           </div>
         </div>
         <Footer />

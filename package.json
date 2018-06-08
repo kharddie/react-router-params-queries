@@ -67,6 +67,7 @@
     "less": "^3.0.1",
     "less-loader": "^4.1.0",
     "mini-css-extract-plugin": "^0.4.0",
+    "mo-js": "^0.288.2",
     "moment": "^2.22.1",
     "node-sass": "^4.8.3",
     "react-bootstrap-modal": "^4.0.0",
